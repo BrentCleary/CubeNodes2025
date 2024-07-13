@@ -1,0 +1,15 @@
+    // PSUEDO CODE
+    
+    // Set Intial States for Values Depending
+    // - Empty States { 0, 1, 2, 3, 4 }
+    // - Occupied States { WhiteSheep, BlackSheep }
+    // - Active States - { BeingCaptured }
+    // - Placeable Bool{ True , False}
+    // - LibertyValue{ 1 , 0 }
+    //  - Future iterations - State Machine
+    
+    
+    // OBJECT PROPERTIES
+    // Objects for displaying value
+    // - List containing game object references to display or toggle based on Node state
+    // - To be hidden toggle their renders on or off
