@@ -101,7 +101,7 @@ public class NodeScript : MonoBehaviour
             {
                 GrassTileList[i].GetComponent<MeshRenderer>().enabled = isActive;
             }
-            for (int i = nodeValueList.Count; i > nodeValue; i--)   // Sets all tiles from nodeValue and higher false
+            for (int i = nodeValueList.Count- 1; i > nodeValue; i--)   // Sets all tiles from nodeValue and higher false
             {
                 GrassTileList[i].GetComponent<MeshRenderer>().enabled = !isActive;
             }
