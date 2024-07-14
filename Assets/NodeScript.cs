@@ -48,6 +48,7 @@ public class NodeScript : MonoBehaviour
     void Update()
     {
         NodeValueSetter();
+        SetGrassTileDisplayLoop();
     }
 
     // Test Method for Node Value Setting
@@ -62,29 +63,52 @@ public class NodeScript : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.Keypad1))  // Press 1 on Keypad to set nodeValue to 1
         {
+            settingState = true;
             nodeValue = nodeValueList[1];
             Debug.Log("Button Pressed = 1");
         }
 
         if(Input.GetKeyDown(KeyCode.Keypad2))  // Press 2 on Keypad to set nodeValue to 2
         {
+            settingState = true;
             nodeValue = nodeValueList[2];
             Debug.Log("Button Pressed = 2");
         }
 
         if(Input.GetKeyDown(KeyCode.Keypad3))  // Press 3 on Keypad to set nodeValue to 3
         {
+            settingState = true;
             nodeValue = nodeValueList[3];
             Debug.Log("Button Pressed = 3");
         }
 
         if(Input.GetKeyDown(KeyCode.Keypad4))  // Press 4 on Keypad to set nodeValue to 4
         {
+            settingState = true;
             nodeValue = nodeValueList[4];
             Debug.Log("Button Pressed = 4");
         }
 
-        SetGrassTileDisplay();
+    }
+
+    public void SetGrassTileDisplayLoop()
+    {
+        bool isActive = true;                   // Sets initialize bool
+
+        if(settingState)
+        {
+            for (int i = nodeValue; i >= 0; i--)    // Sets all tiles from nodeValue and lower true
+            {
+                GrassTileList[i].GetComponent<MeshRenderer>().enabled = isActive;
+            }
+            for (int i = nodeValueList.Count; i > nodeValue; i--)   // Sets all tiles from nodeValue and higher false
+            {
+                GrassTileList[i].GetComponent<MeshRenderer>().enabled = !isActive;
+            }
+        }
+
+        settingState = false;
+
     }
 
     public void SetGrassTileDisplay()
