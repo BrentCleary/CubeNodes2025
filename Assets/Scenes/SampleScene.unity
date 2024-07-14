@@ -479,6 +479,7 @@ MonoBehaviour:
   - {fileID: 131502242}
   - {fileID: 1015085055}
   - {fileID: 1456573941}
+  settingState: 0
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
