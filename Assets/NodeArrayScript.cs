@@ -6,9 +6,9 @@ using UnityEngine;
 public class NodeArrayScript : MonoBehaviour
 {
     
+    [SerializeField] public GameObject[] gNodeArray;
 
     [SerializeField] public List<GameObject> gNodeList;
-
     public GameObject gNode1;
     public GameObject gNode2; 
     public GameObject gNode3;
@@ -49,5 +49,19 @@ public class NodeArrayScript : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void Generate3x3NodeArray()
+    {
+        int arrayColumnLength = 3;
+        int arrayRowLength = 3;
+        
+        for(int i = 0; i < arrayColumnLength; i ++)
+        {
+            for(int j = 0; j < arrayRowLength; j ++)
+            {
+                gNodeArray[i,j] =  
+            }
+        }
     }
 }
