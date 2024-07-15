@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class NodeArrayScript : MonoBehaviour
 {
@@ -21,15 +22,6 @@ public class NodeArrayScript : MonoBehaviour
     public GameObject gNode8; 
     public GameObject gNode9; 
 
-    public NodeScript gNodeScript1;
-    public NodeScript gNodeScript2;
-    public NodeScript gNodeScript3;
-    public NodeScript gNodeScript4;
-    public NodeScript gNodeScript5;
-    public NodeScript gNodeScript6;
-    public NodeScript gNodeScript7;
-    public NodeScript gNodeScript8;
-    public NodeScript gNodeScript9;
 
     // Start is called before the first frame update
     void Start()
@@ -38,16 +30,6 @@ public class NodeArrayScript : MonoBehaviour
 
         // gNode List and Script Reference
         gNodeList = new List<GameObject> { gNode1, gNode2, gNode3, gNode4, gNode5, gNode6, gNode7, gNode8, gNode9 };
-
-        gNodeScript1 = gNode1.GetComponent<NodeScript>();
-        gNodeScript2 = gNode2.GetComponent<NodeScript>();
-        gNodeScript3 = gNode3.GetComponent<NodeScript>();
-        gNodeScript4 = gNode4.GetComponent<NodeScript>();
-        gNodeScript5 = gNode5.GetComponent<NodeScript>();
-        gNodeScript6 = gNode6.GetComponent<NodeScript>();
-        gNodeScript7 = gNode7.GetComponent<NodeScript>();
-        gNodeScript8 = gNode8.GetComponent<NodeScript>();
-        gNodeScript9 = gNode9.GetComponent<NodeScript>();
     
         Generate3x3NodeArray();
     }
@@ -56,6 +38,7 @@ public class NodeArrayScript : MonoBehaviour
     void Update()
     {
         DisplayArray();
+        ArrayPositionNodeValueSetter();
     }
 
     public void Generate3x3NodeArray()                      // Generate a 3x3 array containing Nodes contained gNodeList
@@ -86,4 +69,78 @@ public class NodeArrayScript : MonoBehaviour
         }
     }
     
+    public void ArrayPositionNodeValueSetter()
+    {
+        if(Input.GetKeyDown(KeyCode.O))
+        {
+            for(int i = 0; i < arrayColumnLength; i++)         // Assigns positions to each gNode in gNodeArray
+            {
+                for(int j = 0; j < arrayRowLength; j++)
+                {
+                    GameObject currentNode = gNodeArray[i,j];
+                    NodeScript currentNodeScript = currentNode.GetComponent<NodeScript>();
+
+                    // Check left position
+                    if(j == 0)
+                    {
+                        currentNodeScript.nodeValue -= 1;
+                    }
+                    if(j != 0)      // Check left index is not out of range 
+                    {
+                        if(gNodeArray[i, j-1] == null)
+                        {
+                            currentNodeScript.nodeValue -= 1;
+                        }
+                    }
+
+                    // Check right position
+                    if(j == arrayRowLength-1)
+                    {
+                        currentNodeScript.nodeValue -= 1;
+                    }
+                    if(j != arrayRowLength-1)     // Check right index is not out of range 
+                    {
+                        if(gNodeArray[i, j+1] == null)
+                        {
+                            currentNodeScript.nodeValue -= 1;
+                        }
+
+                    }
+
+                    // Check top position
+                    if(i == 0)
+                    {
+                        currentNodeScript.nodeValue -= 1;
+                    }
+                    if(i != 0)      // Check top index is not out of range 
+                    {
+                        if(gNodeArray[i-1,j] == null)
+                        {
+                            currentNodeScript.nodeValue -= 1;
+                        }
+                    }
+
+                    // Check bottom position
+                    if(i == arrayColumnLength-1)
+                    {
+                        currentNodeScript.nodeValue -= 1;
+                    }
+                    if(i != arrayColumnLength-1)      // Check bottom index is not out of range 
+                    {
+                        if(gNodeArray[i+1,j] == null)
+                        {
+                            currentNodeScript.nodeValue -= 1;
+                        }
+                    }
+                    
+                    currentNode.GetComponent<NodeScript>().settingState = true;
+                    currentNode.GetComponent<NodeScript>().SetGrassTileDisplayLoop();
+
+                    Debug.Log(currentNode.GetComponent<NodeScript>().name + "'s nodeValue is " + currentNode.GetComponent<NodeScript>().nodeValue);
+
+                }
+            }
+        }
+    }
 }
+    

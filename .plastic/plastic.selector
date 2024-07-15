@@ -1,0 +1,4 @@
+repository "CubeNodes@BrightGames@cloud"
+  path "/"
+    br "/main"
+    co "/main"
