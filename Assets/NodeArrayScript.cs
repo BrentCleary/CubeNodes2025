@@ -6,7 +6,9 @@ using UnityEngine;
 public class NodeArrayScript : MonoBehaviour
 {
     
-    [SerializeField] public GameObject[] gNodeArray;
+    [SerializeField] public GameObject[,] gNodeArray;
+    int arrayColumnLength = 3;                          // Array Dimensions - Column
+    int arrayRowLength = 3;                             // Array Dimensions - Row
 
     [SerializeField] public List<GameObject> gNodeList;
     public GameObject gNode1;
@@ -32,6 +34,9 @@ public class NodeArrayScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gNodeArray = new GameObject[3,3];
+
+        // gNode List and Script Reference
         gNodeList = new List<GameObject> { gNode1, gNode2, gNode3, gNode4, gNode5, gNode6, gNode7, gNode8, gNode9 };
 
         gNodeScript1 = gNode1.GetComponent<NodeScript>();
@@ -43,25 +48,42 @@ public class NodeArrayScript : MonoBehaviour
         gNodeScript7 = gNode7.GetComponent<NodeScript>();
         gNodeScript8 = gNode8.GetComponent<NodeScript>();
         gNodeScript9 = gNode9.GetComponent<NodeScript>();
+    
+        Generate3x3NodeArray();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        DisplayArray();
     }
 
-    public void Generate3x3NodeArray()
-    {
-        int arrayColumnLength = 3;
-        int arrayRowLength = 3;
-        
-        for(int i = 0; i < arrayColumnLength; i ++)
+    public void Generate3x3NodeArray()                      // Generate a 3x3 array containing Nodes contained gNodeList
+    {               
+        int nodeCounter = 0;                                // Increments Node reference in gNodeList 
+
+        for(int i = 0; i < arrayColumnLength; i ++)         // Assigns positions to each gNode in gNodeArray
         {
             for(int j = 0; j < arrayRowLength; j ++)
             {
-                gNodeArray[i,j] =  
+                gNodeArray[i,j] = gNodeList[nodeCounter];
+                nodeCounter = nodeCounter + 1;
             }
         }
     }
+
+    public void DisplayArray()
+    {
+        if(Input.GetKeyDown(KeyCode.P))
+        {
+            for(int i = 0; i < arrayColumnLength; i ++)         // Assigns positions to each gNode in gNodeArray
+            {
+                for(int j = 0; j < arrayRowLength; j ++)
+                {
+                    Debug.Log(gNodeArray[i,j].name);
+                }
+            }
+        }
+    }
+    
 }
