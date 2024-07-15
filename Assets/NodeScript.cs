@@ -34,7 +34,7 @@ public class NodeScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        nodeValue = 4;
+        nodeValue = nodeValueList[5];  // sets value to 4 - { 0, 1, 2, 3, 4 }
         libertyValue = 1;
         placeAbleBool = true;
 
@@ -110,6 +110,12 @@ public class NodeScript : MonoBehaviour
         settingState = false;
 
     }
+
+
+
+
+
+
 
     public void SetGrassTileDisplay()
     {
