@@ -39,6 +39,7 @@ public class NodeArrayScript : MonoBehaviour
     {
         DisplayArray();
         ArrayPositionNodeValueSetter();
+
     }
 
     public void Generate3x3NodeArray()                      // Generate a 3x3 array containing Nodes contained gNodeList
@@ -79,60 +80,61 @@ public class NodeArrayScript : MonoBehaviour
                 {
                     GameObject currentNode = gNodeArray[i,j];
                     NodeScript currentNodeScript = currentNode.GetComponent<NodeScript>();
+                    
+                    currentNodeScript.nodeValue = 4;           // Resets nodeValue of all Nodes to 4 before Setting
 
                     // Check left position
-                    if(j == 0)
+                    if(j == 0)      // Check left index is not out of range 
                     {
                         currentNodeScript.nodeValue -= 1;
                     }
-                    if(j != 0)      // Check left index is not out of range 
+                    if(j != 0)
                     {
-                        if(gNodeArray[i, j-1] == null)
+                        if(gNodeArray[i, j-1].GetComponent<NodeScript>().libertyValue == 0)     // Check left index is not null
                         {
                             currentNodeScript.nodeValue -= 1;
                         }
                     }
 
                     // Check right position
-                    if(j == arrayRowLength-1)
+                    if(j == arrayRowLength-1)      // Check right index is not out of range 
                     {
                         currentNodeScript.nodeValue -= 1;
                     }
-                    if(j != arrayRowLength-1)     // Check right index is not out of range 
+                    if(j != arrayRowLength-1)
                     {
-                        if(gNodeArray[i, j+1] == null)
+                        if(gNodeArray[i, j+1].GetComponent<NodeScript>().libertyValue == 0)     // Check right index is not null
                         {
                             currentNodeScript.nodeValue -= 1;
                         }
-
                     }
 
                     // Check top position
-                    if(i == 0)
+                    if(i == 0)      // Check top index is not out of range 
                     {
                         currentNodeScript.nodeValue -= 1;
                     }
-                    if(i != 0)      // Check top index is not out of range 
+                    if(i != 0)      // Check top index is not null
                     {
-                        if(gNodeArray[i-1,j] == null)
+                        if(gNodeArray[i-1,j].GetComponent<NodeScript>().libertyValue == 0)
                         {
                             currentNodeScript.nodeValue -= 1;
                         }
                     }
 
                     // Check bottom position
-                    if(i == arrayColumnLength-1)
+                    if(i == arrayColumnLength-1)      // Check bottom index is not out of range 
                     {
                         currentNodeScript.nodeValue -= 1;
                     }
-                    if(i != arrayColumnLength-1)      // Check bottom index is not out of range 
+                    if(i != arrayColumnLength-1)      // Check bottom index is not null 
                     {
-                        if(gNodeArray[i+1,j] == null)
+                        if(gNodeArray[i+1,j].GetComponent<NodeScript>().libertyValue == 0)
                         {
                             currentNodeScript.nodeValue -= 1;
                         }
                     }
-                    
+
                     currentNode.GetComponent<NodeScript>().settingState = true;
                     currentNode.GetComponent<NodeScript>().SetGrassTileDisplayLoop();
 

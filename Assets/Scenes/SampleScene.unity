@@ -628,6 +628,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: Node (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 2404018319395889093, guid: 2171c39f9063e3e488721af2d1f06815, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7633713287661895302, guid: 2171c39f9063e3e488721af2d1f06815, type: 3}
+      propertyPath: sheepValueList.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7633713287661895302, guid: 2171c39f9063e3e488721af2d1f06815, type: 3}
+      propertyPath: sheepValueList.Array.data[0]
+      value: 
+      objectReference: {fileID: 4061226557962082552, guid: 4a593498ca0bcd243a5ccfbf043548f1, type: 3}
+    - target: {fileID: 7633713287661895302, guid: 2171c39f9063e3e488721af2d1f06815, type: 3}
+      propertyPath: sheepValueList.Array.data[1]
+      value: 
+      objectReference: {fileID: 663536277094645605, guid: 7f7373044021aaa4596c731aad6ff865, type: 3}
+    - target: {fileID: 7633713287661895302, guid: 2171c39f9063e3e488721af2d1f06815, type: 3}
+      propertyPath: sheepValueList.Array.data[2]
+      value: 
+      objectReference: {fileID: 3397406179871344672, guid: 3ea15fc2f10edb14e803b0467dfc5b2e, type: 3}
     - target: {fileID: 8988802235557534299, guid: 2171c39f9063e3e488721af2d1f06815, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1097,6 +1117,22 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7633713287661895302, guid: 2171c39f9063e3e488721af2d1f06815, type: 3}
+      propertyPath: sheepValueList.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7633713287661895302, guid: 2171c39f9063e3e488721af2d1f06815, type: 3}
+      propertyPath: sheepValueList.Array.data[0]
+      value: 
+      objectReference: {fileID: 4061226557962082552, guid: 4a593498ca0bcd243a5ccfbf043548f1, type: 3}
+    - target: {fileID: 7633713287661895302, guid: 2171c39f9063e3e488721af2d1f06815, type: 3}
+      propertyPath: sheepValueList.Array.data[1]
+      value: 
+      objectReference: {fileID: 663536277094645605, guid: 7f7373044021aaa4596c731aad6ff865, type: 3}
+    - target: {fileID: 7633713287661895302, guid: 2171c39f9063e3e488721af2d1f06815, type: 3}
+      propertyPath: sheepValueList.Array.data[2]
+      value: 
+      objectReference: {fileID: 3397406179871344672, guid: 3ea15fc2f10edb14e803b0467dfc5b2e, type: 3}
     - target: {fileID: 8988802235557534299, guid: 2171c39f9063e3e488721af2d1f06815, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

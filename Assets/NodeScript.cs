@@ -5,28 +5,30 @@ using System.ComponentModel;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class NodeScript : MonoBehaviour
 {
 
     public int nodeValue;
     private List<int> nodeValueList = new List<int> { 0, 1, 2, 3, 4 };   // Node Values when not occupied
-    
-    private int libertyValue;
-    private List<int> libertyValueList = new List<int> { 0, 1 };          //  LibertyValue{ 1 , 0 }
-    
-    private bool placeAbleBool;
-    private List<bool> placeAbleValueList = new List<bool> { false, true };   // is node placeable for current player
-    
     public List<GameObject> GrassTileList = new List<GameObject> {};
     
-    private List<string> nodeContainsList = new List<string> { "empty", "sheepBlack", "sheepWhite" }; // List displaying current Node GameObject
+    public int sheepValue;
+    public List<int> sheepValueList = new List<int> {0, 1, 2};    // { emptySpace, sheepBlack, sheepWhite }
+    public List<GameObject> sheepTileList = new List<GameObject> {};   // { emptySpace, sheepBlack, sheepWhite }
+
+    public int libertyValue;
+    public List<int> libertyValueList = new List<int> { 0, 1 };          //  LibertyValue{ 1 , 0 }
+    
+    public bool placeAbleBool;
+    public List<bool> placeAbleValueList = new List<bool> { false, true };   // is node placeable for current player
+    
     private List<string> transitionStatesList = new List<string> { "beingCaptured" };             // States for transition
-
-
 
     // TEMP VARS FOR TEST
     public bool settingState;
+    public bool settingSheep;
 
 
     // Start is called before the first frame update
@@ -35,10 +37,16 @@ public class NodeScript : MonoBehaviour
         nodeValue = nodeValueList[4];  // sets value to 4 - { 0, 1, 2, 3, 4 }
         libertyValue = 1;
         placeAbleBool = true;
+        sheepValue = sheepValueList[0];
 
         foreach(GameObject tile in GrassTileList)
         {
             Debug.Log("GameObject is " + tile);
+        }
+
+        foreach(GameObject tile in sheepTileList)
+        {
+            Debug.Log("SheepObject is " + tile);
         }
 
     }
@@ -48,7 +56,7 @@ public class NodeScript : MonoBehaviour
     {
         NodeValueSetter();
         SetGrassTileDisplayLoop();
-
+        SheepObjectSetter();
     }
 
     // Test Method for Node Value Setting
@@ -110,6 +118,45 @@ public class NodeScript : MonoBehaviour
         settingState = false;
 
     }
+
+    // TODO
+    public void SheepObjectSetter()
+    {
+        if(Input.GetKeyDown(KeyCode.Keypad8))
+        {
+            sheepValue = sheepValueList[1];     // Set sheep value to blackSheep index
+
+            if(sheepValue != sheepValueList[0])         // If SheepValue is not emptyObject
+            {
+                libertyValue = libertyValueList[0];     // Set libertyValue to 0
+            }
+
+            if(libertyValue == libertyValueList[0])     // If libertyValue is 0
+            {
+                nodeValue = nodeValueList[0];           // nodeValue is 0
+            }
+
+            settingState = true;        //Activates TileSetter to remove tiles
+        }
+
+        bool isActive = true;
+        settingSheep = true;
+
+        if(settingSheep)
+        {
+            for (int i = sheepTileList.Count-1; i >= 0; i--)    
+            {
+                sheepTileList[i].GetComponent<MeshRenderer>().enabled = !isActive;      // Sets all SheepTiles to inactive
+            }
+
+            sheepTileList[sheepValue].GetComponent<MeshRenderer>().enabled = isActive;      // Set Current SheepTile active
+        }
+
+        settingSheep = false;
+
+    }
+
+
 
 
     // public void SetGrassTileDisplay()
