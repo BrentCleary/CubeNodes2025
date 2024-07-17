@@ -37,12 +37,18 @@ public class NodeArrayScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        DisplayArray();
-        ArrayPositionNodeValueSetter();
-
+        DebugControls();
     }
 
-    public void Generate3x3NodeArray()                      // Generate a 3x3 array containing Nodes contained gNodeList
+    public void DebugControls()
+    {
+        if(Input.GetKeyDown(KeyCode.O)) { ArrayPositionNodeValueSetter(); }
+
+        if(Input.GetKeyDown(KeyCode.P)) { DisplayArray(); }
+    }
+
+
+    public void Generate3x3NodeArray()              // Generate a 3x3 array containing Nodes contained gNodeList
     {               
         int nodeCounter = 0;                                // Increments Node reference in gNodeList 
 
@@ -56,93 +62,89 @@ public class NodeArrayScript : MonoBehaviour
         }
     }
 
-    public void DisplayArray()
+    public void DisplayArray()                      // Debugs Array Nodes in Console
     {
-        if(Input.GetKeyDown(KeyCode.P))
+        for(int i = 0; i < arrayColumnLength; i ++)         // Assigns positions to each gNode in gNodeArray
         {
-            for(int i = 0; i < arrayColumnLength; i ++)         // Assigns positions to each gNode in gNodeArray
+            for(int j = 0; j < arrayRowLength; j ++)
             {
-                for(int j = 0; j < arrayRowLength; j ++)
-                {
-                    Debug.Log(gNodeArray[i,j].name);
-                }
+                Debug.Log(gNodeArray[i,j].name);
             }
         }
     }
     
-    public void ArrayPositionNodeValueSetter()
+    
+    public void ArrayPositionNodeValueSetter()      // Displays Array based on nodeValues
     {
-        if(Input.GetKeyDown(KeyCode.O))
+        for(int i = 0; i < arrayColumnLength; i++)         // Assigns positions to each gNode in gNodeArray
         {
-            for(int i = 0; i < arrayColumnLength; i++)         // Assigns positions to each gNode in gNodeArray
+            for(int j = 0; j < arrayRowLength; j++)
             {
-                for(int j = 0; j < arrayRowLength; j++)
+                GameObject currentNode = gNodeArray[i,j];
+                NodeScript currentNodeScript = currentNode.GetComponent<NodeScript>();
+                
+                currentNodeScript.nodeValue = 4;           // Resets nodeValue of all Nodes to 4 before Setting
+
+                // Check left position
+                if(j == 0)      // Check left index is not out of range 
                 {
-                    GameObject currentNode = gNodeArray[i,j];
-                    NodeScript currentNodeScript = currentNode.GetComponent<NodeScript>();
-                    
-                    currentNodeScript.nodeValue = 4;           // Resets nodeValue of all Nodes to 4 before Setting
-
-                    // Check left position
-                    if(j == 0)      // Check left index is not out of range 
-                    {
-                        currentNodeScript.nodeValue -= 1;
-                    }
-                    if(j != 0)
-                    {
-                        if(gNodeArray[i, j-1].GetComponent<NodeScript>().libertyValue == 0)     // Check left index is not null
-                        {
-                            currentNodeScript.nodeValue -= 1;
-                        }
-                    }
-
-                    // Check right position
-                    if(j == arrayRowLength-1)      // Check right index is not out of range 
-                    {
-                        currentNodeScript.nodeValue -= 1;
-                    }
-                    if(j != arrayRowLength-1)
-                    {
-                        if(gNodeArray[i, j+1].GetComponent<NodeScript>().libertyValue == 0)     // Check right index is not null
-                        {
-                            currentNodeScript.nodeValue -= 1;
-                        }
-                    }
-
-                    // Check top position
-                    if(i == 0)      // Check top index is not out of range 
-                    {
-                        currentNodeScript.nodeValue -= 1;
-                    }
-                    if(i != 0)      // Check top index is not null
-                    {
-                        if(gNodeArray[i-1,j].GetComponent<NodeScript>().libertyValue == 0)
-                        {
-                            currentNodeScript.nodeValue -= 1;
-                        }
-                    }
-
-                    // Check bottom position
-                    if(i == arrayColumnLength-1)      // Check bottom index is not out of range 
-                    {
-                        currentNodeScript.nodeValue -= 1;
-                    }
-                    if(i != arrayColumnLength-1)      // Check bottom index is not null 
-                    {
-                        if(gNodeArray[i+1,j].GetComponent<NodeScript>().libertyValue == 0)
-                        {
-                            currentNodeScript.nodeValue -= 1;
-                        }
-                    }
-
-                    currentNode.GetComponent<NodeScript>().settingState = true;
-                    currentNode.GetComponent<NodeScript>().SetGrassTileDisplayLoop();
-
-                    Debug.Log(currentNode.GetComponent<NodeScript>().name + "'s nodeValue is " + currentNode.GetComponent<NodeScript>().nodeValue);
-
+                    currentNodeScript.nodeValue -= 1;
                 }
+                if(j != 0)
+                {
+                    if(gNodeArray[i, j-1].GetComponent<NodeScript>().libertyValue == 0)     // Check left index is not null
+                    {
+                        currentNodeScript.nodeValue -= 1;
+                    }
+                }
+
+                // Check right position
+                if(j == arrayRowLength-1)      // Check right index is not out of range 
+                {
+                    currentNodeScript.nodeValue -= 1;
+                }
+                if(j != arrayRowLength-1)
+                {
+                    if(gNodeArray[i, j+1].GetComponent<NodeScript>().libertyValue == 0)     // Check right index is not null
+                    {
+                        currentNodeScript.nodeValue -= 1;
+                    }
+                }
+
+                // Check top position
+                if(i == 0)      // Check top index is not out of range 
+                {
+                    currentNodeScript.nodeValue -= 1;
+                }
+                if(i != 0)      // Check top index is not null
+                {
+                    if(gNodeArray[i-1,j].GetComponent<NodeScript>().libertyValue == 0)
+                    {
+                        currentNodeScript.nodeValue -= 1;
+                    }
+                }
+
+                // Check bottom position
+                if(i == arrayColumnLength-1)      // Check bottom index is not out of range 
+                {
+                    currentNodeScript.nodeValue -= 1;
+                }
+                if(i != arrayColumnLength-1)      // Check bottom index is not null 
+                {
+                    if(gNodeArray[i+1,j].GetComponent<NodeScript>().libertyValue == 0)
+                    {
+                        currentNodeScript.nodeValue -= 1;
+                    }
+                }
+
+                currentNode.GetComponent<NodeScript>().settingState = true;
+                currentNode.GetComponent<NodeScript>().SetGrassTileDisplayLoop();
+
+                Debug.Log(currentNode.GetComponent<NodeScript>().name + "'s nodeValue is " + currentNode.GetComponent<NodeScript>().nodeValue);
             }
         }
     }
+
+
 }
     

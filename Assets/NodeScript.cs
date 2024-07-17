@@ -11,7 +11,7 @@ public class NodeScript : MonoBehaviour
 {
 
     public int nodeValue;
-    private List<int> nodeValueList = new List<int> { 0, 1, 2, 3, 4 };   // Node Values when not occupied
+    public List<int> nodeValueList = new List<int> { 0, 1, 2, 3, 4 };   // Node Values when not occupied
     public List<GameObject> GrassTileList = new List<GameObject> {};
     
     public int sheepValue;
@@ -48,55 +48,46 @@ public class NodeScript : MonoBehaviour
         {
             Debug.Log("SheepObject is " + tile);
         }
-
     }
 
     // Update is called once per frame
     void Update()
     {
         NodeValueSetter();
-        SetGrassTileDisplayLoop();
-        SheepObjectSetter();
     }
 
     // Test Method for Node Value Setting
     public void NodeValueSetter()
     {
-        if(Input.GetKeyDown(KeyCode.Keypad0))  // Press 0 on Keypad to set nodeValue to 0
-        {
+        if(Input.GetKeyDown(KeyCode.Keypad0)){  // Press 0 on Keypad to set nodeValue to 0
             settingState = true;
             Debug.Log("Button Pressed = 0 and settingState = " + settingState);
             nodeValue = nodeValueList[0];
         }
 
-        if(Input.GetKeyDown(KeyCode.Keypad1))  // Press 1 on Keypad to set nodeValue to 1
-        {
+        if(Input.GetKeyDown(KeyCode.Keypad1)){  // Press 1 on Keypad to set nodeValue to 1
             settingState = true;
             nodeValue = nodeValueList[1];
             Debug.Log("Button Pressed = 1");
         }
 
-        if(Input.GetKeyDown(KeyCode.Keypad2))  // Press 2 on Keypad to set nodeValue to 2
-        {
+        if(Input.GetKeyDown(KeyCode.Keypad2)){  // Press 2 on Keypad to set nodeValue to 2
             settingState = true;
             nodeValue = nodeValueList[2];
             Debug.Log("Button Pressed = 2");
         }
 
-        if(Input.GetKeyDown(KeyCode.Keypad3))  // Press 3 on Keypad to set nodeValue to 3
-        {
+        if(Input.GetKeyDown(KeyCode.Keypad3)){  // Press 3 on Keypad to set nodeValue to 3
             settingState = true;
             nodeValue = nodeValueList[3];
             Debug.Log("Button Pressed = 3");
         }
 
-        if(Input.GetKeyDown(KeyCode.Keypad4))  // Press 4 on Keypad to set nodeValue to 4
-        {
+        if(Input.GetKeyDown(KeyCode.Keypad4)){  // Press 4 on Keypad to set nodeValue to 4
             settingState = true;
             nodeValue = nodeValueList[4];
             Debug.Log("Button Pressed = 4");
         }
-
     }
 
     public void SetGrassTileDisplayLoop()
@@ -114,49 +105,54 @@ public class NodeScript : MonoBehaviour
                 GrassTileList[i].GetComponent<MeshRenderer>().enabled = !isActive;
             }
         }
-
         settingState = false;
-
     }
 
-    // TODO
-    public void SheepObjectSetter()
+
+    public void BlackSheepSetter()              // Sets node to Black Sheep Object
     {
-        if(Input.GetKeyDown(KeyCode.Keypad8))
-        {
-            sheepValue = sheepValueList[1];     // Set sheep value to blackSheep index
-
-            if(sheepValue != sheepValueList[0])         // If SheepValue is not emptyObject
-            {
-                libertyValue = libertyValueList[0];     // Set libertyValue to 0
-            }
-
-            if(libertyValue == libertyValueList[0])     // If libertyValue is 0
-            {
-                nodeValue = nodeValueList[0];           // nodeValue is 0
-            }
-
-            settingState = true;        //Activates TileSetter to remove tiles
-        }
+        sheepValue = sheepValueList[1];         // Set sheep value to blackSheep index
+        libertyValue = libertyValueList[0];     // Set libertyValue to 0
+        nodeValue = nodeValueList[0];           // nodeValue is 0
 
         bool isActive = true;
-        settingSheep = true;
-
-        if(settingSheep)
+        for (int i = sheepTileList.Count-1; i >= 0; i--)    
         {
-            for (int i = sheepTileList.Count-1; i >= 0; i--)    
-            {
-                sheepTileList[i].GetComponent<MeshRenderer>().enabled = !isActive;      // Sets all SheepTiles to inactive
-            }
-
-            sheepTileList[sheepValue].GetComponent<MeshRenderer>().enabled = isActive;      // Set Current SheepTile active
+            sheepTileList[i].GetComponent<MeshRenderer>().enabled = !isActive;      // Sets all SheepTiles to inactive
         }
-
-        settingSheep = false;
-
+        
+        sheepTileList[sheepValue].GetComponent<MeshRenderer>().enabled = isActive;      // Set Current SheepTile active
     }
 
+    public void WhiteSheepSetter()              // Sets node to Black Sheep Object
+    {
+        sheepValue = sheepValueList[2];         // Set sheep value to whiteSheep index
+        libertyValue = libertyValueList[0];     // Set libertyValue to 0
+        nodeValue = nodeValueList[0];           // nodeValue is 0
 
+        bool isActive = true;
+        for (int i = sheepTileList.Count-1; i >= 0; i--)    
+        {
+            sheepTileList[i].GetComponent<MeshRenderer>().enabled = !isActive;      // Sets all SheepTiles to inactive
+        }
+        
+        sheepTileList[sheepValue].GetComponent<MeshRenderer>().enabled = isActive;      // Set Current SheepTile active
+    }
+
+    public void EmptySheepSetter()              // Sets node to Black Sheep Object
+    {
+        sheepValue = sheepValueList[0];         // Set sheep value to whiteSheep index
+        libertyValue = libertyValueList[0];     // Set libertyValue to 0
+        nodeValue = nodeValueList[0];           // nodeValue is 0
+
+        bool isActive = true;
+        for (int i = sheepTileList.Count-1; i >= 0; i--)    
+        {
+            sheepTileList[i].GetComponent<MeshRenderer>().enabled = !isActive;      // Sets all SheepTiles to inactive
+        }
+        
+        sheepTileList[sheepValue].GetComponent<MeshRenderer>().enabled = isActive;      // Set Current SheepTile active
+    }
 
 
     // public void SetGrassTileDisplay()

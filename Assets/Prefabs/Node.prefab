@@ -361,24 +361,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nodeValue: 0
-  libertyValue: 0
-  libertyValueList: 0000000001000000
-  placeAbleBool: 0
-  placeAbleValueList: 0001
   GrassTileList:
   - {fileID: 7446470294818435023}
   - {fileID: 2368221022121570766}
   - {fileID: 3735721408213786464}
   - {fileID: 560020290682487905}
   - {fileID: 1443934886890347179}
-  sheepBlack: {fileID: 663536277094645605, guid: 7f7373044021aaa4596c731aad6ff865, type: 3}
-  sheepWhite: {fileID: 3397406179871344672, guid: 3ea15fc2f10edb14e803b0467dfc5b2e, type: 3}
-  emptySpace: {fileID: 4061226557962082552, guid: 4a593498ca0bcd243a5ccfbf043548f1, type: 3}
-  sheepPlacedList:
+  sheepValue: 0
+  sheepValueList: 000000000100000002000000
+  sheepTileList:
   - {fileID: 4061226557962082552, guid: 4a593498ca0bcd243a5ccfbf043548f1, type: 3}
   - {fileID: 663536277094645605, guid: 7f7373044021aaa4596c731aad6ff865, type: 3}
   - {fileID: 3397406179871344672, guid: 3ea15fc2f10edb14e803b0467dfc5b2e, type: 3}
+  libertyValue: 0
+  libertyValueList: 0000000001000000
+  placeAbleBool: 0
+  placeAbleValueList: 0001
   settingState: 0
+  settingSheep: 0
 --- !u!1 &3735721408213786464
 GameObject:
   m_ObjectHideFlags: 0
