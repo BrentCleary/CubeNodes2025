@@ -29,6 +29,7 @@ public class NodeArrayScript : MonoBehaviour
     void Start()
     {
         masterNode = GameObject.Find("MasterNode");
+        Debug.Log("MasterNode found with name of " + masterNode.name);
         masterNodeScript = masterNode.GetComponent<NodeScript>();
 
         gNodeArray = new GameObject[3,3];
@@ -85,87 +86,77 @@ public class NodeArrayScript : MonoBehaviour
 
     public void ArrayPositionNodeValueSetter()      // Displays Array based on nodeValues
     {
-        List<int> nodeArrayMapper = new List<int>();  // List to hold update values for arrayNodes
-        foreach(GameObject node in gNodeList)         // Loops over all nodes in gNodeList
-        {
-            nodeArrayMapper.Add(masterNodeScript.nodeValueList[4]);     // Assigns max NodeValue to each position
+        List<int> nodeValueMap = new List<int>();  // List to hold update values for arrayNodes
+        
+        // Reset all node liberty values to 1
+        foreach(GameObject node in gNodeList){         // Loops over all nodes in gNodeList    
+            node.GetComponent<NodeScript>().libertyValue = masterNodeScript.libertyValueList[1];  // Set liberty value based on masterNode
+            nodeValueMap.Add(masterNodeScript.nodeValueList[4]);     // Assigns max NodeValue to each position
         }
         
-        int mappingCounter = 0;     // Counter to increment through index in nodeArrayMapper
+        int mapIndex = 0;     // Counter to increment through index in nodeValueMap
 
-        // Map node values to nodeArrayMapper based on current board state
-        for(int i = 0; i < arrayColumnLength; i++)         // Assigns positions to each gNode in gNodeArray
-        {
+        // Map node values to nodeValueMap based on current board state
+        for(int i = 0; i < arrayColumnLength; i++){         // Assigns positions to each gNode in gNodeArray
             for(int j = 0; j < arrayRowLength; j++)
-            {
-                GameObject currentNode = gNodeArray[i,j];
-                
+            {                
                 // Left
-                if(j == 0)      // Check left index is not out of range 
-                {
-                    nodeArrayMapper[mappingCounter] -= 1;
+                if(j == 0){      // Check left index is not out of range 
+                    nodeValueMap[mapIndex] -= 1;
                 }
-                if(j != 0)      // Check left position
-                {
-                    if(gNodeArray[i, j-1].GetComponent<NodeScript>().libertyValue == 0)     // Check left index is not null
-                    {
-                        nodeArrayMapper[mappingCounter] -= 1;
-                    }
-                }
-                // Right
-                if(j == arrayRowLength-1)      // Check right index is not out of range 
-                {
-                    nodeArrayMapper[mappingCounter] -= 1;
-                }
-                if(j != arrayRowLength-1)       // Check right position
-                {
-                    if(gNodeArray[i, j+1].GetComponent<NodeScript>().libertyValue == 0)     // Check right index is not null
-                    {
-                        nodeArrayMapper[mappingCounter] -= 1;
-                    }
-                }
-                // Top 
-                if(i == 0)      // Check top index is not out of range 
-                {
-                    nodeArrayMapper[mappingCounter] -= 1;
-                }
-                if(i != 0)      //  Check top position
-                {
-                    if(gNodeArray[i-1,j].GetComponent<NodeScript>().libertyValue == 0)
-                    {
-                        nodeArrayMapper[mappingCounter] -= 1;
-                    }
-                }
-                // Bottom
-                if(i == arrayColumnLength-1)      // Check bottom index is not out of range 
-                {
-                    nodeArrayMapper[mappingCounter] -= 1;
-                }
-                if(i != arrayColumnLength-1)      // Check bottom position 
-                {
-                    if(gNodeArray[i+1,j].GetComponent<NodeScript>().libertyValue == 0)
-                    {
-                        nodeArrayMapper[mappingCounter] -= 1;
+                if(j != 0){      // Check left position
+                    if(gNodeArray[i, j-1].GetComponent<NodeScript>().libertyValue == 0){     // Check left mapIndex is not null
+                        nodeValueMap[mapIndex] -= 1;
                     }
                 }
 
-                mappingCounter += 1;
+                // Right
+                if(j == arrayRowLength-1){      // Check right mapIndex is not out of range 
+                    nodeValueMap[mapIndex] -= 1;
+                }
+                if(j != arrayRowLength-1){       // Check right position
+                    if(gNodeArray[i, j+1].GetComponent<NodeScript>().libertyValue == 0){     // Check right mapIndex is not null
+                        nodeValueMap[mapIndex] -= 1;
+                    }
+                }
+
+                // Top 
+                if(i == 0){      // Check top mapIndex is not out of range 
+                    nodeValueMap[mapIndex] -= 1;
+                }
+                if(i != 0){      //  Check top position
+                    if(gNodeArray[i-1, j].GetComponent<NodeScript>().libertyValue == 0){
+                        nodeValueMap[mapIndex] -= 1;
+                    }
+                }
+
+                // Bottom
+                if(i == arrayColumnLength-1){      // Check bottom mapIndex is not out of range 
+                    nodeValueMap[mapIndex] -= 1;
+                }
+                if(i != arrayColumnLength-1){      // Check bottom position 
+                    if(gNodeArray[i+1, j].GetComponent<NodeScript>().libertyValue == 0){
+                        nodeValueMap[mapIndex] -= 1;
+                    }
+                }
+
+                mapIndex += 1;
             }
         }
         
-        if(1 == 1)      // Debug to display nodeArrayMapper values
+        if(1 == 1)      // Debug to display nodeValueMap values
         {
-            int counter = 0;
-            foreach(int mapperValue in nodeArrayMapper)
+            int debugCounter = 0;
+            foreach(int mapValue in nodeValueMap)
             {
-                Debug.Log("nodeArrayMapperValue[" + counter + "] is " + mapperValue);
-                counter += 1;
+                Debug.Log("nodeValueMapValue[" + debugCounter + "] is " + mapValue);
+                debugCounter += 1;
             }
         }
 
-        int nodeSetterCounter = 0;
+        int arrayIndex = 0;
 
-        // Map nodeArrayMapper values to nodeArray
+        // Map nodeValueMap values to nodeArray
         for(int i = 0; i < arrayColumnLength; i++)         // Assigns positions to each gNode in gNodeArray
         {
             for(int j = 0; j < arrayRowLength; j++)
@@ -173,54 +164,14 @@ public class NodeArrayScript : MonoBehaviour
                 GameObject currentNode = gNodeArray[i,j];
                 NodeScript currentNodeScript = currentNode.GetComponent<NodeScript>();
                 
+                currentNodeScript.nodeValue = nodeValueMap[arrayIndex];
+                
                 currentNodeScript.libertyValue = currentNodeScript.libertyValueList[1];
-
-                if(j != 0)      // Check left position
-                {
-                    if(gNodeArray[i, j-1].GetComponent<NodeScript>().libertyValue == 0)     // Check left index is not null
-                    {
-                        currentNodeScript.nodeValue -= 1;
-                    }
-                }
-
-                if(j == arrayRowLength-1)      // Check right index is not out of range 
-                {
-                    currentNodeScript.nodeValue -= 1;
-                }
-                if(j != arrayRowLength-1)       // Check right position
-                {
-                    if(gNodeArray[i, j+1].GetComponent<NodeScript>().libertyValue == 0)     // Check right index is not null
-                    {
-                        currentNodeScript.nodeValue -= 1;
-                    }
-                }
-
-                if(i == 0)      // Check top index is not out of range 
-                {
-                    currentNodeScript.nodeValue -= 1;
-                }
-                if(i != 0)      //  Check top position
-                {
-                    if(gNodeArray[i-1,j].GetComponent<NodeScript>().libertyValue == 0)
-                    {
-                        currentNodeScript.nodeValue -= 1;
-                    }
-                }
-
-                if(i == arrayColumnLength-1)      // Check bottom index is not out of range 
-                {
-                    currentNodeScript.nodeValue -= 1;
-                }
-                if(i != arrayColumnLength-1)      // Check bottom position 
-                {
-                    if(gNodeArray[i+1,j].GetComponent<NodeScript>().libertyValue == 0)
-                    {
-                        currentNodeScript.nodeValue -= 1;
-                    }
-                }
-
+                
                 currentNode.GetComponent<NodeScript>().SetGrassTileDisplayLoop();
                 Debug.Log(currentNode.GetComponent<NodeScript>().name + "'s nodeValue is " + currentNode.GetComponent<NodeScript>().nodeValue);
+            
+                arrayIndex += 1;
             }
         }
     }
@@ -268,9 +219,12 @@ public class NodeArrayScript : MonoBehaviour
                 GameObject currentNode = gNodeArray[i,j];
                 NodeScript currentNodeScript = currentNode.GetComponent<NodeScript>();
                 
+                currentNodeScript.libertyValue = currentNodeScript.libertyValueList[1];     // Set all libertyValue to 1 (Empty sheep object)
+
                 currentNodeScript.EmptySheepSetter();           // Resets nodeValue of all Nodes to 4 before Setting
 
                 currentNode.GetComponent<NodeScript>().settingState = true;
+                ArrayPositionNodeValueSetter();
                 currentNode.GetComponent<NodeScript>().SetGrassTileDisplayLoop();
             }
         }
