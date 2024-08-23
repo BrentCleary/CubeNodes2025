@@ -1,14 +1,14 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\Brent\\Desktop\\CubeNodes\\",
+  "WorkspaceRootPath": "C:\\Users\\Brent\\OneDrive\\Desktop\\CubeNodes\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Brent\\Desktop\\CubeNodes\\Assets\\NodeScript.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\NodeScript.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{B12BB391-E8DA-F158-3EC8-5379E0547FDF}|Assembly-CSharp.csproj|c:\\users\\brent\\onedrive\\desktop\\cubenodes\\assets\\nodescript.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B12BB391-E8DA-F158-3EC8-5379E0547FDF}|Assembly-CSharp.csproj|solutionrelative:assets\\nodescript.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C82AD968-EA84-459E-A891-7C241A9404FA}|Solution Items{C82AD968-EA84-459E-A891-7C241A9404FA}|C:\\Users\\Brent\\Desktop\\CubeNodes\\TextFile1.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{C82AD968-EA84-459E-A891-7C241A9404FA}|Solution Items{C82AD968-EA84-459E-A891-7C241A9404FA}|solutionrelative:TextFile1.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Brent\\OneDrive\\Desktop\\CubeNodes\\TextFile1.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:TextFile1.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
     }
   ],
   "DocumentGroupContainers": [
@@ -24,9 +24,9 @@
               "$type": "Document",
               "DocumentIndex": 1,
               "Title": "TextFile1.txt",
-              "DocumentMoniker": "C:\\Users\\Brent\\Desktop\\CubeNodes\\TextFile1.txt",
+              "DocumentMoniker": "C:\\Users\\Brent\\OneDrive\\Desktop\\CubeNodes\\TextFile1.txt",
               "RelativeDocumentMoniker": "TextFile1.txt",
-              "ToolTip": "C:\\Users\\Brent\\Desktop\\CubeNodes\\TextFile1.txt",
+              "ToolTip": "C:\\Users\\Brent\\OneDrive\\Desktop\\CubeNodes\\TextFile1.txt",
               "RelativeToolTip": "TextFile1.txt",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAA8AAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
@@ -36,11 +36,11 @@
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "NodeScript.cs",
-              "DocumentMoniker": "C:\\Users\\Brent\\Desktop\\CubeNodes\\Assets\\NodeScript.cs",
+              "DocumentMoniker": "C:\\Users\\Brent\\OneDrive\\Desktop\\CubeNodes\\Assets\\NodeScript.cs",
               "RelativeDocumentMoniker": "Assets\\NodeScript.cs",
-              "ToolTip": "C:\\Users\\Brent\\Desktop\\CubeNodes\\Assets\\NodeScript.cs",
+              "ToolTip": "C:\\Users\\Brent\\OneDrive\\Desktop\\CubeNodes\\Assets\\NodeScript.cs",
               "RelativeToolTip": "Assets\\NodeScript.cs",
-              "ViewState": "AQIAAAEAAAAAAAAAAAAiwAoAAAASAAAA",
+              "ViewState": "AQIAAAEAAAAAAAAAAAAiwAoAAAABAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-07-13T05:07:18.356Z",
               "EditorCaption": ""

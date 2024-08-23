@@ -94,10 +94,13 @@ public class NodeScript : MonoBehaviour
         for (int i = nodeValue; i >= 0; i--)    // Sets all tiles from nodeValue and lower true
         {
             GrassTileList[i].GetComponent<MeshRenderer>().enabled = isActive;
+            GrassTileList[i].SetActive(isActive);
+
         }
         for (int i = nodeValueList.Count- 1; i > nodeValue; i--)   // Sets all tiles from nodeValue and higher false
         {
             GrassTileList[i].GetComponent<MeshRenderer>().enabled = !isActive;
+            GrassTileList[i].SetActive(!isActive);
         }
     }
 
@@ -143,7 +146,7 @@ public class NodeScript : MonoBehaviour
         bool isActive = true;
         for (int i = sheepTileList.Count-1; i >= 0; i--)    
         {
-            sheepTileList[i].GetComponent<MeshRenderer>().enabled = !isActive;      // Sets all SheepTiles to inactive
+            sheepTileList[i].GetComponent<MeshRenderer>().enabled = !isActive;      // Sets all SheepTiles to inactive    // Sets all SheepTiles to inactive
         }
         
         sheepTileList[sheepValue].GetComponent<MeshRenderer>().enabled = isActive;      // Set Current SheepTile active

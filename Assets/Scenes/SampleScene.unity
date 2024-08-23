@@ -365,6 +365,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Node (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 3735721408213786464, guid: 2171c39f9063e3e488721af2d1f06815, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7633713287661895302, guid: 2171c39f9063e3e488721af2d1f06815, type: 3}
       propertyPath: sheepTileList.Array.data[0]
       value: 
@@ -780,13 +784,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.27302483, y: -0.31143022, z: 0.093918055, w: 0.90534425}
-  m_LocalPosition: {x: 3.66, y: 5.52, z: -5.54}
+  m_LocalRotation: {x: 0.42368606, y: -0.46072236, z: 0.26630023, w: 0.73301387}
+  m_LocalPosition: {x: 4.65, y: 8.9, z: -2.65}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 33.564, y: -37.966, z: 0}
+  m_LocalEulerAnglesHint: {x: 60.056, y: -64.301, z: 0}
 --- !u!1 &1071964292 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5220549801508980871, guid: 2171c39f9063e3e488721af2d1f06815, type: 3}
