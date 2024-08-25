@@ -5,17 +5,30 @@ using UnityEngine;
 
 public class TargetNode : MonoBehaviour
 {
-    private GameObject parentNode;
+    public GameObject grassContainer;
+    public GameObject parentNode;
+    public GameObject nodeArray;
     public Material selectionMaterial;
     private List<Renderer> tileRendererList;
     public List<Material> tileMaterialList;
+    private NodeScript parentNodeScript;
+    private NodeArrayScript nodeArrayScript;
 
     // Start is called before the first frame update
     void Start()
     {
-        parentNode = gameObject.transform.parent.gameObject;
 
-        tileRendererList = parentNode.GetComponentsInChildren<Renderer>().ToList();
+        grassContainer = gameObject.transform.parent.gameObject;
+
+        // node reference - parent reference
+        parentNode = grassContainer.transform.parent.gameObject;
+        parentNodeScript = parentNode.GetComponent<NodeScript>();
+        
+        // board array reference - highest parent
+        nodeArray = parentNode.transform.parent.gameObject;
+        nodeArrayScript = nodeArray.GetComponent<NodeArrayScript>();
+
+        tileRendererList = grassContainer.GetComponentsInChildren<Renderer>().ToList();
         
         foreach(Renderer renderer in tileRendererList)
         {
@@ -27,7 +40,7 @@ public class TargetNode : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     private void OnMouseEnter()
@@ -36,6 +49,9 @@ public class TargetNode : MonoBehaviour
         {
             renderer.material = selectionMaterial;
         }
+
+        Debug.Log(parentNode.name);
+
         Debug.Log("OnMouseEnter Activated on " + gameObject.name);
         
         // Material Debuggeer for checking material display - Disabled 08222024.2059 
@@ -44,6 +60,7 @@ public class TargetNode : MonoBehaviour
         //     Debug.Log($"{material}");
         // }
     }
+
 
     private void OnMouseExit()
     {
@@ -54,4 +71,31 @@ public class TargetNode : MonoBehaviour
             colorCounter++;
         }
     }
+
+    // To be called in the TargetNode script from parentNodeScript
+    public void OnMouseDown()
+    {
+        // Check if the left mouse button was clicked
+        if (Input.GetMouseButtonDown(0))
+        {
+            parentNodeScript.BlackSheepSetter();
+            parentNodeScript.SetGrassTileDisplayLoop();
+            List<int> nodeValueMap = nodeArrayScript.NodeValueMapper();
+            nodeArrayScript.NodeValueUpdater(nodeValueMap);
+
+            Debug.Log("Object clicked!");
+        }
+
+        // Check if the left mouse button was clicked
+        if (Input.GetMouseButtonDown(1))
+        {
+            parentNodeScript.WhiteSheepSetter();
+            parentNodeScript.SetGrassTileDisplayLoop();
+            List<int> nodeValueMap = nodeArrayScript.NodeValueMapper();
+            nodeArrayScript.NodeValueUpdater(nodeValueMap);
+
+            Debug.Log("Object clicked!");
+        }
+    }
+
 }

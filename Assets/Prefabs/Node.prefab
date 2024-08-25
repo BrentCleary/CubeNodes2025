@@ -118,6 +118,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d5730930e5e4cc4db83e682346aa2e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  grassContainer: {fileID: 0}
+  parentNode: {fileID: 0}
+  nodeArray: {fileID: 0}
   selectionMaterial: {fileID: 2100000, guid: 83f935cf247a987418b4bd63a09b1c13, type: 2}
   tileMaterialList: []
 --- !u!1 &1443934886890347179
@@ -238,6 +241,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d5730930e5e4cc4db83e682346aa2e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  grassContainer: {fileID: 0}
+  parentNode: {fileID: 0}
+  nodeArray: {fileID: 0}
   selectionMaterial: {fileID: 2100000, guid: 83f935cf247a987418b4bd63a09b1c13, type: 2}
   tileMaterialList: []
 --- !u!1 &2368221022121570766
@@ -358,6 +364,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d5730930e5e4cc4db83e682346aa2e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  grassContainer: {fileID: 0}
+  parentNode: {fileID: 0}
+  nodeArray: {fileID: 0}
   selectionMaterial: {fileID: 2100000, guid: 83f935cf247a987418b4bd63a09b1c13, type: 2}
   tileMaterialList: []
 --- !u!1 &2404018319395889093
@@ -568,6 +577,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d5730930e5e4cc4db83e682346aa2e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  grassContainer: {fileID: 0}
+  parentNode: {fileID: 0}
+  nodeArray: {fileID: 0}
   selectionMaterial: {fileID: 2100000, guid: 83f935cf247a987418b4bd63a09b1c13, type: 2}
   tileMaterialList: []
 --- !u!1 &3842436591245947211
@@ -724,6 +736,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d5730930e5e4cc4db83e682346aa2e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  grassContainer: {fileID: 0}
+  parentNode: {fileID: 0}
+  nodeArray: {fileID: 0}
   selectionMaterial: {fileID: 2100000, guid: 83f935cf247a987418b4bd63a09b1c13, type: 2}
   tileMaterialList: []
 --- !u!1001 &4015143177413364480
@@ -844,6 +859,10 @@ PrefabInstance:
     - target: {fileID: 3397406179871344672, guid: 3ea15fc2f10edb14e803b0467dfc5b2e, type: 3}
       propertyPath: m_Name
       value: WhiteSheep
+      objectReference: {fileID: 0}
+    - target: {fileID: 3397406179871344672, guid: 3ea15fc2f10edb14e803b0467dfc5b2e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

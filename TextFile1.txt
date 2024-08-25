@@ -13,3 +13,77 @@
     // Objects for displaying value
     // - List containing game object references to display or toggle based on Node state
     // - To be hidden toggle their renders on or off
+
+
+// Old Scripts:
+
+ // Script Updated to loop over all objects in array
+// public void SetGrassTileDisplay()
+    // {
+    //     bool isActive = true;
+
+    //     if(nodeValue == nodeValueList[0] && settingState)               // Set Value for 0
+    //     {
+    //         GrassTileList[0].GetComponent<MeshRenderer>().enabled = isActive;
+    //         GrassTileList[1].GetComponent<MeshRenderer>().enabled = !isActive;
+    //         GrassTileList[2].GetComponent<MeshRenderer>().enabled = !isActive;
+    //         GrassTileList[3].GetComponent<MeshRenderer>().enabled = !isActive;
+    //         GrassTileList[4].GetComponent<MeshRenderer>().enabled = !isActive;
+
+    //         settingState = false;
+    //         Debug.Log("SetGrassTile 0 Triggered and settingState = " + settingState);
+    //     }
+
+        
+    //     if(nodeValue == nodeValueList[1] && settingState)               // Set Value for 1
+    //         GrassTileList[0].GetComponent<MeshRenderer>().enabled = isActive;
+    //         GrassTileList[1].GetComponent<MeshRenderer>().enabled = isActive;
+    //         GrassTileList[2].GetComponent<MeshRenderer>().enabled = !isActive;
+    //         GrassTileList[3].GetComponent<MeshRenderer>().enabled = !isActive;
+    //         GrassTileList[4].GetComponent<MeshRenderer>().enabled = !isActive;
+            
+    //         settingState = false;
+    //         Debug.Log("SetGrassTile 1 Triggered and settingState = " + settingState);
+    //     }
+
+    //     if(nodeValue == nodeValueList[2] && settingState)               // Set Value for 2
+    //     {
+    //         GrassTileList[0].GetComponent<MeshRenderer>().enabled = isActive;
+    //         GrassTileList[1].GetComponent<MeshRenderer>().enabled = isActive;
+    //         GrassTileList[2].GetComponent<MeshRenderer>().enabled = isActive;
+    //         GrassTileList[3].GetComponent<MeshRenderer>().enabled = !isActive;
+    //         GrassTileList[4].GetComponent<MeshRenderer>().enabled = !isActive;
+            
+    //         settingState = false;
+    //         Debug.Log("SetGrassTile 2 Triggered and settingState = " + settingState);
+    //     }
+
+    //     if(nodeValue == nodeValueList[3] && settingState)               // Set Value for 3
+    //     {
+    //         GrassTileList[0].GetComponent<MeshRenderer>().enabled = isActive;
+    //         GrassTileList[1].GetComponent<MeshRenderer>().enabled = isActive;
+    //         GrassTileList[2].GetComponent<MeshRenderer>().enabled = isActive;
+    //         GrassTileList[3].GetComponent<MeshRenderer>().enabled = isActive;
+    //         GrassTileList[4].GetComponent<MeshRenderer>().enabled = !isActive;
+            
+    //         settingState = false;
+    //         Debug.Log("SetGrassTile 3 Triggered and settingState = " + settingState);
+    //     }
+
+    //     if(nodeValue == nodeValueList[4] && settingState)               // Set Value for 3
+    //     {
+    //         GrassTileList[0].GetComponent<MeshRenderer>().enabled = isActive;
+    //         GrassTileList[1].GetComponent<MeshRenderer>().enabled = isActive;
+    //         GrassTileList[2].GetComponent<MeshRenderer>().enabled = isActive;
+    //         GrassTileList[3].GetComponent<MeshRenderer>().enabled = isActive;
+    //         GrassTileList[4].GetComponent<MeshRenderer>().enabled = isActive;
+            
+    //         settingState = false;
+    //         Debug.Log("SetGrassTile 3 Triggered and settingState = " + settingState);
+    //     }
+
+    //     settingState = true;
+    // }
+
+
+

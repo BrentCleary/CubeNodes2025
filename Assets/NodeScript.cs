@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using JetBrains.Annotations;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -97,7 +98,7 @@ public class NodeScript : MonoBehaviour
             GrassTileList[i].SetActive(isActive);
 
         }
-        for (int i = nodeValueList.Count- 1; i > nodeValue; i--)   // Sets all tiles from nodeValue and higher false
+        for (int i = nodeValueList.Count- 1; i > nodeValue; i--)   // Sets all tiles above nodeValue false
         {
             GrassTileList[i].GetComponent<MeshRenderer>().enabled = !isActive;
             GrassTileList[i].SetActive(!isActive);
@@ -154,72 +155,11 @@ public class NodeScript : MonoBehaviour
     }
 
 
-    // public void SetGrassTileDisplay()
-    // {
-    //     bool isActive = true;
 
-    //     if(nodeValue == nodeValueList[0] && settingState)               // Set Value for 0
-    //     {
-    //         GrassTileList[0].GetComponent<MeshRenderer>().enabled = isActive;
-    //         GrassTileList[1].GetComponent<MeshRenderer>().enabled = !isActive;
-    //         GrassTileList[2].GetComponent<MeshRenderer>().enabled = !isActive;
-    //         GrassTileList[3].GetComponent<MeshRenderer>().enabled = !isActive;
-    //         GrassTileList[4].GetComponent<MeshRenderer>().enabled = !isActive;
-
-    //         settingState = false;
-    //         Debug.Log("SetGrassTile 0 Triggered and settingState = " + settingState);
-    //     }
-
-        
-    //     if(nodeValue == nodeValueList[1] && settingState)               // Set Value for 1
-    //     {
-    //         GrassTileList[0].GetComponent<MeshRenderer>().enabled = isActive;
-    //         GrassTileList[1].GetComponent<MeshRenderer>().enabled = isActive;
-    //         GrassTileList[2].GetComponent<MeshRenderer>().enabled = !isActive;
-    //         GrassTileList[3].GetComponent<MeshRenderer>().enabled = !isActive;
-    //         GrassTileList[4].GetComponent<MeshRenderer>().enabled = !isActive;
-            
-    //         settingState = false;
-    //         Debug.Log("SetGrassTile 1 Triggered and settingState = " + settingState);
-    //     }
-
-    //     if(nodeValue == nodeValueList[2] && settingState)               // Set Value for 2
-    //     {
-    //         GrassTileList[0].GetComponent<MeshRenderer>().enabled = isActive;
-    //         GrassTileList[1].GetComponent<MeshRenderer>().enabled = isActive;
-    //         GrassTileList[2].GetComponent<MeshRenderer>().enabled = isActive;
-    //         GrassTileList[3].GetComponent<MeshRenderer>().enabled = !isActive;
-    //         GrassTileList[4].GetComponent<MeshRenderer>().enabled = !isActive;
-            
-    //         settingState = false;
-    //         Debug.Log("SetGrassTile 2 Triggered and settingState = " + settingState);
-    //     }
-
-    //     if(nodeValue == nodeValueList[3] && settingState)               // Set Value for 3
-    //     {
-    //         GrassTileList[0].GetComponent<MeshRenderer>().enabled = isActive;
-    //         GrassTileList[1].GetComponent<MeshRenderer>().enabled = isActive;
-    //         GrassTileList[2].GetComponent<MeshRenderer>().enabled = isActive;
-    //         GrassTileList[3].GetComponent<MeshRenderer>().enabled = isActive;
-    //         GrassTileList[4].GetComponent<MeshRenderer>().enabled = !isActive;
-            
-    //         settingState = false;
-    //         Debug.Log("SetGrassTile 3 Triggered and settingState = " + settingState);
-    //     }
-
-    //     if(nodeValue == nodeValueList[4] && settingState)               // Set Value for 3
-    //     {
-    //         GrassTileList[0].GetComponent<MeshRenderer>().enabled = isActive;
-    //         GrassTileList[1].GetComponent<MeshRenderer>().enabled = isActive;
-    //         GrassTileList[2].GetComponent<MeshRenderer>().enabled = isActive;
-    //         GrassTileList[3].GetComponent<MeshRenderer>().enabled = isActive;
-    //         GrassTileList[4].GetComponent<MeshRenderer>().enabled = isActive;
-            
-    //         settingState = false;
-    //         Debug.Log("SetGrassTile 3 Triggered and settingState = " + settingState);
-    //     }
-
-    //     settingState = true;
-    // }
-
+    public void PlaceBlackSheep()
+    {
+        sheepValue = sheepValueList[1];
+        libertyValue = 0;
+    }
+    
 }
