@@ -17,6 +17,7 @@ public class BoardGenerator : MonoBehaviour
     [SerializeField] public List<GameObject> gNodeList;
     public GameObject nodePrefab;
 
+
     public List<int> startNodeValueMap;
 
     // Start is called before the first frame update
@@ -30,8 +31,7 @@ public class BoardGenerator : MonoBehaviour
 
         gNodeArray = new GameObject[arrayColumnLength,arrayRowLength];
         arrayTotalNodes = arrayColumnLength * arrayRowLength;
-
-        // gNode List and Script Reference
+        
         gNodeList = new List<GameObject>();
 
         NodeGenerator();
@@ -110,14 +110,13 @@ public class BoardGenerator : MonoBehaviour
         // NodeValueMapDebugDisplayValue(nodeValueMap);  // DEBUG METHOD 
 
         return nodeValueMap;
-        
     }
     
 
 
     public List<int> NodeValueMapIndexer(List<int> nodeValueMap)
     {
-                // Counter to increment through index in nodeValueMap
+        // Counter to increment through index in nodeValueMap
         int mapIndex = 0;     
 
         // Map node values to nodeValueMap based on current board state
@@ -216,7 +215,6 @@ public class BoardGenerator : MonoBehaviour
     // Debug Value Setters
     public void DebugControls()
     {
-        if(Input.GetKeyDown(KeyCode.O)) { NodeValueMapper(); }
         if(Input.GetKeyDown(KeyCode.I)) { ArrayPositionBlackSheepSetter(); }
         if(Input.GetKeyDown(KeyCode.U)) { ArrayPositionWhiteSheepSetter(); }
         if(Input.GetKeyDown(KeyCode.Y)) { ArrayPositionEmptySheepSetter(); }

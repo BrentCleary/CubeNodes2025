@@ -142,26 +142,19 @@ public class NodeScript : MonoBehaviour
 
     public void EmptySheepSetter()              // Sets node to Black Sheep Object
     {
-        sheepValue = sheepValueList[0];         // Set sheep value to whiteSheep index
-        libertyValue = libertyValueList[0];     // Set libertyValue to 0
-        nodeValue = nodeValueList[0];           // nodeValue is 0
+        sheepValue = sheepValueList[0];         // Set sheep value to emptySheep index
+        libertyValue = libertyValueList[1];     // Set libertyValue to 1
+        nodeValue = nodeValueList[4];           // nodeValue is reset to 4
 
         bool isActive = true;
         for (int i = sheepTileList.Count-1; i >= 0; i--)    
         {
-            sheepTileList[i].GetComponent<MeshRenderer>().enabled = !isActive;      // Sets all SheepTiles to inactive    // Sets all SheepTiles to inactive
+            sheepTileList[i].SetActive(!isActive);      // Sets all SheepTiles to inactive      // Sets all SheepTiles to inactive    // Sets all SheepTiles to inactive
         }
         
-        sheepTileList[sheepValue].GetComponent<MeshRenderer>().enabled = isActive;      // Set Current SheepTile active
+        sheepTileList[sheepValue].SetActive(isActive);      // Set Current SheepTile active 
         Debug.Log(gameObject.name + " is " + sheepTileList[sheepValue].GetComponent<MeshRenderer>().enabled);
     }
 
 
-
-    public void PlaceBlackSheep()
-    {
-        sheepValue = sheepValueList[1];
-        libertyValue = 0;
-    }
-    
 }
