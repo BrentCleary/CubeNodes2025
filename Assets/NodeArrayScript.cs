@@ -10,6 +10,8 @@ public class NodeArrayScript : MonoBehaviour
     private NodeScript masterNodeScript;
 
     [SerializeField] public GameObject[,] gNodeArray;
+
+    public Array BoardArray3x3;
     int arrayColumnLength = 3;                          // Array Dimensions - Column
     int arrayRowLength = 3;                             // Array Dimensions - Row
 
