@@ -43,6 +43,7 @@
      <Compile Include="Assets\TargetNode.cs" />
      <Compile Include="Assets\NodeArrayScript.cs" />
      <Compile Include="Assets\EventClick.cs" />
+     <Compile Include="Assets\BoardGenerator.cs" />
      <Compile Include="Assets\NodeScript.cs" />
      <Compile Include="Assets\PlayerScript.cs" />
     <Reference Include="UnityEngine">
