@@ -14,6 +14,8 @@ public class TargetNode : MonoBehaviour
     private NodeScript parentNodeScript;
     private NodeArrayScript nodeArrayScript;
 
+    public bool nodeSelected = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -40,18 +42,19 @@ public class TargetNode : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        PlaceBlackSheepMethod();
+        PlaceWhiteSheepMethod();
     }
 
     private void OnMouseEnter()
     {
-        foreach(Renderer renderer in tileRendererList)
-        {
+        nodeSelected = true;
+
+        foreach(Renderer renderer in tileRendererList)        {
             renderer.material = selectionMaterial;
         }
 
         Debug.Log(parentNode.name);
-
         Debug.Log("OnMouseEnter Activated on " + gameObject.name);
         
         // Material Debuggeer for checking material display - Disabled 08222024.2059 
@@ -64,37 +67,42 @@ public class TargetNode : MonoBehaviour
 
     private void OnMouseExit()
     {
+        nodeSelected = false;
+
         int colorCounter = 0;
-        foreach(Renderer renderer in tileRendererList)
-        {
+
+        foreach(Renderer renderer in tileRendererList){
             renderer.material = tileMaterialList[colorCounter];
             colorCounter++;
         }
     }
 
-    // To be called in the TargetNode script from parentNodeScript
-    public void OnMouseDown()
+
+    public void PlaceBlackSheepMethod()
     {
         // Check if the left mouse button was clicked
-        if (Input.GetMouseButtonDown(0))
+        if (nodeSelected && Input.GetKeyDown(KeyCode.Mouse0))
         {
             parentNodeScript.BlackSheepSetter();
             parentNodeScript.SetGrassTileDisplayLoop();
             List<int> nodeValueMap = nodeArrayScript.NodeValueMapper();
             nodeArrayScript.NodeValueUpdater(nodeValueMap);
 
-            Debug.Log("Object clicked!");
+            Debug.Log("Black Sheep Set");
         }
+    }
 
-        // Check if the left mouse button was clicked
-        if (Input.GetMouseButtonDown(1))
+    public void PlaceWhiteSheepMethod()
+    {
+        // Check if the right mouse button was clicked
+        if (nodeSelected && Input.GetKeyDown(KeyCode.Mouse1))
         {
+            Debug.Log("White Sheep Set!");
             parentNodeScript.WhiteSheepSetter();
             parentNodeScript.SetGrassTileDisplayLoop();
             List<int> nodeValueMap = nodeArrayScript.NodeValueMapper();
             nodeArrayScript.NodeValueUpdater(nodeValueMap);
 
-            Debug.Log("Object clicked!");
         }
     }
 

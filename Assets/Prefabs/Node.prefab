@@ -123,6 +123,7 @@ MonoBehaviour:
   nodeArray: {fileID: 0}
   selectionMaterial: {fileID: 2100000, guid: 83f935cf247a987418b4bd63a09b1c13, type: 2}
   tileMaterialList: []
+  nodeSelected: 0
 --- !u!1 &1443934886890347179
 GameObject:
   m_ObjectHideFlags: 0
@@ -246,6 +247,7 @@ MonoBehaviour:
   nodeArray: {fileID: 0}
   selectionMaterial: {fileID: 2100000, guid: 83f935cf247a987418b4bd63a09b1c13, type: 2}
   tileMaterialList: []
+  nodeSelected: 0
 --- !u!1 &2368221022121570766
 GameObject:
   m_ObjectHideFlags: 0
@@ -369,6 +371,7 @@ MonoBehaviour:
   nodeArray: {fileID: 0}
   selectionMaterial: {fileID: 2100000, guid: 83f935cf247a987418b4bd63a09b1c13, type: 2}
   tileMaterialList: []
+  nodeSelected: 0
 --- !u!1 &2404018319395889093
 GameObject:
   m_ObjectHideFlags: 0
@@ -582,6 +585,7 @@ MonoBehaviour:
   nodeArray: {fileID: 0}
   selectionMaterial: {fileID: 2100000, guid: 83f935cf247a987418b4bd63a09b1c13, type: 2}
   tileMaterialList: []
+  nodeSelected: 0
 --- !u!1 &3842436591245947211
 GameObject:
   m_ObjectHideFlags: 0
@@ -741,6 +745,7 @@ MonoBehaviour:
   nodeArray: {fileID: 0}
   selectionMaterial: {fileID: 2100000, guid: 83f935cf247a987418b4bd63a09b1c13, type: 2}
   tileMaterialList: []
+  nodeSelected: 0
 --- !u!1001 &4015143177413364480
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -792,6 +797,10 @@ PrefabInstance:
     - target: {fileID: 4061226557962082552, guid: 4a593498ca0bcd243a5ccfbf043548f1, type: 3}
       propertyPath: m_Name
       value: EmptySpace
+      objectReference: {fileID: 0}
+    - target: {fileID: 4061226557962082552, guid: 4a593498ca0bcd243a5ccfbf043548f1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -890,6 +899,14 @@ PrefabInstance:
     - target: {fileID: 663536277094645605, guid: 7f7373044021aaa4596c731aad6ff865, type: 3}
       propertyPath: m_Name
       value: BlackSheep
+      objectReference: {fileID: 0}
+    - target: {fileID: 663536277094645605, guid: 7f7373044021aaa4596c731aad6ff865, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4893693526467893465, guid: 7f7373044021aaa4596c731aad6ff865, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7068461261987728732, guid: 7f7373044021aaa4596c731aad6ff865, type: 3}
       propertyPath: m_LocalPosition.x

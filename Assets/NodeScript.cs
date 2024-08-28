@@ -42,12 +42,12 @@ public class NodeScript : MonoBehaviour
 
         foreach(GameObject tile in GrassTileList)
         {
-            Debug.Log("GameObject is " + tile);
+            // Debug.Log("GameObject is " + tile);
         }
 
         foreach(GameObject tile in sheepTileList)
         {
-            Debug.Log("SheepObject is " + tile);
+            // Debug.Log("SheepObject is " + tile);
         }
     }
 
@@ -115,10 +115,10 @@ public class NodeScript : MonoBehaviour
         bool isActive = true;
         for (int i = sheepTileList.Count-1; i >= 0; i--)    
         {
-            sheepTileList[i].GetComponent<MeshRenderer>().enabled = !isActive;      // Sets all SheepTiles to inactive
+            sheepTileList[i].SetActive(!isActive);      // Sets all SheepTiles to inactive
         }
         
-        sheepTileList[sheepValue].GetComponent<MeshRenderer>().enabled = isActive;      // Set Current SheepTile active
+        sheepTileList[sheepValue].SetActive(isActive);      // Set Current SheepTile active
         Debug.Log(gameObject.name + " is " + sheepTileList[sheepValue].GetComponent<MeshRenderer>().enabled);
     }
 
@@ -128,13 +128,15 @@ public class NodeScript : MonoBehaviour
         libertyValue = libertyValueList[0];     // Set libertyValue to 0
         nodeValue = nodeValueList[0];           // nodeValue is 0
 
+        // Sets all SheepTiles to inactive
         bool isActive = true;
         for (int i = sheepTileList.Count-1; i >= 0; i--)    
         {
-            sheepTileList[i].GetComponent<MeshRenderer>().enabled = !isActive;      // Sets all SheepTiles to inactive
+            sheepTileList[i].SetActive(!isActive);      // Sets all SheepTiles to inactive
         }
         
-        sheepTileList[sheepValue].GetComponent<MeshRenderer>().enabled = isActive;      // Set Current SheepTile active
+        // Set Current SheepTile active
+        sheepTileList[sheepValue].SetActive(isActive);      // Set Current SheepTile active 
         Debug.Log(gameObject.name + " is " + sheepTileList[sheepValue].GetComponent<MeshRenderer>().enabled);
     }
 

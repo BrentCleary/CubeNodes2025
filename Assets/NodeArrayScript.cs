@@ -190,7 +190,7 @@ public class NodeArrayScript : MonoBehaviour
                 }
                 
                 currentNode.GetComponent<NodeScript>().SetGrassTileDisplayLoop();
-                Debug.Log(currentNode.GetComponent<NodeScript>().name + "'s nodeValue is " + currentNode.GetComponent<NodeScript>().nodeValue);
+                // Debug.Log(currentNode.GetComponent<NodeScript>().name + "'s nodeValue is " + currentNode.GetComponent<NodeScript>().nodeValue);
             
                 arrayIndex += 1;
             }
