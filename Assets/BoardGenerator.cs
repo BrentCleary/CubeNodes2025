@@ -84,26 +84,6 @@ public class BoardGenerator : MonoBehaviour
         }
     }
 
-    public void DisplayArray(){                      // Debugs Array Nodes in Console
-        for(int i = 0; i < arrayColumnLength; i ++){         // Assigns positions to each gNode in gNodeArray
-            for(int j = 0; j < arrayRowLength; j ++){
-                Debug.Log(gNodeArray[i,j].name);
-            }
-        }
-    }
-    
-    
-
-    // Debug Value Setters
-    public void DebugControls()
-    {
-        if(Input.GetKeyDown(KeyCode.O)) { NodeValueMapper(); }
-        if(Input.GetKeyDown(KeyCode.I)) { ArrayPositionBlackSheepSetter(); }
-        if(Input.GetKeyDown(KeyCode.U)) { ArrayPositionWhiteSheepSetter(); }
-        if(Input.GetKeyDown(KeyCode.Y)) { ArrayPositionEmptySheepSetter(); }
-
-        if(Input.GetKeyDown(KeyCode.P)) { DisplayArray(); }
-    }
 
     public List<int> NodeValueMapper()      // Displays Array based on nodeValues
     {
@@ -124,13 +104,26 @@ public class BoardGenerator : MonoBehaviour
             }
         }
         
-        // Counter to increment through index in nodeValueMap
+        // Update nodeValueMap based on position and board state
+        nodeValueMap = NodeValueMapIndexer(nodeValueMap);
+
+        // NodeValueMapDebugDisplayValue(nodeValueMap);  // DEBUG METHOD 
+
+        return nodeValueMap;
+        
+    }
+    
+
+
+    public List<int> NodeValueMapIndexer(List<int> nodeValueMap)
+    {
+                // Counter to increment through index in nodeValueMap
         int mapIndex = 0;     
 
         // Map node values to nodeValueMap based on current board state
         for(int i = 0; i < arrayColumnLength; i++){         // Assigns positions to each gNode in gNodeArray
             for(int j = 0; j < arrayRowLength; j++){                
-                // Left
+                // Left Index Check
                 if(j == 0){      // Check left index is not out of range 
                     nodeValueMap[mapIndex] -= 1;
                 }
@@ -140,7 +133,7 @@ public class BoardGenerator : MonoBehaviour
                     }
                 }
 
-                // Right
+                // Right Index Check
                 if(j == arrayRowLength-1){      // Check right mapIndex is not out of range 
                     nodeValueMap[mapIndex] -= 1;
                 }
@@ -150,7 +143,7 @@ public class BoardGenerator : MonoBehaviour
                     }
                 }
 
-                // Top 
+                // Top Index Check
                 if(i == 0){      // Check top mapIndex is not out of range 
                     nodeValueMap[mapIndex] -= 1;
                 }
@@ -160,7 +153,7 @@ public class BoardGenerator : MonoBehaviour
                     }
                 }
 
-                // Bottom
+                // Bottom Index Check
                 if(i == arrayColumnLength-1){      // Check bottom mapIndex is not out of range 
                     nodeValueMap[mapIndex] -= 1;
                 }
@@ -173,40 +166,26 @@ public class BoardGenerator : MonoBehaviour
                 mapIndex += 1;
             }
         }
-        
-        // if(1 == 1)      // Debug to display nodeValueMap values
-        // {
-        //     int debugCounter = 0;
-        //     foreach(int mapValue in nodeValueMap)
-        //     {
-        //         Debug.Log("nodeValueMapValue[" + debugCounter + "] is " + mapValue);
-        //         debugCounter += 1;
-        //     }
-        // }
 
         return nodeValueMap;
-        
     }
-    
+
+
     public void NodeValueUpdater(List<int> nodeValueMap)
     {
         int arrayIndex = 0;
 
         // Map nodeValueMap values to nodeArray
-        for(int i = 0; i < arrayColumnLength; i++)         // Assigns positions to each gNode in gNodeArray
-        {
-            for(int j = 0; j < arrayRowLength; j++)
-            {
+        for(int i = 0; i < arrayColumnLength; i++){         // Assigns positions to each gNode in gNodeArray
+            for(int j = 0; j < arrayRowLength; j++){
                 GameObject currentNode = gNodeArray[i,j];
                 NodeScript currentNodeScript = currentNode.GetComponent<NodeScript>();
                 
                 // TODO - Update here to check state of node to change liberty Value
-                if(nodeValueMap[arrayIndex] < 0)
-                {
+                if(nodeValueMap[arrayIndex] < 0) {
                     currentNodeScript.nodeValue = 0;
                 }
-                else
-                {
+                else {
                     currentNodeScript.nodeValue = nodeValueMap[arrayIndex];
                 }
                 
@@ -216,6 +195,33 @@ public class BoardGenerator : MonoBehaviour
                 arrayIndex += 1;
             }
         }
+    }
+
+
+
+
+    // ---------------------------------------- DEBUG METHODS ----------------------------------------
+
+    // Debug for displaying Node Values in NodeValueMap - Disabled
+    public void NodeValueMapDebugDisplayValue(List<int> nodeValueMap)
+    {
+        int debugCounter = 0;
+        foreach(int mapValue in nodeValueMap)
+        {
+            Debug.Log("nodeValueMapValue[" + debugCounter + "] is " + mapValue);
+            debugCounter += 1;
+        }
+    }
+
+    // Debug Value Setters
+    public void DebugControls()
+    {
+        if(Input.GetKeyDown(KeyCode.O)) { NodeValueMapper(); }
+        if(Input.GetKeyDown(KeyCode.I)) { ArrayPositionBlackSheepSetter(); }
+        if(Input.GetKeyDown(KeyCode.U)) { ArrayPositionWhiteSheepSetter(); }
+        if(Input.GetKeyDown(KeyCode.Y)) { ArrayPositionEmptySheepSetter(); }
+
+        if(Input.GetKeyDown(KeyCode.P)) { DisplayArray(); }
     }
 
     public void ArrayPositionBlackSheepSetter()      // Displays Array based on nodeValues
@@ -250,6 +256,7 @@ public class BoardGenerator : MonoBehaviour
             }
         }
     }
+
     public void ArrayPositionEmptySheepSetter()      // Displays Array based on nodeValues
     {
         for(int i = 0; i < arrayColumnLength; i++)         // Assigns positions to each gNode in gNodeArray
@@ -267,6 +274,14 @@ public class BoardGenerator : MonoBehaviour
                 List<int> nodeValueMap = NodeValueMapper();
                 NodeValueUpdater(nodeValueMap);
                 currentNode.GetComponent<NodeScript>().SetGrassTileDisplayLoop();
+            }
+        }
+    }
+
+    public void DisplayArray(){                      // Debugs Array Nodes in Console
+        for(int i = 0; i < arrayColumnLength; i ++){         // Assigns positions to each gNode in gNodeArray
+            for(int j = 0; j < arrayRowLength; j ++){
+                Debug.Log(gNodeArray[i,j].name);
             }
         }
     }
