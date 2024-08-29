@@ -39,16 +39,6 @@ public class NodeScript : MonoBehaviour
         libertyValue = 1;
         placeAbleBool = true;
         sheepValue = sheepValueList[0];
-
-        foreach(GameObject tile in GrassTileList)
-        {
-            // Debug.Log("GameObject is " + tile);
-        }
-
-        foreach(GameObject tile in sheepTileList)
-        {
-            // Debug.Log("SheepObject is " + tile);
-        }
     }
 
     // Update is called once per frame
@@ -119,7 +109,7 @@ public class NodeScript : MonoBehaviour
         }
         
         sheepTileList[sheepValue].SetActive(isActive);      // Set Current SheepTile active
-        Debug.Log(gameObject.name + " is " + sheepTileList[sheepValue].GetComponent<MeshRenderer>().enabled);
+        // Debug.Log(gameObject.name + " is " + sheepTileList[sheepValue].GetComponent<MeshRenderer>().enabled);
     }
 
     public void WhiteSheepSetter()              // Sets node to Black Sheep Object
@@ -137,8 +127,9 @@ public class NodeScript : MonoBehaviour
         
         // Set Current SheepTile active
         sheepTileList[sheepValue].SetActive(isActive);      // Set Current SheepTile active 
-        Debug.Log(gameObject.name + " is " + sheepTileList[sheepValue].GetComponent<MeshRenderer>().enabled);
+        // Debug.Log(gameObject.name + " is " + sheepTileList[sheepValue].GetComponent<MeshRenderer>().enabled);
     }
+
 
     public void EmptySheepSetter()              // Sets node to Black Sheep Object
     {
@@ -153,7 +144,7 @@ public class NodeScript : MonoBehaviour
         }
         
         sheepTileList[sheepValue].SetActive(isActive);      // Set Current SheepTile active 
-        Debug.Log(gameObject.name + " is " + sheepTileList[sheepValue].GetComponent<MeshRenderer>().enabled);
+        // Debug.Log(gameObject.name + " is " + sheepTileList[sheepValue].GetComponent<MeshRenderer>().enabled);
     }
 
 

@@ -13,6 +13,7 @@ public class TargetNode : MonoBehaviour
     public List<Material> tileMaterialList;
     private NodeScript parentNodeScript;
     private NodeArrayScript nodeArrayScript;
+    private BoardGenerator boardGeneratorScript;
 
     public bool nodeSelected = false;
 
@@ -28,7 +29,9 @@ public class TargetNode : MonoBehaviour
         
         // board array reference - highest parent
         nodeArray = parentNode.transform.parent.gameObject;
-        nodeArrayScript = nodeArray.GetComponent<NodeArrayScript>();
+        Debug.Log("Node Array is " + nodeArray);
+        boardGeneratorScript = nodeArray.GetComponent<BoardGenerator>();
+
 
         tileRendererList = grassContainer.GetComponentsInChildren<Renderer>().ToList();
         
@@ -85,8 +88,10 @@ public class TargetNode : MonoBehaviour
         {
             parentNodeScript.BlackSheepSetter();
             parentNodeScript.SetGrassTileDisplayLoop();
-            List<int> nodeValueMap = nodeArrayScript.NodeValueMapper();
-            nodeArrayScript.NodeValueUpdater(nodeValueMap);
+
+            // BoardGenerator Script
+            List<int> nodeValueMap = boardGeneratorScript.NodeValueMapper();
+            boardGeneratorScript.NodeValueUpdater(nodeValueMap);
 
             Debug.Log("Black Sheep Set");
         }
@@ -100,24 +105,26 @@ public class TargetNode : MonoBehaviour
             Debug.Log("White Sheep Set!");
             parentNodeScript.WhiteSheepSetter();
             parentNodeScript.SetGrassTileDisplayLoop();
-            List<int> nodeValueMap = nodeArrayScript.NodeValueMapper();
-            nodeArrayScript.NodeValueUpdater(nodeValueMap);
+
+            // BoardGenerator Script
+            List<int> nodeValueMap = boardGeneratorScript.NodeValueMapper();
+            boardGeneratorScript.NodeValueUpdater(nodeValueMap);
 
         }
     }
 
-    public void PlaceEmptySheepMethod()
-    {
-        // Check if the right mouse button was clicked
-        if (nodeSelected && Input.GetKeyDown(KeyCode.Mouse2))
-        {
-            Debug.Log("Empty Sheep Set!");
-            parentNodeScript.EmptySheepSetter();
-            parentNodeScript.SetGrassTileDisplayLoop();
-            List<int> nodeValueMap = nodeArrayScript.NodeValueMapper();
-            nodeArrayScript.NodeValueUpdater(nodeValueMap);
+    // public void PlaceEmptySheepMethod()
+    // {
+    //     // Check if the right mouse button was clicked
+    //     if (nodeSelected && Input.GetKeyDown(KeyCode.Mouse2))
+    //     {
+    //         Debug.Log("Empty Sheep Set!");
+    //         parentNodeScript.EmptySheepSetter();
+    //         parentNodeScript.SetGrassTileDisplayLoop();
+    //         List<int> nodeValueMap = nodeArrayScript.NodeValueMapper();
+    //         nodeArrayScript.NodeValueUpdater(nodeValueMap);
 
-        }
-    }
+    //     }
+    // }
 
 }

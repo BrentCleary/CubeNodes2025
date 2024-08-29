@@ -17,8 +17,9 @@ public class BoardGenerator : MonoBehaviour
     [SerializeField] public List<GameObject> gNodeList;
     public GameObject nodePrefab;
 
-
     public List<int> startNodeValueMap;
+
+    public Transform gNodeArrayTransform;
 
     // Start is called before the first frame update
     void Start()
@@ -26,13 +27,15 @@ public class BoardGenerator : MonoBehaviour
         Debug.Log("Board Generator Started");
 
         masterNode = GameObject.Find("MasterNode");
-        Debug.Log("MasterNode found with name of " + masterNode.name);
+        // Debug.Log("MasterNode found with name of " + masterNode.name);
         masterNodeScript = masterNode.GetComponent<NodeScript>();
 
-        gNodeArray = new GameObject[arrayColumnLength,arrayRowLength];
+        gNodeArray = new GameObject[arrayColumnLength, arrayRowLength];
         arrayTotalNodes = arrayColumnLength * arrayRowLength;
         
         gNodeList = new List<GameObject>();
+
+        gNodeArrayTransform = gameObject.transform;
 
         NodeGenerator();
         NodePositionSetter();
@@ -58,7 +61,7 @@ public class BoardGenerator : MonoBehaviour
     public void NodeGenerator()
     {
         for(int i = 1; i <= arrayTotalNodes; i++) {
-            GameObject gNode = Instantiate(nodePrefab);
+            GameObject gNode = Instantiate(nodePrefab, gNodeArrayTransform);
             gNode.name = gNode + "(" + i + ")";
             gNodeList.Add(gNode);
         }
@@ -72,7 +75,7 @@ public class BoardGenerator : MonoBehaviour
 
 
     // STARTUP METHODS
-    public void GenerateNodeArray()              // Generate a 3x3 array containing Nodes contained gNodeList
+    public void GenerateNodeArray()              // Generate a Length x Row array containing Nodes contained gNodeList
     {               
         int nodeCounter = 0;                                // Increments Node reference in gNodeList 
 
@@ -108,6 +111,8 @@ public class BoardGenerator : MonoBehaviour
         nodeValueMap = NodeValueMapIndexer(nodeValueMap);
 
         // NodeValueMapDebugDisplayValue(nodeValueMap);  // DEBUG METHOD 
+
+        Debug.Log("NodeArray nodeValues Mapped to List");
 
         return nodeValueMap;
     }
@@ -166,6 +171,8 @@ public class BoardGenerator : MonoBehaviour
             }
         }
 
+        Debug.Log("NodeArray Map Index Updated");
+
         return nodeValueMap;
     }
 
@@ -194,6 +201,8 @@ public class BoardGenerator : MonoBehaviour
                 arrayIndex += 1;
             }
         }
+
+        Debug.Log("Node Array Update Complete");
     }
 
 
