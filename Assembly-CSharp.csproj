@@ -40,12 +40,10 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.3.6f1-x86_64\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\TargetNode.cs" />
-     <Compile Include="Assets\NodeArrayScript.cs" />
-     <Compile Include="Assets\EventClick.cs" />
-     <Compile Include="Assets\BoardGenerator.cs" />
-     <Compile Include="Assets\NodeScript.cs" />
-     <Compile Include="Assets\PlayerScript.cs" />
+     <Compile Include="Assets\Scripts\NodeArrayScript.cs" />
+     <Compile Include="Assets\Scripts\TargetNode.cs" />
+     <Compile Include="Assets\Scripts\NodeScript.cs" />
+     <Compile Include="Assets\Scripts\BoardGenerator.cs" />
     <Reference Include="UnityEngine">
         <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.6f1-x86_64\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
     </Reference>

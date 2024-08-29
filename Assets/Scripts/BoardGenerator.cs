@@ -1,49 +1,100 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class NodeArrayScript : MonoBehaviour
+public class BoardGenerator : MonoBehaviour
 {
-    private GameObject masterNode;    // Basic Node Value for Reference
+    // * MasterNode for default Value for Reference
+    private GameObject masterNode;    
     private NodeScript masterNodeScript;
 
     [SerializeField] public GameObject[,] gNodeArray;
-
-    public Array BoardArray3x3;
-    int arrayColumnLength = 3;                          // Array Dimensions - Column
-    int arrayRowLength = 3;                             // Array Dimensions - Row
-
     [SerializeField] public List<GameObject> gNodeList;
-    public GameObject gNode1;
-    public GameObject gNode2; 
-    public GameObject gNode3;
-    public GameObject gNode4; 
-    public GameObject gNode5; 
-    public GameObject gNode6; 
-    public GameObject gNode7; 
-    public GameObject gNode8; 
-    public GameObject gNode9; 
+    
+    // ! Array Size Controls
+    private int arrayColumnLength = 9;                          // Array Dimensions - Column
+    private int arrayRowLength = 9;                             // Array Dimensions - Row
+    private int arrayTotalNodes;
 
+    public GameObject nodePrefab;
     public List<int> startNodeValueMap;
+
+    public Transform gNodeArrayTransform;
 
     // Start is called before the first frame update
     void Start()
     {
+        Debug.Log("Board Generator Started");
+
         masterNode = GameObject.Find("MasterNode");
-        Debug.Log("MasterNode found with name of " + masterNode.name);
         masterNodeScript = masterNode.GetComponent<NodeScript>();
 
-        gNodeArray = new GameObject[3,3];
+        gNodeArray = new GameObject[arrayColumnLength, arrayRowLength];
+        arrayTotalNodes = arrayColumnLength * arrayRowLength;
+        
+        gNodeList = new List<GameObject>();
+        gNodeArrayTransform = gameObject.transform;
 
-        // gNode List and Script Reference
-        gNodeList = new List<GameObject> { gNode1, gNode2, gNode3, gNode4, gNode5, gNode6, gNode7, gNode8, gNode9 };
+        NodeGenerator();
+        NodePositionSetter();
+        GenerateNodeArray();
 
-        Generate3x3NodeArray();
+        // Generate Initial Value Map
         startNodeValueMap = NodeValueMapper();
         NodeValueUpdater(startNodeValueMap);
     }
+
+    public void NodePositionSetter()
+    {
+        int nodeCounter = 0;                                // Increments Node reference in gNodeList 
+
+        for(int i = 0; i < arrayColumnLength; i ++){         // Assigns positions to each gNode in gNodeArray
+            for(int j = 0; j < arrayRowLength; j ++){
+                gNodeList[nodeCounter].transform.position = new Vector3(i * 2.0f, 0, j * 2.0f); // Example positioning
+                nodeCounter++;
+            }
+        }
+    }
+
+    public void NodeGenerator()
+    {
+        for(int i = 1; i <= arrayTotalNodes; i++) {
+            GameObject gNode = Instantiate(nodePrefab, gNodeArrayTransform);
+            gNode.name = gNode + "(" + i + ")";
+            gNodeList.Add(gNode);
+        }
+    }
+
+
+    public void NodeValueDisplayDebug()
+    {
+        string rowValues = "\n NodeValues \n";    
+        
+        for(int i = 0; i < arrayColumnLength; i ++){
+            for(int j = 0; j < arrayRowLength; j ++){
+                rowValues += gNodeArray[i,j].GetComponent<NodeScript>().nodeValue + "  ";   
+            }
+            rowValues += "\n";
+        }
+        Debug.Log(rowValues);
+    }
+
+    public void SheepValueDisplayDebug()
+    {
+        string rowValues = "\n SheepValues \n";    
+        
+        for(int i = 0; i < arrayColumnLength; i ++){
+            for(int j = 0; j < arrayRowLength; j ++){
+                rowValues += gNodeArray[i,j].GetComponent<NodeScript>().sheepValue + "  ";   
+            }
+            rowValues += "\n";
+        }
+        Debug.Log(rowValues);
+    }
+
 
     // Update is called once per frame
     void Update()
@@ -53,7 +104,7 @@ public class NodeArrayScript : MonoBehaviour
 
 
     // STARTUP METHODS
-    public void Generate3x3NodeArray()              // Generate a 3x3 array containing Nodes contained gNodeList
+    public void GenerateNodeArray()              // Generate a Length x Row array containing Nodes contained gNodeList
     {               
         int nodeCounter = 0;                                // Increments Node reference in gNodeList 
 
@@ -65,26 +116,6 @@ public class NodeArrayScript : MonoBehaviour
         }
     }
 
-    public void DisplayArray(){                      // Debugs Array Nodes in Console
-        for(int i = 0; i < arrayColumnLength; i ++){         // Assigns positions to each gNode in gNodeArray
-            for(int j = 0; j < arrayRowLength; j ++){
-                Debug.Log(gNodeArray[i,j].name);
-            }
-        }
-    }
-    
-    
-
-    // Debug Value Setters
-    public void DebugControls()
-    {
-        if(Input.GetKeyDown(KeyCode.O)) { NodeValueMapper(); }
-        if(Input.GetKeyDown(KeyCode.I)) { ArrayPositionBlackSheepSetter(); }
-        if(Input.GetKeyDown(KeyCode.U)) { ArrayPositionWhiteSheepSetter(); }
-        if(Input.GetKeyDown(KeyCode.Y)) { ArrayPositionEmptySheepSetter(); }
-
-        if(Input.GetKeyDown(KeyCode.P)) { DisplayArray(); }
-    }
 
     public List<int> NodeValueMapper()      // Displays Array based on nodeValues
     {
@@ -105,13 +136,27 @@ public class NodeArrayScript : MonoBehaviour
             }
         }
         
+        // Update nodeValueMap based on position and board state
+        nodeValueMap = NodeValueMapIndexer(nodeValueMap);
+
+        // NodeValueMapDebugDisplayValue(nodeValueMap);  // DEBUG METHOD 
+
+        Debug.Log("NodeArray nodeValues Mapped to List");
+
+        return nodeValueMap;
+    }
+    
+
+
+    public List<int> NodeValueMapIndexer(List<int> nodeValueMap)
+    {
         // Counter to increment through index in nodeValueMap
         int mapIndex = 0;     
 
         // Map node values to nodeValueMap based on current board state
         for(int i = 0; i < arrayColumnLength; i++){         // Assigns positions to each gNode in gNodeArray
             for(int j = 0; j < arrayRowLength; j++){                
-                // Left
+                // Left Index Check
                 if(j == 0){      // Check left index is not out of range 
                     nodeValueMap[mapIndex] -= 1;
                 }
@@ -121,7 +166,7 @@ public class NodeArrayScript : MonoBehaviour
                     }
                 }
 
-                // Right
+                // Right Index Check
                 if(j == arrayRowLength-1){      // Check right mapIndex is not out of range 
                     nodeValueMap[mapIndex] -= 1;
                 }
@@ -131,7 +176,7 @@ public class NodeArrayScript : MonoBehaviour
                     }
                 }
 
-                // Top 
+                // Top Index Check
                 if(i == 0){      // Check top mapIndex is not out of range 
                     nodeValueMap[mapIndex] -= 1;
                 }
@@ -141,7 +186,7 @@ public class NodeArrayScript : MonoBehaviour
                     }
                 }
 
-                // Bottom
+                // Bottom Index Check
                 if(i == arrayColumnLength-1){      // Check bottom mapIndex is not out of range 
                     nodeValueMap[mapIndex] -= 1;
                 }
@@ -154,50 +199,75 @@ public class NodeArrayScript : MonoBehaviour
                 mapIndex += 1;
             }
         }
-        
-        // if(1 == 1)      // Debug to display nodeValueMap values
-        // {
-        //     int debugCounter = 0;
-        //     foreach(int mapValue in nodeValueMap)
-        //     {
-        //         Debug.Log("nodeValueMapValue[" + debugCounter + "] is " + mapValue);
-        //         debugCounter += 1;
-        //     }
-        // }
+
+        Debug.Log("NodeArray Map Index Updated");
 
         return nodeValueMap;
-        
     }
-    
+
+
     public void NodeValueUpdater(List<int> nodeValueMap)
     {
         int arrayIndex = 0;
 
         // Map nodeValueMap values to nodeArray
-        for(int i = 0; i < arrayColumnLength; i++)         // Assigns positions to each gNode in gNodeArray
-        {
-            for(int j = 0; j < arrayRowLength; j++)
-            {
+        for(int i = 0; i < arrayColumnLength; i++){         // Assigns positions to each gNode in gNodeArray
+            for(int j = 0; j < arrayRowLength; j++){
                 GameObject currentNode = gNodeArray[i,j];
                 NodeScript currentNodeScript = currentNode.GetComponent<NodeScript>();
                 
                 // TODO - Update here to check state of node to change liberty Value
-                if(nodeValueMap[arrayIndex] < 0)
-                {
+                if(nodeValueMap[arrayIndex] < 0) {
                     currentNodeScript.nodeValue = 0;
                 }
-                else
-                {
+                else {
                     currentNodeScript.nodeValue = nodeValueMap[arrayIndex];
                 }
                 
                 currentNode.GetComponent<NodeScript>().SetGrassTileDisplayLoop();
                 // Debug.Log(currentNode.GetComponent<NodeScript>().name + "'s nodeValue is " + currentNode.GetComponent<NodeScript>().nodeValue);
-            
+
+                
+
                 arrayIndex += 1;
             }
         }
+
+
+
+        Debug.Log("Node Array Update Complete");
     }
+
+
+
+
+    // ---------------------------------------- DEBUG METHODS ----------------------------------------
+
+    // Debug for displaying Node Values in NodeValueMap - Disabled
+    public void NodeValueMapDebugDisplayValue(List<int> nodeValueMap)
+    {
+        int debugCounter = 0;
+        foreach(int mapValue in nodeValueMap)
+        {
+            Debug.Log("nodeValueMapValue[" + debugCounter + "] is " + mapValue);
+            debugCounter += 1;
+        }
+    }
+
+    // Debug Value Setters
+    public void DebugControls()
+    {
+        if(Input.GetKeyDown(KeyCode.I)) { ArrayPositionBlackSheepSetter(); }
+        if(Input.GetKeyDown(KeyCode.U)) { ArrayPositionWhiteSheepSetter(); }
+        if(Input.GetKeyDown(KeyCode.Y)) { ArrayPositionEmptySheepSetter(); }
+
+        if(Input.GetKeyDown(KeyCode.P)) { DisplayArray(); }
+        
+        if(Input.GetKeyDown(KeyCode.G)) { SheepValueDisplayDebug(); }
+        if(Input.GetKeyDown(KeyCode.H)) { NodeValueDisplayDebug(); }
+
+    }
+
 
     public void ArrayPositionBlackSheepSetter()      // Displays Array based on nodeValues
     {
@@ -231,6 +301,7 @@ public class NodeArrayScript : MonoBehaviour
             }
         }
     }
+
     public void ArrayPositionEmptySheepSetter()      // Displays Array based on nodeValues
     {
         for(int i = 0; i < arrayColumnLength; i++)         // Assigns positions to each gNode in gNodeArray
@@ -248,6 +319,14 @@ public class NodeArrayScript : MonoBehaviour
                 List<int> nodeValueMap = NodeValueMapper();
                 NodeValueUpdater(nodeValueMap);
                 currentNode.GetComponent<NodeScript>().SetGrassTileDisplayLoop();
+            }
+        }
+    }
+
+    public void DisplayArray(){                      // Debugs Array Nodes in Console
+        for(int i = 0; i < arrayColumnLength; i ++){         // Assigns positions to each gNode in gNodeArray
+            for(int j = 0; j < arrayRowLength; j ++){
+                Debug.Log(gNodeArray[i,j].name);
             }
         }
     }

@@ -29,7 +29,6 @@ public class TargetNode : MonoBehaviour
         
         // board array reference - highest parent
         nodeArray = parentNode.transform.parent.gameObject;
-        Debug.Log("Node Array is " + nodeArray);
         boardGeneratorScript = nodeArray.GetComponent<BoardGenerator>();
 
 
@@ -113,18 +112,18 @@ public class TargetNode : MonoBehaviour
         }
     }
 
-    // public void PlaceEmptySheepMethod()
-    // {
-    //     // Check if the right mouse button was clicked
-    //     if (nodeSelected && Input.GetKeyDown(KeyCode.Mouse2))
-    //     {
-    //         Debug.Log("Empty Sheep Set!");
-    //         parentNodeScript.EmptySheepSetter();
-    //         parentNodeScript.SetGrassTileDisplayLoop();
-    //         List<int> nodeValueMap = nodeArrayScript.NodeValueMapper();
-    //         nodeArrayScript.NodeValueUpdater(nodeValueMap);
+    public void PlaceEmptySheepMethod()
+    {
+        // Check if the right mouse button was clicked
+        if (nodeSelected && Input.GetKeyDown(KeyCode.Mouse2))
+        {
+            Debug.Log("Empty Sheep Set!");
+            parentNodeScript.EmptySheepSetter();
+            parentNodeScript.SetGrassTileDisplayLoop();
+            List<int> nodeValueMap = nodeArrayScript.NodeValueMapper();
+            nodeArrayScript.NodeValueUpdater(nodeValueMap);
 
-    //     }
-    // }
+        }
+    }
 
 }
