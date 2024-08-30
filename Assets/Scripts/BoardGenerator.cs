@@ -8,9 +8,9 @@ using UnityEngine.UIElements;
 
 public class BoardGenerator : MonoBehaviour
 {
-        // ---------------------------------------- PROPERTIES ----------------------------------------
 
-    // * MasterNode for default Value for Reference
+    //* ---------------------------------------- PROPERTIES ----------------------------------------
+    // MasterNode for default Value for Reference
     private GameObject masterNode;    
     private NodeScript masterNodeScript;
 
@@ -28,7 +28,11 @@ public class BoardGenerator : MonoBehaviour
     public Transform gNodeArrayTransform;
 
 
-    // ---------------------------------------- START AND UPDATE METHODS ----------------------------------------
+
+
+
+    //* ---------------------------------------- START AND UPDATE METHODS ----------------------------------------
+                                     //* Generates Node GameObjects and gNodeArray 
 
     // Start is called before the first frame update
     void Start()
@@ -62,8 +66,9 @@ public class BoardGenerator : MonoBehaviour
 
 
 
-    // *---------------------------------------- BOARD CREATION METHODS METHODS ----------------------------------------
-                                                  //* Called in Start Method
+
+    // *---------------------------------------- BOARD NODE CREATION METHODS ----------------------------------------
+                                               //* Called in Start Method
     public void NodeGenerator()
     {
         for(int i = 1; i <= arrayTotalNodes; i++) {
@@ -86,22 +91,24 @@ public class BoardGenerator : MonoBehaviour
 
 
 
+
+
     // *---------------------------------------- ARRAY GENERATION AND VALUE SET METHODS ----------------------------------------
                                                     //* Called in Start Method
-    // START METHODS
-    public void GenerateNodeArray()              // Generate a Length x Row array containing Nodes contained gNodeList
+
+    // ------------------------------ //* gNodeArray Assigner 0 ------------------------------
+    public void GenerateNodeArray()                         // Generate a Length x Row array containing Nodes contained gNodeList
     {               
         int nodeCounter = 0;                                // Increments Node reference in gNodeList 
-
         for(int i = 0; i < arrayColumnLength; i ++){         // Assigns positions to each gNode in gNodeArray
             for(int j = 0; j < arrayRowLength; j ++){
                 gNodeArray[i,j] = gNodeList[nodeCounter];   // Set curent gNodeList object to current array position
-                nodeCounter++;              // Increment gNodeList index
+                nodeCounter++;                              // Increment gNodeList index
             }
         }
     }
 
-    // NodeValue Updater Part1
+    // ------------------------------ // gNodeValue Updater Part 1 ------------------------------
     public List<int> NodeValueMapper()      // Displays Array based on nodeValues
     {
         List<int> nodeValueMap = new List<int>();  // List to hold update values for arrayNodes
@@ -131,7 +138,7 @@ public class BoardGenerator : MonoBehaviour
         return nodeValueMap;
     }
     
-    // NodeValue Updater Part2
+    // ------------------------------// gNodeValue Updater Part 2 ------------------------------
     public List<int> NodeValueMapIndexer(List<int> nodeValueMap)
     {
         // Counter to increment through index in nodeValueMap
@@ -188,7 +195,7 @@ public class BoardGenerator : MonoBehaviour
         return nodeValueMap;
     }
 
-    // NodeValue Updater Part3
+    // ------------------------------ // gNodeValue Updater Part 3 ------------------------------
     public void NodeValueUpdater(List<int> nodeValueMap)
     {
         int arrayIndex = 0;
@@ -223,6 +230,21 @@ public class BoardGenerator : MonoBehaviour
 
     // *---------------------------------------- DEBUG METHODS ----------------------------------------
                                           //* Called in Update Method 
+    
+    // Debug Value Setters
+    public void DebugControls()
+    {
+        if(Input.GetKeyDown(KeyCode.I)) { ArrayPositionBlackSheepSetter(); }
+        if(Input.GetKeyDown(KeyCode.U)) { ArrayPositionWhiteSheepSetter(); }
+        if(Input.GetKeyDown(KeyCode.Y)) { ArrayPositionEmptySheepSetter(); }
+
+        if(Input.GetKeyDown(KeyCode.P)) { DisplayArray(); }
+        
+        if(Input.GetKeyDown(KeyCode.G)) { SheepValueDisplayDebug(); }
+        if(Input.GetKeyDown(KeyCode.H)) { NodeValueDisplayDebug(); }
+
+    }
+
 
     public void NodeValueDisplayDebug()
     {
@@ -250,19 +272,6 @@ public class BoardGenerator : MonoBehaviour
         Debug.Log(rowValues);
     }
 
-    // Debug Value Setters
-    public void DebugControls()
-    {
-        if(Input.GetKeyDown(KeyCode.I)) { ArrayPositionBlackSheepSetter(); }
-        if(Input.GetKeyDown(KeyCode.U)) { ArrayPositionWhiteSheepSetter(); }
-        if(Input.GetKeyDown(KeyCode.Y)) { ArrayPositionEmptySheepSetter(); }
-
-        if(Input.GetKeyDown(KeyCode.P)) { DisplayArray(); }
-        
-        if(Input.GetKeyDown(KeyCode.G)) { SheepValueDisplayDebug(); }
-        if(Input.GetKeyDown(KeyCode.H)) { NodeValueDisplayDebug(); }
-
-    }
 
     public void ArrayPositionBlackSheepSetter()      // Displays Array based on nodeValues
     {

@@ -11,6 +11,7 @@ using UnityEngine.Tilemaps;
 public class NodeScript : MonoBehaviour
 {
 
+    //* ---------------------------------------- PROPERTIES ----------------------------------------
     public int nodeValue;
     public List<int> nodeValueList = new List<int> { 0, 1, 2, 3, 4 };   // Node Values when not occupied
     public List<GameObject> GrassTileList = new List<GameObject> {};
@@ -32,6 +33,11 @@ public class NodeScript : MonoBehaviour
     public bool settingSheep;
 
 
+
+
+
+    //* ---------------------------------------- START AND UPDATE METHODS ----------------------------------------
+                                     //* Sets Initial Node Values to Default on Creation 
     // Start is called before the first frame update
     void Start()
     {
@@ -44,40 +50,15 @@ public class NodeScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        NodeValueSetter();
-    }
-
-    // Test Method for Node Value Setting
-    public void NodeValueSetter()
-    {
-        if(Input.GetKeyDown(KeyCode.Keypad0)){  // Press 0 on Keypad to set nodeValue to 0
-            Debug.Log("Button Pressed = 0");
-            nodeValue = nodeValueList[0];
-        }
-
-        if(Input.GetKeyDown(KeyCode.Keypad1)){  // Press 1 on Keypad to set nodeValue to 1
-            nodeValue = nodeValueList[1];
-            Debug.Log("Button Pressed = 1");
-        }
-
-        if(Input.GetKeyDown(KeyCode.Keypad2)){  // Press 2 on Keypad to set nodeValue to 2
-            nodeValue = nodeValueList[2];
-            Debug.Log("Button Pressed = 2");
-        }
-
-        if(Input.GetKeyDown(KeyCode.Keypad3)){  // Press 3 on Keypad to set nodeValue to 3
-            nodeValue = nodeValueList[3];
-            Debug.Log("Button Pressed = 3");
-        }
-
-        if(Input.GetKeyDown(KeyCode.Keypad4)){  // Press 4 on Keypad to set nodeValue to 4
-            settingState = true;
-            nodeValue = nodeValueList[4];
-            Debug.Log("Button Pressed = 4");
-        }
+        // NodeValueSetterDebug();
     }
 
 
+
+
+
+    //* ---------------------------------------- GRASS TILE DISPLAY METHODS ----------------------------------------
+                                       //* Sets Grass Tile  on/off based on nodeValue 
     public void SetGrassTileDisplayLoop()
     {
         bool isActive = true;       // Sets initialize bool
@@ -95,6 +76,12 @@ public class NodeScript : MonoBehaviour
         }
     }
 
+
+
+
+
+    // *---------------------------------------- SHEEP SETTER  METHODS ----------------------------------------
+                                          //* Called in TargetNode Script 
 
     public void BlackSheepSetter()              // Sets node to Black Sheep Object
     {
@@ -125,7 +112,6 @@ public class NodeScript : MonoBehaviour
             sheepTileList[i].SetActive(!isActive);      // Sets all SheepTiles to inactive
         }
         
-        // Set Current SheepTile active
         sheepTileList[sheepValue].SetActive(isActive);      // Set Current SheepTile active 
         // Debug.Log(gameObject.name + " is " + sheepTileList[sheepValue].GetComponent<MeshRenderer>().enabled);
     }
@@ -147,5 +133,41 @@ public class NodeScript : MonoBehaviour
         // Debug.Log(gameObject.name + " is " + sheepTileList[sheepValue].GetComponent<MeshRenderer>().enabled);
     }
 
+
+
+
+
+    // *---------------------------------------- DEBUG METHODS ----------------------------------------
+                                          //* Called in Update Method 
+
+    // Test Method for Node Value Setting - Disabled in Update
+    public void NodeValueSetterDebug()
+    {
+        if(Input.GetKeyDown(KeyCode.Keypad0)){  // Press 0 on Keypad to set nodeValue to 0
+            Debug.Log("Button Pressed = 0");
+            nodeValue = nodeValueList[0];
+        }
+
+        if(Input.GetKeyDown(KeyCode.Keypad1)){  // Press 1 on Keypad to set nodeValue to 1
+            nodeValue = nodeValueList[1];
+            Debug.Log("Button Pressed = 1");
+        }
+
+        if(Input.GetKeyDown(KeyCode.Keypad2)){  // Press 2 on Keypad to set nodeValue to 2
+            nodeValue = nodeValueList[2];
+            Debug.Log("Button Pressed = 2");
+        }
+
+        if(Input.GetKeyDown(KeyCode.Keypad3)){  // Press 3 on Keypad to set nodeValue to 3
+            nodeValue = nodeValueList[3];
+            Debug.Log("Button Pressed = 3");
+        }
+
+        if(Input.GetKeyDown(KeyCode.Keypad4)){  // Press 4 on Keypad to set nodeValue to 4
+            settingState = true;
+            nodeValue = nodeValueList[4];
+            Debug.Log("Button Pressed = 4");
+        }
+    }
 
 }
