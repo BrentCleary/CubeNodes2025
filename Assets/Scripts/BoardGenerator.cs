@@ -2,8 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using Unity.PlasticSCM.Editor.WebApi;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Analytics;
 using UnityEngine.UIElements;
 
 public class BoardGenerator : MonoBehaviour
@@ -18,16 +20,14 @@ public class BoardGenerator : MonoBehaviour
     [SerializeField] public List<GameObject> gNodeList;
     
     // ! Array Size Controls
-    private int arrayColumnLength = 9;                          // Array Dimensions - Column
-    private int arrayRowLength = 9;                             // Array Dimensions - Row
+    private int arrayColumnLength = 5;                  // Array Dimensions - Column
+    private int arrayRowLength = 5;                     // Array Dimensions - Row
     private int arrayTotalNodes;
 
     public GameObject nodePrefab;
     public List<int> startNodeValueMap;
 
     public Transform gNodeArrayTransform;
-
-
 
 
 
@@ -52,6 +52,7 @@ public class BoardGenerator : MonoBehaviour
         NodePositionSetter();
         
         GenerateNodeArray();
+        AdjacentSheepNodeMapper(gNodeList);
 
         // Generate Initial Value Map
         startNodeValueMap = NodeValueMapper();
@@ -73,7 +74,7 @@ public class BoardGenerator : MonoBehaviour
     {
         for(int i = 1; i <= arrayTotalNodes; i++) {
             GameObject gNode = Instantiate(nodePrefab, gNodeArrayTransform);
-            gNode.name = gNode + "(" + i + ")";
+            gNode.name = "Node (" + i + ")";
             gNodeList.Add(gNode);
         }
     }
@@ -103,10 +104,20 @@ public class BoardGenerator : MonoBehaviour
         for(int i = 0; i < arrayColumnLength; i ++){         // Assigns positions to each gNode in gNodeArray
             for(int j = 0; j < arrayRowLength; j ++){
                 gNodeArray[i,j] = gNodeList[nodeCounter];   // Set curent gNodeList object to current array position
+                
+                // Maps Board Array position for reference
+                NodeScript nodeScript = gNodeList[nodeCounter].GetComponent<NodeScript>();
+                nodeScript.arrayPosition[0] = i;
+                nodeScript.arrayPosition[1] = j;
+                
+                // Add Array Position to Node Name
+                gNodeArray[i,j].name = gNodeArray[i,j].name + " [" + i + "," + j+ "]";
+
                 nodeCounter++;                              // Increment gNodeList index
             }
         }
     }
+
 
     // ------------------------------ // gNodeValue Updater Part 1 ------------------------------
     public List<int> NodeValueMapper()      // Displays Array based on nodeValues
@@ -138,6 +149,7 @@ public class BoardGenerator : MonoBehaviour
         return nodeValueMap;
     }
     
+
     // ------------------------------// gNodeValue Updater Part 2 ------------------------------
     public List<int> NodeValueMapIndexer(List<int> nodeValueMap)
     {
@@ -195,6 +207,7 @@ public class BoardGenerator : MonoBehaviour
         return nodeValueMap;
     }
 
+
     // ------------------------------ // gNodeValue Updater Part 3 ------------------------------
     public void NodeValueUpdater(List<int> nodeValueMap)
     {
@@ -223,6 +236,58 @@ public class BoardGenerator : MonoBehaviour
 
         Debug.Log("gNodeArray Update Complete");
     }
+
+
+
+
+
+    // *---------------------------------------- SHEEP GROUP METHODS ----------------------------------------
+                                //* Loops over gNodeList and assigns adjacent Nodes 
+    
+    public void AdjacentSheepNodeMapper(List<GameObject> gNodeList)
+    {
+        foreach(GameObject currentNode in gNodeList)
+        {
+            NodeScript nodeScript = currentNode.GetComponent<NodeScript>();
+            int[] arrayPos = nodeScript.arrayPosition;   
+        
+            // Left index
+            if(arrayPos[0] == 0){      // left index is not out of range 
+                nodeScript.leftNode = null;
+            }
+            if(arrayPos[0] != 0){      // left index is a node
+                nodeScript.leftNode = gNodeArray[arrayPos[0] - 1, arrayPos[1]].gameObject;
+            }
+
+            // Right index
+            if(arrayPos[0] == arrayColumnLength - 1){      // right index is not out of range 
+                nodeScript.rightNode = null;
+            }
+            else if(arrayPos[0] != arrayColumnLength - 1){      // right index is a node
+                nodeScript.rightNode = gNodeArray[arrayPos[0] + 1, arrayPos[1]].gameObject;
+            }
+        
+            // Bottom index
+            if(arrayPos[1] == 0){      // bottom index is not out of range 
+                nodeScript.bottomNode = null;
+            }
+            if(arrayPos[1] != 0){      // bottom index is a node
+                nodeScript.bottomNode = gNodeArray[arrayPos[0], arrayPos[1] - 1].gameObject;
+            }
+
+            // Top index
+            if(arrayPos[1] == arrayRowLength - 1){      // top index is not out of range 
+                nodeScript.topNode = null;
+            }
+            else if(arrayPos[1] != arrayRowLength - 1){      // top index is a node
+                nodeScript.topNode = gNodeArray[arrayPos[0], arrayPos[1] + 1].gameObject;
+            }
+
+        }
+    }
+    
+
+
 
 
 

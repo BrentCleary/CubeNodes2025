@@ -26,13 +26,22 @@ public class NodeScript : MonoBehaviour
     public bool placeAbleBool;
     public List<bool> placeAbleValueList = new List<bool> { false, true };   // is node placeable for current player
     
+    public List<GameObject> sheepGroupList = new List<GameObject>();
+    public bool inSheepGroup;
+
     private List<string> transitionStatesList = new List<string> { "beingCaptured" };             // States for transition
 
     // TEMP VARS FOR TEST
     public bool settingState;
     public bool settingSheep;
 
+    public int[] arrayPosition = new int[2];
 
+    // Adjacent Nodes
+    public GameObject leftNode;
+    public GameObject rightNode;
+    public GameObject topNode;
+    public GameObject bottomNode;
 
 
 
@@ -97,6 +106,7 @@ public class NodeScript : MonoBehaviour
         
         sheepTileList[sheepValue].SetActive(isActive);      // Set Current SheepTile active
         // Debug.Log(gameObject.name + " is " + sheepTileList[sheepValue].GetComponent<MeshRenderer>().enabled);
+
     }
 
     public void WhiteSheepSetter()              // Sets node to Black Sheep Object
@@ -135,6 +145,14 @@ public class NodeScript : MonoBehaviour
 
 
 
+
+
+    // *---------------------------------------- SHEEP GROUP METHODS ----------------------------------------
+                                //* Loops over gNodeArray and adjacent sheep in groups 
+    public void SheepIdentifier()
+    {
+
+    }
 
 
     // *---------------------------------------- DEBUG METHODS ----------------------------------------
