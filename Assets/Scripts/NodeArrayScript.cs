@@ -209,7 +209,6 @@ public class NodeArrayScript : MonoBehaviour
                 
                 currentNodeScript.BlackSheepSetter();           // Resets nodeValue of all Nodes to 4 before Setting
 
-                currentNode.GetComponent<NodeScript>().settingState = true;
                 currentNode.GetComponent<NodeScript>().SetGrassTileDisplayLoop();
             }
         }
@@ -225,7 +224,6 @@ public class NodeArrayScript : MonoBehaviour
                 
                 currentNodeScript.WhiteSheepSetter();           // Resets nodeValue of all Nodes to 4 before Setting
 
-                currentNode.GetComponent<NodeScript>().settingState = true;
                 currentNode.GetComponent<NodeScript>().SetGrassTileDisplayLoop();
             }
         }
@@ -243,7 +241,6 @@ public class NodeArrayScript : MonoBehaviour
 
                 currentNodeScript.EmptySheepSetter();           // Resets nodeValue of all Nodes to 4 before Setting
 
-                currentNode.GetComponent<NodeScript>().settingState = true;
                 List<int> nodeValueMap = NodeValueMapper();
                 NodeValueUpdater(nodeValueMap);
                 currentNode.GetComponent<NodeScript>().SetGrassTileDisplayLoop();

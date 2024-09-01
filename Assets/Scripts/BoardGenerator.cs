@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Unity.PlasticSCM.Editor.WebApi;
 using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Analytics;
 using UnityEngine.UIElements;
@@ -26,8 +27,11 @@ public class BoardGenerator : MonoBehaviour
 
     public GameObject nodePrefab;
     public List<int> startNodeValueMap;
+    public List<int> currentNodeValueMap;
 
     public Transform gNodeArrayTransform;
+
+    public List<Node> sheepGroupList;
 
 
 
@@ -79,6 +83,7 @@ public class BoardGenerator : MonoBehaviour
         }
     }
 
+
     public void NodePositionSetter()
     {
         int nodeCounter = 0;                                // Increments Node reference in gNodeList 
@@ -119,8 +124,15 @@ public class BoardGenerator : MonoBehaviour
     }
 
 
-    // ------------------------------ // gNodeValue Updater Part 1 ------------------------------
-    public List<int> NodeValueMapper()      // Displays Array based on nodeValues
+
+
+
+    // *---------------------------------------- NODE VALUE DISPLAY AND UPDATE METHODS ----------------------------------------
+                                                    //* Called in Start Method
+                                                    //* Called in TargetNode.cs
+    
+    // --------------------------------------------- // gNodeValue Updater Part 1 ---------------------------------------------
+    public List<int> NodeValueMapper()          // Displays Array based on nodeValues
     {
         List<int> nodeValueMap = new List<int>();  // List to hold update values for arrayNodes
         
@@ -148,9 +160,9 @@ public class BoardGenerator : MonoBehaviour
 
         return nodeValueMap;
     }
-    
 
-    // ------------------------------// gNodeValue Updater Part 2 ------------------------------
+
+    // ---------------------------------------- -----// gNodeValue Updater Part 2 ---------------------------------------------
     public List<int> NodeValueMapIndexer(List<int> nodeValueMap)
     {
         // Counter to increment through index in nodeValueMap
@@ -208,7 +220,7 @@ public class BoardGenerator : MonoBehaviour
     }
 
 
-    // ------------------------------ // gNodeValue Updater Part 3 ------------------------------
+    // --------------------------------------------- // gNodeValue Updater Part 3 ---------------------------------------------
     public void NodeValueUpdater(List<int> nodeValueMap)
     {
         int arrayIndex = 0;
@@ -257,6 +269,7 @@ public class BoardGenerator : MonoBehaviour
             }
             if(arrayPos[0] != 0){      // left index is a node
                 nodeScript.leftNode = gNodeArray[arrayPos[0] - 1, arrayPos[1]].gameObject;
+                nodeScript.leftNodeScript = gNodeArray[arrayPos[0] - 1, arrayPos[1]].GetComponent<NodeScript>();
             }
 
             // Right index
@@ -265,6 +278,7 @@ public class BoardGenerator : MonoBehaviour
             }
             else if(arrayPos[0] != arrayColumnLength - 1){      // right index is a node
                 nodeScript.rightNode = gNodeArray[arrayPos[0] + 1, arrayPos[1]].gameObject;
+                nodeScript.rightNodeScript = gNodeArray[arrayPos[0] + 1, arrayPos[1]].GetComponent<NodeScript>();
             }
         
             // Bottom index
@@ -273,6 +287,7 @@ public class BoardGenerator : MonoBehaviour
             }
             if(arrayPos[1] != 0){      // bottom index is a node
                 nodeScript.bottomNode = gNodeArray[arrayPos[0], arrayPos[1] - 1].gameObject;
+                nodeScript.bottomNodeScript = gNodeArray[arrayPos[0], arrayPos[1] - 1].GetComponent<NodeScript>();
             }
 
             // Top index
@@ -281,13 +296,11 @@ public class BoardGenerator : MonoBehaviour
             }
             else if(arrayPos[1] != arrayRowLength - 1){      // top index is a node
                 nodeScript.topNode = gNodeArray[arrayPos[0], arrayPos[1] + 1].gameObject;
+                nodeScript.topNodeScript = gNodeArray[arrayPos[0], arrayPos[1] + 1].GetComponent<NodeScript>();
             }
 
         }
     }
-    
-
-
 
 
 
@@ -349,7 +362,6 @@ public class BoardGenerator : MonoBehaviour
                 
                 currentNodeScript.BlackSheepSetter();           // Resets nodeValue of all Nodes to 4 before Setting
 
-                currentNode.GetComponent<NodeScript>().settingState = true;
                 currentNode.GetComponent<NodeScript>().SetGrassTileDisplayLoop();
             }
         }
@@ -366,7 +378,6 @@ public class BoardGenerator : MonoBehaviour
                 
                 currentNodeScript.WhiteSheepSetter();           // Resets nodeValue of all Nodes to 4 before Setting
 
-                currentNode.GetComponent<NodeScript>().settingState = true;
                 currentNode.GetComponent<NodeScript>().SetGrassTileDisplayLoop();
             }
         }
@@ -385,7 +396,6 @@ public class BoardGenerator : MonoBehaviour
 
                 currentNodeScript.EmptySheepSetter();           // Resets nodeValue of all Nodes to 4 before Setting
 
-                currentNode.GetComponent<NodeScript>().settingState = true;
                 List<int> nodeValueMap = NodeValueMapper();
                 NodeValueUpdater(nodeValueMap);
                 currentNode.GetComponent<NodeScript>().SetGrassTileDisplayLoop();

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1798988717815891635}
   - component: {fileID: 6898820397445276300}
   - component: {fileID: 3778995099956303782}
+  - component: {fileID: 4528337800545275979}
   m_Layer: 0
   m_Name: GrassTile (0)
   m_TagString: Untagged
@@ -27,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4716341144831533674}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -105,3 +106,21 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &4528337800545275979
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4716341144831533674}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d5730930e5e4cc4db83e682346aa2e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grassContainer: {fileID: 0}
+  parentNode: {fileID: 0}
+  nodeArray: {fileID: 0}
+  selectionMaterial: {fileID: 2100000, guid: 83f935cf247a987418b4bd63a09b1c13, type: 2}
+  tileMaterialList: []
+  nodeSelected: 0

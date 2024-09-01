@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using JetBrains.Annotations;
 using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -25,24 +26,25 @@ public class NodeScript : MonoBehaviour
     
     public bool placeAbleBool;
     public List<bool> placeAbleValueList = new List<bool> { false, true };   // is node placeable for current player
-    
-    public List<GameObject> sheepGroupList = new List<GameObject>();
-    public bool inSheepGroup;
-
-    private List<string> transitionStatesList = new List<string> { "beingCaptured" };             // States for transition
-
-    // TEMP VARS FOR TEST
-    public bool settingState;
-    public bool settingSheep;
 
     public int[] arrayPosition = new int[2];
 
+
+    //* SHEEP GROUP PARAMETERS
     // Adjacent Nodes
     public GameObject leftNode;
     public GameObject rightNode;
     public GameObject topNode;
     public GameObject bottomNode;
+    // Adjacent Node Scripts
+    public NodeScript leftNodeScript;
+    public NodeScript rightNodeScript;
+    public NodeScript bottomNodeScript;
+    public NodeScript topNodeScript;
 
+    public List<Node> sheepGroupList;
+
+    public int groupID;
 
 
     //* ---------------------------------------- START AND UPDATE METHODS ----------------------------------------
@@ -149,10 +151,16 @@ public class NodeScript : MonoBehaviour
 
     // *---------------------------------------- SHEEP GROUP METHODS ----------------------------------------
                                 //* Loops over gNodeArray and adjacent sheep in groups 
-    public void SheepIdentifier()
-    {
-
-    }
+    // public void SheepNodeGroupSetter()
+    // {
+    //     if(leftNodeScript != null)
+    //     {
+    //         if(leftNodeScript.sheepValue == sheepValue)
+    //         {
+    //             leftNodeScript.sheepGroupList.Add(gameObject);
+    //         }
+    //     }
+    // }
 
 
     // *---------------------------------------- DEBUG METHODS ----------------------------------------
@@ -182,7 +190,6 @@ public class NodeScript : MonoBehaviour
         }
 
         if(Input.GetKeyDown(KeyCode.Keypad4)){  // Press 4 on Keypad to set nodeValue to 4
-            settingState = true;
             nodeValue = nodeValueList[4];
             Debug.Log("Button Pressed = 4");
         }

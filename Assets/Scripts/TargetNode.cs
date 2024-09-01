@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class TargetNode : MonoBehaviour
@@ -16,6 +17,7 @@ public class TargetNode : MonoBehaviour
 
     private NodeScript parentNodeScript;
     private BoardGenerator boardGeneratorScript;
+    private NodeGroupManager nodeGroupManagerScript;
     // private NodeArrayScript nodeArrayScript; // Replaced by boardGeneratorScript
 
     public bool nodeSelected = false;
@@ -40,6 +42,9 @@ public class TargetNode : MonoBehaviour
         // board array reference - highest parent
         nodeArray = parentNode.transform.parent.gameObject;
         boardGeneratorScript = nodeArray.GetComponent<BoardGenerator>();
+
+        // get NodeGroupManagerScript
+        nodeGroupManagerScript = nodeArray.GetComponent<NodeGroupManager>();
 
         tileRendererList = grassContainer.GetComponentsInChildren<Renderer>().ToList();
         
@@ -109,6 +114,8 @@ public class TargetNode : MonoBehaviour
             List<int> nodeValueMap = boardGeneratorScript.NodeValueMapper();
             boardGeneratorScript.NodeValueUpdater(nodeValueMap);
 
+            AssignSheepToAdjacentGroup();
+
             Debug.Log("Black Sheep Set");
         }
     }
@@ -142,6 +149,40 @@ public class TargetNode : MonoBehaviour
 
             Debug.Log("Empty Sheep Set!");
         }
+    }
+
+
+    //* ---------------------------------------- ON MOUSE ENTER/EXIT METHODS ----------------------------------------
+                            //* Highlights/Resets selected Nodes Color by changing GrassTiles materials 
+
+    public void AssignSheepToAdjacentGroup()
+    {
+
+        // Adjacent Node Scripts
+        NodeScript leftNodeScript = parentNodeScript.leftNodeScript;
+        int leftNodeGroupID = leftNodeScript.groupID;
+        NodeScript rightNodeScrip  = parentNodeScript.rightNodeScript;;
+        NodeScript bottomNodeScript  = parentNodeScript.bottomNodeScript;
+        NodeScript topNodeScript  = parentNodeScript.topNodeScript;
+
+        if(leftNodeScript != null && leftNodeScript.sheepValue != 0)
+        {
+            nodeGroupManagerScript.AddSheepToGroup(parentNode, leftNodeGroupID);
+            parentNodeScript.groupID = leftNodeScript.groupID;
+        }
+        else
+        {
+            CreateNewSheepGroup(parentNode);
+        }
+
+        nodeGroupManagerScript.CalculateGroupLiberties();
+    }
+
+    public void CreateNewSheepGroup(GameObject newSheep)
+    {
+        int groupID = nodeGroupManagerScript.CreateNewNodeGroup(newSheep);
+
+        parentNodeScript.groupID = groupID;
     }
 
 }
