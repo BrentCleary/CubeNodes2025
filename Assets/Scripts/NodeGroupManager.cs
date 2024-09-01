@@ -85,10 +85,22 @@ public class NodeGroupManager : MonoBehaviour
             {
                 NodeScript nodeScript = node.GetComponent<NodeScript>();
 
-                totalGroupLiberties += nodeScript.leftNodeScript.libertyValue;
-                totalGroupLiberties += nodeScript.rightNodeScript.libertyValue;
-                totalGroupLiberties += nodeScript.bottomNodeScript.libertyValue;
-                totalGroupLiberties += nodeScript.topNodeScript.libertyValue;
+                if(nodeScript.leftNode != null)
+                {
+                    totalGroupLiberties += nodeScript.leftNodeScript.libertyValue;
+                }
+                if(nodeScript.rightNode != null)
+                {
+                    totalGroupLiberties += nodeScript.rightNodeScript.libertyValue;
+                }
+                if(nodeScript.bottomNode != null)
+                {
+                    totalGroupLiberties += nodeScript.bottomNodeScript.libertyValue;
+                }
+                if(nodeScript.topNode != null)
+                {
+                    totalGroupLiberties += nodeScript.topNodeScript.libertyValue;
+                }
 
                 Debug.Log("node liberties are " + nodeScript.libertyValue);
             }

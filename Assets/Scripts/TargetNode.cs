@@ -75,8 +75,9 @@ public class TargetNode : MonoBehaviour
             renderer.material = selectionMaterial;
         }
 
-        Debug.Log(parentNode.name);
-        Debug.Log("OnMouseEnter Activated on " + gameObject.name);
+        // DEBUGS disabled 09/01/2024 
+        // Debug.Log(parentNode.name);
+        // Debug.Log("OnMouseEnter Activated on " + gameObject.name);
         
         // Material Debuggeer for checking material display - Disabled 08222024.2059 
         // foreach(Material material in tileMaterialList)
@@ -115,6 +116,7 @@ public class TargetNode : MonoBehaviour
             boardGeneratorScript.NodeValueUpdater(nodeValueMap);
 
             AssignSheepToAdjacentGroup();
+            nodeGroupManagerScript.CalculateGroupLiberties();
 
             Debug.Log("Black Sheep Set");
         }
@@ -175,7 +177,6 @@ public class TargetNode : MonoBehaviour
             CreateNewSheepGroup(parentNode);
         }
 
-        nodeGroupManagerScript.CalculateGroupLiberties();
     }
 
     public void CreateNewSheepGroup(GameObject newSheep)

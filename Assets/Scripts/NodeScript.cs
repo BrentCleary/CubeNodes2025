@@ -42,6 +42,11 @@ public class NodeScript : MonoBehaviour
     public NodeScript bottomNodeScript;
     public NodeScript topNodeScript;
 
+    public int leftNodeLibertyVal;
+    public int rightNodeLibertyVal;
+    public int bottomNodeLibertyVal;
+    public int topNodeLibertyVal;
+
     public List<Node> sheepGroupList;
 
     public int groupID;
