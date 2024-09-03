@@ -174,9 +174,15 @@ public class NodeGroupManager : MonoBehaviour
 
                     nodeScript.EmptySheepSetter();
                     nodeScript.SetGrassTileDisplayLoop();
+
                 }
 
+                DeleteNodeGroup(nodeGroup.GroupID);
             }
+            
         }
+        // BoardGenerator Script
+        List<int> nodeValueMap = boardGeneratorScript.NodeValueMapper();
+        boardGeneratorScript.NodeValueUpdater(nodeValueMap);
     }
 }

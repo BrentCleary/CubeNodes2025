@@ -142,7 +142,7 @@ public class NodeScript : MonoBehaviour
         sheepValue = sheepValueList[0];         // Set sheep value to emptySheep index
         libertyValue = libertyValueList[1];     // Set libertyValue to 1
         nodeValue = nodeValueList[4];           // nodeValue is reset to 4
-        placeAbleBool = false;
+        placeAbleBool = true;
 
         bool isActive = true;
         for (int i = sheepTileList.Count-1; i >= 0; i--)    
