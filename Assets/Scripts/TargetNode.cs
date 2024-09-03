@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor.Experimental.GraphView;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 public class TargetNode : MonoBehaviour
@@ -115,10 +116,10 @@ public class TargetNode : MonoBehaviour
             List<int> nodeValueMap = boardGeneratorScript.NodeValueMapper();
             boardGeneratorScript.NodeValueUpdater(nodeValueMap);
 
-            AssignSheepToAdjacentGroup();
+            AssignSheepToGroups();
             nodeGroupManagerScript.CalculateGroupLiberties();
 
-            Debug.Log("Black Sheep Set");
+            // Debug.Log("Black Sheep Set");
         }
     }
 
@@ -157,33 +158,103 @@ public class TargetNode : MonoBehaviour
     //* ---------------------------------------- ON MOUSE ENTER/EXIT METHODS ----------------------------------------
                             //* Highlights/Resets selected Nodes Color by changing GrassTiles materials 
 
-    public void AssignSheepToAdjacentGroup()
+    public void AssignSheepToGroups()
     {
+
+        // Create new NodeGroup, assign groupID
+        parentNodeScript.groupID = nodeGroupManagerScript.CreateNewNodeGroup(parentNode);
 
         // Adjacent Node Scripts
         NodeScript leftNodeScript = parentNodeScript.leftNodeScript;
-        int leftNodeGroupID = leftNodeScript.groupID;
-        NodeScript rightNodeScrip  = parentNodeScript.rightNodeScript;;
-        NodeScript bottomNodeScript  = parentNodeScript.bottomNodeScript;
-        NodeScript topNodeScript  = parentNodeScript.topNodeScript;
+        NodeScript rightNodeScript = parentNodeScript.rightNodeScript;
+        NodeScript bottomNodeScript = parentNodeScript.bottomNodeScript;
+        NodeScript topNodeScript = parentNodeScript.topNodeScript;
 
-        if(leftNodeScript != null && leftNodeScript.sheepValue != 0)
+        // Left Node Found
+        if(leftNodeScript != null && leftNodeScript.sheepValue == parentNodeScript.sheepValue)
         {
-            nodeGroupManagerScript.AddSheepToGroup(parentNode, leftNodeGroupID);
-            parentNodeScript.groupID = leftNodeScript.groupID;
-        }
-        else
-        {
-            CreateNewSheepGroup(parentNode);
+            int leftNodeGroupID = leftNodeScript.groupID;
+            int parentNodeGroupID = parentNodeScript.groupID;
+
+            List<GameObject> nodeGroup = nodeGroupManagerScript.JoinNodeGroups(parentNodeGroupID, leftNodeGroupID);
+
+            foreach(GameObject node in nodeGroup)
+            {
+                Debug.Log("parentNodeID is " + parentNodeGroupID);
+                Debug.Log("prevNodeID's are " + node.GetComponent<NodeScript>().groupID);
+                node.GetComponent<NodeScript>().groupID = parentNodeGroupID;
+                Debug.Log("newNodeID's are " + node.GetComponent<NodeScript>().groupID);
+            }
+
+            nodeGroupManagerScript.DeleteNodeGroup(leftNodeGroupID);
+
+            Debug.Log("New Node added to GroupID: " + leftNodeScript.groupID);
         }
 
+        // Right Node Found
+        if(rightNodeScript != null && rightNodeScript.sheepValue == parentNodeScript.sheepValue)
+        {
+            int rightNodeGroupID = rightNodeScript.groupID;
+            int parentNodeGroupID = parentNodeScript.groupID;
+
+            List<GameObject> nodeGroup = nodeGroupManagerScript.JoinNodeGroups(parentNodeGroupID, rightNodeGroupID);
+
+            foreach(GameObject node in nodeGroup)
+            {
+                Debug.Log("parentNodeID is " + parentNodeGroupID);
+                Debug.Log("prevNodeID's are " + node.GetComponent<NodeScript>().groupID);
+                node.GetComponent<NodeScript>().groupID = parentNodeGroupID;
+                Debug.Log("newNodeID's are " + node.GetComponent<NodeScript>().groupID);
+            }
+
+            nodeGroupManagerScript.DeleteNodeGroup(rightNodeGroupID);
+
+            Debug.Log("New Node added to GroupID: " + rightNodeScript.groupID);
+        }
+
+        // Bottom Node Found
+        if(bottomNodeScript != null && bottomNodeScript.sheepValue == parentNodeScript.sheepValue)
+        {
+            int bottomNodeGroupID = bottomNodeScript.groupID;
+            int parentNodeGroupID = parentNodeScript.groupID;
+
+            List<GameObject> nodeGroup = nodeGroupManagerScript.JoinNodeGroups(parentNodeGroupID, bottomNodeGroupID);
+
+            foreach(GameObject node in nodeGroup)
+            {
+                Debug.Log("parentNodeID is " + parentNodeGroupID);
+                Debug.Log("prevNodeID's are " + node.GetComponent<NodeScript>().groupID);
+                node.GetComponent<NodeScript>().groupID = parentNodeGroupID;
+                Debug.Log("newNodeID's are " + node.GetComponent<NodeScript>().groupID);
+            }
+
+            nodeGroupManagerScript.DeleteNodeGroup(bottomNodeGroupID);
+
+            Debug.Log("New Node added to GroupID: " + bottomNodeScript.groupID);
+        }
+
+        // Top Node Found
+        if(topNodeScript != null && topNodeScript.sheepValue == parentNodeScript.sheepValue)
+        {
+            int topNodeGroupID = topNodeScript.groupID;
+            int parentNodeGroupID = parentNodeScript.groupID;
+
+            List<GameObject> nodeGroup = nodeGroupManagerScript.JoinNodeGroups(parentNodeGroupID, topNodeGroupID);
+
+            foreach(GameObject node in nodeGroup)
+            {
+                Debug.Log("parentNodeID is " + parentNodeGroupID);
+                Debug.Log("prevNodeID's are " + node.GetComponent<NodeScript>().groupID);
+                node.GetComponent<NodeScript>().groupID = parentNodeGroupID;
+                Debug.Log("newNodeID's are " + node.GetComponent<NodeScript>().groupID);
+            }
+
+            nodeGroupManagerScript.DeleteNodeGroup(topNodeGroupID);
+
+            Debug.Log("New Node added to GroupID: " + topNodeScript.groupID);
+        }
     }
 
-    public void CreateNewSheepGroup(GameObject newSheep)
-    {
-        int groupID = nodeGroupManagerScript.CreateNewNodeGroup(newSheep);
 
-        parentNodeScript.groupID = groupID;
-    }
 
 }

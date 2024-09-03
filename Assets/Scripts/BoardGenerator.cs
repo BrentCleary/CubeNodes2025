@@ -156,7 +156,7 @@ public class BoardGenerator : MonoBehaviour
 
         // NodeValueMapDebugDisplayValue(nodeValueMap);  // DEBUG METHOD 
 
-        Debug.Log("gNodeArray nodeValues Mapped to List");
+        // Debug.Log("gNodeArray nodeValues Mapped to List");
 
         return nodeValueMap;
     }
@@ -214,7 +214,7 @@ public class BoardGenerator : MonoBehaviour
                 mapIndex += 1;
             }
         }
-        Debug.Log("gNodeArray MapIndex Updated");
+        // Debug.Log("gNodeArray MapIndex Updated");
 
         return nodeValueMap;
     }
@@ -246,7 +246,7 @@ public class BoardGenerator : MonoBehaviour
             }
         }
 
-        Debug.Log("gNodeArray Update Complete");
+        // Debug.Log("gNodeArray Update Complete");
     }
 
 
@@ -280,7 +280,7 @@ public class BoardGenerator : MonoBehaviour
                 nodeScript.rightNode = gNodeArray[arrayPos[0] + 1, arrayPos[1]].gameObject;
                 nodeScript.rightNodeScript = gNodeArray[arrayPos[0] + 1, arrayPos[1]].GetComponent<NodeScript>();
             }
-            
+
             // Bottom index
             if(arrayPos[1] == 0){      // bottom index is not out of range 
                 nodeScript.bottomNode = null;

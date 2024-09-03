@@ -6,7 +6,8 @@ using UnityEngine;
 
 public class NodeGroupManager : MonoBehaviour
 {
-
+    public GameObject gridArray;
+    public BoardGenerator boardGeneratorScript;
 
     [System.Serializable]
     public class NodeGroup
@@ -15,7 +16,6 @@ public class NodeGroupManager : MonoBehaviour
         
         public int GroupID {get; private set;}
         public int GroupLiberties;
-
         public List<GameObject> GroupNodeList = new List<GameObject>();
 
         // Constructor
@@ -32,26 +32,17 @@ public class NodeGroupManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gridArray = gameObject;
+        boardGeneratorScript = gameObject.GetComponent<BoardGenerator>();
 
     }
-
     // Update is called once per frame
     void Update()
     {
         
     }
 
-    public void AddSheepToGroup(GameObject node, int groupID)
-    {
-        NodeGroup nodeGroup = RetrieveNodeGroup(groupID);
-        nodeGroup.GroupNodeList.Add(node);
 
-    }
-
-    public void Add_To_AllGroupList(NodeGroup group)
-    {
-        AllGroupList.Add(group);
-    }
 
     public int CreateNewNodeGroup(GameObject node)
     {
@@ -61,53 +52,91 @@ public class NodeGroupManager : MonoBehaviour
 
         int groupID = newNodeGroup.GroupID;
 
+        Debug.Log("NodeGM : CreateNewNodeGroup: Group ID: [ " + groupID + " ]");
+
         return groupID;
         
     }
 
+    public List<GameObject> JoinNodeGroups(int newGroupID, int prevGroupID)
+    {
+        NodeGroup prevNodeGroup = RetrieveNodeGroup(prevGroupID);
+        NodeGroup newNodeGroup = RetrieveNodeGroup(newGroupID);
+
+        foreach(GameObject node in prevNodeGroup.GroupNodeList)
+        {
+            newNodeGroup.GroupNodeList.Add(node);
+        }
+
+        Debug.Log("NodeGroupManager:JoinNodeGroups [ " + prevGroupID + " Nodes added to newGroupID " + newGroupID + " ]");
+
+        return newNodeGroup.GroupNodeList;
+    }
+
+
+
+
+
+    // *---------------------------------------- CRUD GROUP METHODS ----------------------------------------
+                                //* Add_To_AllGroupList - Updates All Group List 
+                                //* RetrieveNodeGroup - Returns NodeGroup by NodeScript.groupID 
+                                //* DeleteNodeGroup - Clears previous group List and removes for AllGroupList 
+                                //* CalculateGroupLiberties - Calculates Liberties of all NodeGroups
+
+    public void Add_To_AllGroupList(NodeGroup group)
+    {
+        AllGroupList.Add(group);
+    }
+
+
     public NodeGroup RetrieveNodeGroup(int groupID)
     {
-        NodeGroup nodeGroup = AllGroupList.Find(group => group.GroupID == groupID);
-
+        NodeGroup nodeGroup = AllGroupList.Find(g => g.GroupID == groupID);
         return nodeGroup;
     }
 
+    public void DeleteNodeGroup(int prevGroupID)
+    {
+        NodeGroup groupToDelete = AllGroupList.Find(g => g.GroupID == prevGroupID);
+        
+        groupToDelete.GroupNodeList.Clear();
+        AllGroupList.Remove(groupToDelete);
+        
+        Debug.Log("NodeGroup " + groupToDelete.GroupID + " cleared and deleted.");
+    }
+
+
+    // TODO: Based Calculated liberties on Grid Array. Calculating by nodes doubles liberty references.
     public void CalculateGroupLiberties()
     {
-
-        foreach(NodeGroup group in AllGroupList)
+        foreach(NodeGroup nodeGroup in AllGroupList)
         {
             int totalGroupLiberties = 0;
-        
-            List<GameObject> currentGroup = group.GroupNodeList;
+            List<GameObject> currentGroup = nodeGroup.GroupNodeList;
 
             foreach(GameObject node in currentGroup)
             {
                 NodeScript nodeScript = node.GetComponent<NodeScript>();
 
-                if(nodeScript.leftNode != null)
-                {
+                if(nodeScript.leftNode != null){
                     totalGroupLiberties += nodeScript.leftNodeScript.libertyValue;
                 }
-                if(nodeScript.rightNode != null)
-                {
+                if(nodeScript.rightNode != null){
                     totalGroupLiberties += nodeScript.rightNodeScript.libertyValue;
                 }
-                if(nodeScript.bottomNode != null)
-                {
+                if(nodeScript.bottomNode != null){
                     totalGroupLiberties += nodeScript.bottomNodeScript.libertyValue;
                 }
-                if(nodeScript.topNode != null)
-                {
+                if(nodeScript.topNode != null){
                     totalGroupLiberties += nodeScript.topNodeScript.libertyValue;
                 }
 
-                Debug.Log("node liberties are " + nodeScript.libertyValue);
+                // Debug.Log("node liberties are " + nodeScript.libertyValue);
             }
             
-            group.GroupLiberties = totalGroupLiberties;
-            Debug.Log("currentGroup Liberties are " + totalGroupLiberties);
-            Debug.Log("GroupLiberties property is " + group.GroupLiberties);
+            nodeGroup.GroupLiberties = totalGroupLiberties;
+            // Debug.Log("currentGroup Liberties are " + totalGroupLiberties);
+            // Debug.Log("GroupLiberties property is " + group.GroupLiberties);
             
             totalGroupLiberties = 0;
         }

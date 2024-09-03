@@ -49,7 +49,7 @@ public class NodeScript : MonoBehaviour
 
     public List<Node> sheepGroupList;
 
-    public int groupID;
+    public int groupID = -1;   // -1 is default groupID for Ungrouped-Nodes used for checking status
 
 
     //* ---------------------------------------- START AND UPDATE METHODS ----------------------------------------
