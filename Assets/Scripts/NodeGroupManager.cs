@@ -60,6 +60,7 @@ public class NodeGroupManager : MonoBehaviour
 
     public List<GameObject> JoinNodeGroups(int newGroupID, int prevGroupID)
     {
+
         NodeGroup prevNodeGroup = RetrieveNodeGroup(prevGroupID);
         NodeGroup newNodeGroup = RetrieveNodeGroup(newGroupID);
 
@@ -113,32 +114,49 @@ public class NodeGroupManager : MonoBehaviour
         {
             int totalGroupLiberties = 0;
             List<GameObject> currentGroup = nodeGroup.GroupNodeList;
+            List<GameObject> libertyNodes = new List<GameObject>();
 
             foreach(GameObject node in currentGroup)
             {
                 NodeScript nodeScript = node.GetComponent<NodeScript>();
 
                 if(nodeScript.leftNode != null){
-                    totalGroupLiberties += nodeScript.leftNodeScript.libertyValue;
+                    if(!libertyNodes.Contains(nodeScript.leftNode))
+                    {
+                        libertyNodes.Add(nodeScript.leftNode);
+                        totalGroupLiberties += nodeScript.leftNodeScript.libertyValue;
+                    }
                 }
                 if(nodeScript.rightNode != null){
-                    totalGroupLiberties += nodeScript.rightNodeScript.libertyValue;
+                    if(!libertyNodes.Contains(nodeScript.rightNode))
+                    {
+                        libertyNodes.Add(nodeScript.rightNode);
+                        totalGroupLiberties += nodeScript.rightNodeScript.libertyValue;
+                    }
                 }
                 if(nodeScript.bottomNode != null){
-                    totalGroupLiberties += nodeScript.bottomNodeScript.libertyValue;
+                    if(!libertyNodes.Contains(nodeScript.bottomNode))
+                    {
+                        libertyNodes.Add(nodeScript.bottomNode);
+                        totalGroupLiberties += nodeScript.bottomNodeScript.libertyValue;
+                    }
                 }
                 if(nodeScript.topNode != null){
-                    totalGroupLiberties += nodeScript.topNodeScript.libertyValue;
+                    if(!libertyNodes.Contains(nodeScript.topNode))
+                    {
+                        libertyNodes.Add(nodeScript.topNode);
+                        totalGroupLiberties += nodeScript.topNodeScript.libertyValue;
+                    }
                 }
-
                 // Debug.Log("node liberties are " + nodeScript.libertyValue);
             }
             
             nodeGroup.GroupLiberties = totalGroupLiberties;
-            // Debug.Log("currentGroup Liberties are " + totalGroupLiberties);
-            // Debug.Log("GroupLiberties property is " + group.GroupLiberties);
+            Debug.Log("currentGroup Liberties are " + totalGroupLiberties);
+            Debug.Log("GroupLiberties property is " + nodeGroup.GroupLiberties);
             
             totalGroupLiberties = 0;
+            libertyNodes.Clear();
         }
     }
 }

@@ -104,7 +104,9 @@ public class NodeScript : MonoBehaviour
         sheepValue = sheepValueList[1];         // Set sheep value to blackSheep index
         libertyValue = libertyValueList[0];     // Set libertyValue to 0
         nodeValue = nodeValueList[0];           // nodeValue is 0
+        placeAbleBool = false;
 
+        // Sets all SheepTiles to inactive
         bool isActive = true;
         for (int i = sheepTileList.Count-1; i >= 0; i--)    
         {
@@ -121,6 +123,7 @@ public class NodeScript : MonoBehaviour
         sheepValue = sheepValueList[2];         // Set sheep value to whiteSheep index
         libertyValue = libertyValueList[0];     // Set libertyValue to 0
         nodeValue = nodeValueList[0];           // nodeValue is 0
+        placeAbleBool = false;
 
         // Sets all SheepTiles to inactive
         bool isActive = true;
@@ -139,6 +142,7 @@ public class NodeScript : MonoBehaviour
         sheepValue = sheepValueList[0];         // Set sheep value to emptySheep index
         libertyValue = libertyValueList[1];     // Set libertyValue to 1
         nodeValue = nodeValueList[4];           // nodeValue is reset to 4
+        placeAbleBool = false;
 
         bool isActive = true;
         for (int i = sheepTileList.Count-1; i >= 0; i--)    

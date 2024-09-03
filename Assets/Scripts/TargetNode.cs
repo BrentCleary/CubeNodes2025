@@ -107,7 +107,7 @@ public class TargetNode : MonoBehaviour
     public void PlaceBlackSheepMethod()
     {
         // Check if the left mouse button was clicked
-        if (nodeSelected && Input.GetKeyDown(KeyCode.Mouse0))
+        if (nodeSelected && parentNodeScript.placeAbleBool == true && Input.GetKeyDown(KeyCode.Mouse0))
         {
             parentNodeScript.BlackSheepSetter();
             parentNodeScript.SetGrassTileDisplayLoop();
@@ -117,6 +117,7 @@ public class TargetNode : MonoBehaviour
             boardGeneratorScript.NodeValueUpdater(nodeValueMap);
 
             AssignSheepToGroups();
+            // RefactoredAssignSheepMethod();
             nodeGroupManagerScript.CalculateGroupLiberties();
 
             // Debug.Log("Black Sheep Set");
@@ -135,7 +136,7 @@ public class TargetNode : MonoBehaviour
             List<int> nodeValueMap = boardGeneratorScript.NodeValueMapper();
             boardGeneratorScript.NodeValueUpdater(nodeValueMap);
 
-            Debug.Log("White Sheep Set!");
+            // Debug.Log("White Sheep Set!");
         }
     }
 
@@ -163,7 +164,8 @@ public class TargetNode : MonoBehaviour
 
         // Create new NodeGroup, assign groupID
         parentNodeScript.groupID = nodeGroupManagerScript.CreateNewNodeGroup(parentNode);
-
+        int parentNodeGroupID = parentNodeScript.groupID;
+        
         // Adjacent Node Scripts
         NodeScript leftNodeScript = parentNodeScript.leftNodeScript;
         NodeScript rightNodeScript = parentNodeScript.rightNodeScript;
@@ -174,87 +176,128 @@ public class TargetNode : MonoBehaviour
         if(leftNodeScript != null && leftNodeScript.sheepValue == parentNodeScript.sheepValue)
         {
             int leftNodeGroupID = leftNodeScript.groupID;
-            int parentNodeGroupID = parentNodeScript.groupID;
 
             List<GameObject> nodeGroup = nodeGroupManagerScript.JoinNodeGroups(parentNodeGroupID, leftNodeGroupID);
 
             foreach(GameObject node in nodeGroup)
             {
-                Debug.Log("parentNodeID is " + parentNodeGroupID);
-                Debug.Log("prevNodeID's are " + node.GetComponent<NodeScript>().groupID);
                 node.GetComponent<NodeScript>().groupID = parentNodeGroupID;
-                Debug.Log("newNodeID's are " + node.GetComponent<NodeScript>().groupID);
             }
 
             nodeGroupManagerScript.DeleteNodeGroup(leftNodeGroupID);
 
-            Debug.Log("New Node added to GroupID: " + leftNodeScript.groupID);
         }
 
         // Right Node Found
         if(rightNodeScript != null && rightNodeScript.sheepValue == parentNodeScript.sheepValue)
         {
             int rightNodeGroupID = rightNodeScript.groupID;
-            int parentNodeGroupID = parentNodeScript.groupID;
 
-            List<GameObject> nodeGroup = nodeGroupManagerScript.JoinNodeGroups(parentNodeGroupID, rightNodeGroupID);
-
-            foreach(GameObject node in nodeGroup)
+            if(rightNodeGroupID != parentNodeGroupID)
             {
-                Debug.Log("parentNodeID is " + parentNodeGroupID);
-                Debug.Log("prevNodeID's are " + node.GetComponent<NodeScript>().groupID);
-                node.GetComponent<NodeScript>().groupID = parentNodeGroupID;
-                Debug.Log("newNodeID's are " + node.GetComponent<NodeScript>().groupID);
+                List<GameObject> nodeGroup = nodeGroupManagerScript.JoinNodeGroups(parentNodeGroupID, rightNodeGroupID);
+
+                foreach(GameObject node in nodeGroup)
+                {
+                    Debug.Log("parentNodeID is " + parentNodeGroupID);
+                    Debug.Log("prevNodeID's are " + node.GetComponent<NodeScript>().groupID);
+                    node.GetComponent<NodeScript>().groupID = parentNodeGroupID;
+                    Debug.Log("newNodeID's are " + node.GetComponent<NodeScript>().groupID);
+                }
+
+                nodeGroupManagerScript.DeleteNodeGroup(rightNodeGroupID);
+
+                Debug.Log("New Node added to GroupID: " + rightNodeScript.groupID);
             }
-
-            nodeGroupManagerScript.DeleteNodeGroup(rightNodeGroupID);
-
-            Debug.Log("New Node added to GroupID: " + rightNodeScript.groupID);
         }
 
         // Bottom Node Found
         if(bottomNodeScript != null && bottomNodeScript.sheepValue == parentNodeScript.sheepValue)
         {
             int bottomNodeGroupID = bottomNodeScript.groupID;
-            int parentNodeGroupID = parentNodeScript.groupID;
 
-            List<GameObject> nodeGroup = nodeGroupManagerScript.JoinNodeGroups(parentNodeGroupID, bottomNodeGroupID);
-
-            foreach(GameObject node in nodeGroup)
+            if(bottomNodeGroupID != parentNodeGroupID)
             {
-                Debug.Log("parentNodeID is " + parentNodeGroupID);
-                Debug.Log("prevNodeID's are " + node.GetComponent<NodeScript>().groupID);
-                node.GetComponent<NodeScript>().groupID = parentNodeGroupID;
-                Debug.Log("newNodeID's are " + node.GetComponent<NodeScript>().groupID);
+                List<GameObject> nodeGroup = nodeGroupManagerScript.JoinNodeGroups(parentNodeGroupID, bottomNodeGroupID);
+
+                foreach(GameObject node in nodeGroup)
+                {
+                    Debug.Log("parentNodeID is " + parentNodeGroupID);
+                    Debug.Log("prevNodeID's are " + node.GetComponent<NodeScript>().groupID);
+                    node.GetComponent<NodeScript>().groupID = parentNodeGroupID;
+                    Debug.Log("newNodeID's are " + node.GetComponent<NodeScript>().groupID);
+                }
+
+                nodeGroupManagerScript.DeleteNodeGroup(bottomNodeGroupID);
+
+                Debug.Log("New Node added to GroupID: " + bottomNodeScript.groupID);
             }
-
-            nodeGroupManagerScript.DeleteNodeGroup(bottomNodeGroupID);
-
-            Debug.Log("New Node added to GroupID: " + bottomNodeScript.groupID);
         }
 
         // Top Node Found
         if(topNodeScript != null && topNodeScript.sheepValue == parentNodeScript.sheepValue)
         {
             int topNodeGroupID = topNodeScript.groupID;
-            int parentNodeGroupID = parentNodeScript.groupID;
-
-            List<GameObject> nodeGroup = nodeGroupManagerScript.JoinNodeGroups(parentNodeGroupID, topNodeGroupID);
-
-            foreach(GameObject node in nodeGroup)
+            
+            if(topNodeGroupID != parentNodeGroupID)
             {
-                Debug.Log("parentNodeID is " + parentNodeGroupID);
-                Debug.Log("prevNodeID's are " + node.GetComponent<NodeScript>().groupID);
-                node.GetComponent<NodeScript>().groupID = parentNodeGroupID;
-                Debug.Log("newNodeID's are " + node.GetComponent<NodeScript>().groupID);
+                List<GameObject> nodeGroup = nodeGroupManagerScript.JoinNodeGroups(parentNodeGroupID, topNodeGroupID);
+
+                foreach(GameObject node in nodeGroup)
+                {
+                    Debug.Log("parentNodeID is " + parentNodeGroupID);
+                    Debug.Log("prevNodeID's are " + node.GetComponent<NodeScript>().groupID);
+                    node.GetComponent<NodeScript>().groupID = parentNodeGroupID;
+                    Debug.Log("newNodeID's are " + node.GetComponent<NodeScript>().groupID);
+                }
+
+                nodeGroupManagerScript.DeleteNodeGroup(topNodeGroupID);
+
+                Debug.Log("New Node added to GroupID: " + topNodeScript.groupID);
             }
-
-            nodeGroupManagerScript.DeleteNodeGroup(topNodeGroupID);
-
-            Debug.Log("New Node added to GroupID: " + topNodeScript.groupID);
         }
     }
 
 
+
+    public void RefactoredAssignSheepMethod()
+    {
+        // Adjacent Node Scripts
+        List<NodeScript> NodeScriptList = new List<NodeScript>();
+
+        NodeScript leftNodeScript = parentNodeScript.leftNodeScript;
+        NodeScript rightNodeScript = parentNodeScript.rightNodeScript;
+        NodeScript bottomNodeScript = parentNodeScript.bottomNodeScript;
+        NodeScript topNodeScript = parentNodeScript.topNodeScript;
+
+        NodeScriptList.Add(leftNodeScript);
+        NodeScriptList.Add(rightNodeScript);
+        NodeScriptList.Add(bottomNodeScript);
+        NodeScriptList.Add(topNodeScript);
+
+        foreach(NodeScript nodeScript in NodeScriptList)
+        {
+            // Top Node Found
+            if(nodeScript != null && nodeScript.sheepValue == parentNodeScript.sheepValue)
+            {
+                int nodeGroupID = nodeScript.groupID;
+                int parentNodeGroupID = parentNodeScript.groupID;
+
+                List<GameObject> nodeGroup = nodeGroupManagerScript.JoinNodeGroups(parentNodeGroupID, nodeGroupID);
+
+                foreach(GameObject node in nodeGroup)
+                {
+                    Debug.Log("parentNodeID is " + parentNodeGroupID);
+                    Debug.Log("prevNodeID's are " + node.GetComponent<NodeScript>().groupID);
+                    node.GetComponent<NodeScript>().groupID = parentNodeGroupID;
+                    Debug.Log("newNodeID's are " + node.GetComponent<NodeScript>().groupID);
+                }
+
+                nodeGroupManagerScript.DeleteNodeGroup(nodeGroupID);
+
+                Debug.Log("New Node added to GroupID: " + nodeScript.groupID);
+            }
+        }
+    }
 
 }
