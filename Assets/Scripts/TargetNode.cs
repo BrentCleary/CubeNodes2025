@@ -156,6 +156,12 @@ public class TargetNode : MonoBehaviour
     }
 
 
+    public void RemoveDeadGroupsMethod()
+    {
+
+    }
+
+
     //* ---------------------------------------- ON MOUSE ENTER/EXIT METHODS ----------------------------------------
                             //* Highlights/Resets selected Nodes Color by changing GrassTiles materials 
 
@@ -304,6 +310,6 @@ public class TargetNode : MonoBehaviour
 
     public void RemoveGroupsWithZeroLiberties()
     {
-        
+
     }
 }

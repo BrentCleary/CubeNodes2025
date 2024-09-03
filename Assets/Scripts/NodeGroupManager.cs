@@ -6,7 +6,8 @@ using UnityEngine;
 
 public class NodeGroupManager : MonoBehaviour
 {
-
+    public BoardGenerator boardGeneratorScript;
+    public NodeScript nodeScript;
 
     [System.Serializable]
     public class NodeGroup
@@ -30,7 +31,7 @@ public class NodeGroupManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        boardGeneratorScript = gameObject.GetComponent<BoardGenerator>();
 
     }
     // Update is called once per frame
@@ -155,6 +156,27 @@ public class NodeGroupManager : MonoBehaviour
             
             totalGroupLiberties = 0;
             libertyNodes.Clear();
+
+        }
+    }
+
+    public void UpdateAllNodeGroups()
+    {
+        foreach(NodeGroup nodeGroup in AllGroupList)
+        {
+            List<GameObject> currentGroup = nodeGroup.GroupNodeList;
+
+            if(nodeGroup.GroupLiberties == 0)
+            {
+                foreach(GameObject node in currentGroup)
+                {
+                    NodeScript nodeScript = node.GetComponent<NodeScript>();
+
+                    nodeScript.EmptySheepSetter();
+                    nodeScript.SetGrassTileDisplayLoop();
+                }
+
+            }
         }
     }
 }
