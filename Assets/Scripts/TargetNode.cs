@@ -120,6 +120,7 @@ public class TargetNode : MonoBehaviour
             // RefactoredAssignSheepMethod();
             nodeGroupManagerScript.CalculateGroupLiberties();
 
+            nodeGroupManagerScript.UpdateAllNodeGroups();
             // Debug.Log("Black Sheep Set");
         }
     }

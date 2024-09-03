@@ -21,8 +21,8 @@ public class BoardGenerator : MonoBehaviour
     [SerializeField] public List<GameObject> gNodeList;
     
     // ! Array Size Controls
-    private int arrayColumnLength = 5;                  // Array Dimensions - Column
-    private int arrayRowLength = 5;                     // Array Dimensions - Row
+    private int arrayColumnLength = 2;                  // Array Dimensions - Column
+    private int arrayRowLength = 2;                     // Array Dimensions - Row
     private int arrayTotalNodes;
 
     public GameObject nodePrefab;
