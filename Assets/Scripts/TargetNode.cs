@@ -172,6 +172,8 @@ public class TargetNode : MonoBehaviour
         NodeScript bottomNodeScript = parentNodeScript.bottomNodeScript;
         NodeScript topNodeScript = parentNodeScript.topNodeScript;
 
+
+        //* FIRST CHECK OCCURS ON LEFT NODE
         // Left Node Found
         if(leftNodeScript != null && leftNodeScript.sheepValue == parentNodeScript.sheepValue)
         {
@@ -258,46 +260,50 @@ public class TargetNode : MonoBehaviour
         }
     }
 
+    // Possible Simplification of AssignSheep Method to be refactored later
+    // public void RefactoredAssignSheepMethod()
+    // {
+    //     // Adjacent Node Scripts
+    //     List<NodeScript> NodeScriptList = new List<NodeScript>();
+
+    //     NodeScript leftNodeScript = parentNodeScript.leftNodeScript;
+    //     NodeScript rightNodeScript = parentNodeScript.rightNodeScript;
+    //     NodeScript bottomNodeScript = parentNodeScript.bottomNodeScript;
+    //     NodeScript topNodeScript = parentNodeScript.topNodeScript;
+
+    //     NodeScriptList.Add(leftNodeScript);
+    //     NodeScriptList.Add(rightNodeScript);
+    //     NodeScriptList.Add(bottomNodeScript);
+    //     NodeScriptList.Add(topNodeScript);
+
+    //     foreach(NodeScript nodeScript in NodeScriptList)
+    //     {
+    //         // Top Node Found
+    //         if(nodeScript != null && nodeScript.sheepValue == parentNodeScript.sheepValue)
+    //         {
+    //             int nodeGroupID = nodeScript.groupID;
+    //             int parentNodeGroupID = parentNodeScript.groupID;
+
+    //             List<GameObject> nodeGroup = nodeGroupManagerScript.JoinNodeGroups(parentNodeGroupID, nodeGroupID);
+
+    //             foreach(GameObject node in nodeGroup)
+    //             {
+    //                 Debug.Log("parentNodeID is " + parentNodeGroupID);
+    //                 Debug.Log("prevNodeID's are " + node.GetComponent<NodeScript>().groupID);
+    //                 node.GetComponent<NodeScript>().groupID = parentNodeGroupID;
+    //                 Debug.Log("newNodeID's are " + node.GetComponent<NodeScript>().groupID);
+    //             }
+
+    //             nodeGroupManagerScript.DeleteNodeGroup(nodeGroupID);
+
+    //             Debug.Log("New Node added to GroupID: " + nodeScript.groupID);
+    //         }
+    //     }
+    // }
 
 
-    public void RefactoredAssignSheepMethod()
+    public void RemoveGroupsWithZeroLiberties()
     {
-        // Adjacent Node Scripts
-        List<NodeScript> NodeScriptList = new List<NodeScript>();
-
-        NodeScript leftNodeScript = parentNodeScript.leftNodeScript;
-        NodeScript rightNodeScript = parentNodeScript.rightNodeScript;
-        NodeScript bottomNodeScript = parentNodeScript.bottomNodeScript;
-        NodeScript topNodeScript = parentNodeScript.topNodeScript;
-
-        NodeScriptList.Add(leftNodeScript);
-        NodeScriptList.Add(rightNodeScript);
-        NodeScriptList.Add(bottomNodeScript);
-        NodeScriptList.Add(topNodeScript);
-
-        foreach(NodeScript nodeScript in NodeScriptList)
-        {
-            // Top Node Found
-            if(nodeScript != null && nodeScript.sheepValue == parentNodeScript.sheepValue)
-            {
-                int nodeGroupID = nodeScript.groupID;
-                int parentNodeGroupID = parentNodeScript.groupID;
-
-                List<GameObject> nodeGroup = nodeGroupManagerScript.JoinNodeGroups(parentNodeGroupID, nodeGroupID);
-
-                foreach(GameObject node in nodeGroup)
-                {
-                    Debug.Log("parentNodeID is " + parentNodeGroupID);
-                    Debug.Log("prevNodeID's are " + node.GetComponent<NodeScript>().groupID);
-                    node.GetComponent<NodeScript>().groupID = parentNodeGroupID;
-                    Debug.Log("newNodeID's are " + node.GetComponent<NodeScript>().groupID);
-                }
-
-                nodeGroupManagerScript.DeleteNodeGroup(nodeGroupID);
-
-                Debug.Log("New Node added to GroupID: " + nodeScript.groupID);
-            }
-        }
+        
     }
-
 }

@@ -6,8 +6,7 @@ using UnityEngine;
 
 public class NodeGroupManager : MonoBehaviour
 {
-    public GameObject gridArray;
-    public BoardGenerator boardGeneratorScript;
+
 
     [System.Serializable]
     public class NodeGroup
@@ -19,9 +18,8 @@ public class NodeGroupManager : MonoBehaviour
         public List<GameObject> GroupNodeList = new List<GameObject>();
 
         // Constructor
-        public NodeGroup()
+        public NodeGroup() // Increment the counter and assign it to GroupID
         {
-            // Increment the counter and assign it to GroupID
             groupCounter++;
             GroupID = groupCounter;
         }
@@ -32,8 +30,7 @@ public class NodeGroupManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        gridArray = gameObject;
-        boardGeneratorScript = gameObject.GetComponent<BoardGenerator>();
+
 
     }
     // Update is called once per frame
@@ -42,6 +39,15 @@ public class NodeGroupManager : MonoBehaviour
         
     }
 
+
+
+    // *---------------------------------------- CRUD GROUP METHODS ----------------------------------------
+                        //* Add_To_AllGroupList - Updates All Group List 
+                        //* CreateNewNodeGroup - Creates New NodeGroup - Called in TargetNode - Returns GroupID
+                        //* JoineNodeGroups - Adds all nodes from Previous Group to New Group by ID - Takes new/prev GroupID
+                        //* RetrieveNodeGroup - Returns NodeGroup by NodeScript.groupID 
+                        //* DeleteNodeGroup - Clears previous group List and removes for AllGroupList 
+                        //* CalculateGroupLiberties - Calculates Liberties of all NodeGroups
 
 
     public int CreateNewNodeGroup(GameObject node)
@@ -57,6 +63,7 @@ public class NodeGroupManager : MonoBehaviour
         return groupID;
         
     }
+
 
     public List<GameObject> JoinNodeGroups(int newGroupID, int prevGroupID)
     {
@@ -75,15 +82,6 @@ public class NodeGroupManager : MonoBehaviour
     }
 
 
-
-
-
-    // *---------------------------------------- CRUD GROUP METHODS ----------------------------------------
-                                //* Add_To_AllGroupList - Updates All Group List 
-                                //* RetrieveNodeGroup - Returns NodeGroup by NodeScript.groupID 
-                                //* DeleteNodeGroup - Clears previous group List and removes for AllGroupList 
-                                //* CalculateGroupLiberties - Calculates Liberties of all NodeGroups
-
     public void Add_To_AllGroupList(NodeGroup group)
     {
         AllGroupList.Add(group);
@@ -96,6 +94,7 @@ public class NodeGroupManager : MonoBehaviour
         return nodeGroup;
     }
 
+
     public void DeleteNodeGroup(int prevGroupID)
     {
         NodeGroup groupToDelete = AllGroupList.Find(g => g.GroupID == prevGroupID);
@@ -106,9 +105,8 @@ public class NodeGroupManager : MonoBehaviour
         Debug.Log("NodeGroup " + groupToDelete.GroupID + " cleared and deleted.");
     }
 
-
-    // TODO: Based Calculated liberties on Grid Array. Calculating by nodes doubles liberty references.
-    public void CalculateGroupLiberties()
+    // Calculates and Updates Liberties for All Groups and stones on the board
+    public void CalculateGroupLiberties() 
     {
         foreach(NodeGroup nodeGroup in AllGroupList)
         {
