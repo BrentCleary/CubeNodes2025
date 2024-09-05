@@ -32,8 +32,8 @@ public class NodeGroupManager : MonoBehaviour
     void Start()
     {
         boardGeneratorScript = gameObject.GetComponent<BoardGenerator>();
-
     }
+
     // Update is called once per frame
     void Update()
     {
@@ -42,15 +42,10 @@ public class NodeGroupManager : MonoBehaviour
 
 
 
-    // *---------------------------------------- CRUD GROUP METHODS ----------------------------------------
-                        //* Add_To_AllGroupList - Updates All Group List 
-                        //* CreateNewNodeGroup - Creates New NodeGroup - Called in TargetNode - Returns GroupID
-                        //* JoineNodeGroups - Adds all nodes from Previous Group to New Group by ID - Takes new/prev GroupID
-                        //* RetrieveNodeGroup - Returns NodeGroup by NodeScript.groupID 
-                        //* DeleteNodeGroup - Clears previous group List and removes for AllGroupList 
-                        //* CalculateGroupLiberties - Calculates Liberties of all NodeGroups
 
 
+    //* ---------------------------------------- CreateNewNodeGroup  ----------------------------------------
+                            // * Creates New NodeGroup - Called in TargetNode - Returns GroupID
     public int CreateNewNodeGroup(GameObject node)
     {
         NodeGroup newNodeGroup = new NodeGroup();
@@ -66,9 +61,11 @@ public class NodeGroupManager : MonoBehaviour
     }
 
 
+    //* ---------------------------------------- JoinNodeGroups ----------------------------------------
+                    //* Adds all nodes from Previous Group to New Group by ID - Takes new/prev GroupID
+
     public List<GameObject> JoinNodeGroups(int newGroupID, int prevGroupID)
     {
-
         NodeGroup prevNodeGroup = RetrieveNodeGroup(prevGroupID);
         NodeGroup newNodeGroup = RetrieveNodeGroup(newGroupID);
 
@@ -83,11 +80,16 @@ public class NodeGroupManager : MonoBehaviour
     }
 
 
+    //* ---------------------------------------- Add_To_AllGroupList ----------------------------------------
+                                            //* Updates All Group List 
     public void Add_To_AllGroupList(NodeGroup group)
     {
         AllGroupList.Add(group);
     }
 
+
+    //* ---------------------------------------- RetrieveNodeGroup ----------------------------------------
+                                    //* Returns NodeGroup by NodeScript.groupID 
 
     public NodeGroup RetrieveNodeGroup(int groupID)
     {
@@ -95,7 +97,8 @@ public class NodeGroupManager : MonoBehaviour
         return nodeGroup;
     }
 
-
+    //* ---------------------------------------- DeleteNodeGroup -----------------------------------------
+                            //* Clears previous group List and removes for AllGroupList 
     public void DeleteNodeGroup(int prevGroupID)
     {
         NodeGroup groupToDelete = AllGroupList.Find(g => g.GroupID == prevGroupID);
@@ -106,6 +109,8 @@ public class NodeGroupManager : MonoBehaviour
         Debug.Log("NodeGroup " + groupToDelete.GroupID + " cleared and deleted.");
     }
 
+    //* ---------------------------------------- CalculateGroupLiberties ----------------------------------------
+                                    //*  - Calculates Liberties of all NodeGroups
     // Calculates and Updates Liberties for All Groups and stones on the board
     public void CalculateGroupLiberties() 
     {
@@ -153,11 +158,6 @@ public class NodeGroupManager : MonoBehaviour
             nodeGroup.GroupLiberties = totalGroupLiberties;
             Debug.Log("currentGroup Liberties are " + totalGroupLiberties);
             Debug.Log("GroupLiberties property is " + nodeGroup.GroupLiberties);
-            
-            if(nodeGroup.GroupLiberties == 0)
-            {
-                DeleteNodeGroup(nodeGroup.GroupID);
-            }
 
             totalGroupLiberties = 0;
             libertyNodes.Clear();
