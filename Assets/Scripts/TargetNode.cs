@@ -112,15 +112,18 @@ public class TargetNode : MonoBehaviour
             parentNodeScript.BlackSheepSetter();
             parentNodeScript.SetGrassTileDisplayLoop();
 
-            // BoardGenerator Script
             List<int> nodeValueMap = boardGeneratorScript.NodeValueMapper();
             boardGeneratorScript.NodeValueUpdater(nodeValueMap);
 
             AssignSheepToGroups();
-            // RefactoredAssignSheepMethod();
+
             nodeGroupManagerScript.CalculateGroupLiberties();
 
-            nodeGroupManagerScript.UpdateAllNodeGroups();
+
+            // BoardGenerator Script
+            // List<int> newNodeMap = boardGeneratorScript.NodeValueMapper();
+            // newNodeMap = boardGeneratorScript.NodeValueMapIndexer(newNodeMap);
+            // boardGeneratorScript.NodeValueUpdater(newNodeMap);
             // Debug.Log("Black Sheep Set");
         }
     }

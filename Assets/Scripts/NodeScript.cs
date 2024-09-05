@@ -85,11 +85,13 @@ public class NodeScript : MonoBehaviour
             GrassTileList[i].SetActive(isActive);
 
         }
-        for (int i = nodeValueList.Count- 1; i > nodeValue; i--)   // Sets all tiles above nodeValue false
+        for (int i = nodeValueList.Count - 1; i > nodeValue; i--)   // Sets all tiles above nodeValue false
         {
             GrassTileList[i].GetComponent<MeshRenderer>().enabled = !isActive;
             GrassTileList[i].SetActive(!isActive);
         }
+
+        Debug.Log("SetGTLoop: "+ gameObject.name +" | nodeValue = " + nodeValue);
     }
 
 
@@ -114,7 +116,7 @@ public class NodeScript : MonoBehaviour
         }
         
         sheepTileList[sheepValue].SetActive(isActive);      // Set Current SheepTile active
-        // Debug.Log(gameObject.name + " is " + sheepTileList[sheepValue].GetComponent<MeshRenderer>().enabled);
+        Debug.Log(gameObject.name + " is " + sheepTileList[sheepValue].GetComponent<MeshRenderer>().enabled);
 
     }
 
@@ -133,11 +135,11 @@ public class NodeScript : MonoBehaviour
         }
         
         sheepTileList[sheepValue].SetActive(isActive);      // Set Current SheepTile active 
-        // Debug.Log(gameObject.name + " is " + sheepTileList[sheepValue].GetComponent<MeshRenderer>().enabled);
+        Debug.Log(gameObject.name + " is " + sheepTileList[sheepValue].GetComponent<MeshRenderer>().enabled);
     }
 
 
-    public void EmptySheepSetter()              // Sets node to Black Sheep Object
+    public void EmptySheepSetter()              // Sets node to Empty Sheep Object
     {
         sheepValue = sheepValueList[0];         // Set sheep value to emptySheep index
         libertyValue = libertyValueList[1];     // Set libertyValue to 1
@@ -151,7 +153,7 @@ public class NodeScript : MonoBehaviour
         }
         
         sheepTileList[sheepValue].SetActive(isActive);      // Set Current SheepTile active 
-        // Debug.Log(gameObject.name + " is " + sheepTileList[sheepValue].GetComponent<MeshRenderer>().enabled);
+        Debug.Log(gameObject.name + " is " + sheepTileList[sheepValue].GetComponent<MeshRenderer>().enabled);
     }
 
 

@@ -21,8 +21,8 @@ public class BoardGenerator : MonoBehaviour
     [SerializeField] public List<GameObject> gNodeList;
     
     // ! Array Size Controls
-    private int arrayColumnLength = 2;                  // Array Dimensions - Column
-    private int arrayRowLength = 2;                     // Array Dimensions - Row
+    private int arrayColumnLength = 5;                  // Array Dimensions - Column
+    private int arrayRowLength = 5;                     // Array Dimensions - Row
     private int arrayTotalNodes;
 
     public GameObject nodePrefab;
@@ -131,6 +131,14 @@ public class BoardGenerator : MonoBehaviour
                                                     //* Called in Start Method
                                                     //* Called in TargetNode.cs
     
+    // --------------------------------------------- // Calls Functions 1, 2, 3  ---------------------------------------------
+    public void BoardUpdaterFunction()
+    {
+        List<int> nodeValueMap = NodeValueMapper();
+        nodeValueMap = NodeValueMapIndexer(nodeValueMap);
+        NodeValueUpdater(nodeValueMap);
+    }
+
     // --------------------------------------------- // gNodeValue Updater Part 1 ---------------------------------------------
     public List<int> NodeValueMapper()          // Displays Array based on nodeValues
     {
@@ -152,15 +160,14 @@ public class BoardGenerator : MonoBehaviour
         }
         
         // Update nodeValueMap based on position and board state
-        nodeValueMap = NodeValueMapIndexer(nodeValueMap);
+        List<int> nodeValueMapUpdated = NodeValueMapIndexer(nodeValueMap);
 
         // NodeValueMapDebugDisplayValue(nodeValueMap);  // DEBUG METHOD 
 
         // Debug.Log("gNodeArray nodeValues Mapped to List");
 
-        return nodeValueMap;
+        return nodeValueMapUpdated;
     }
-
 
     // ---------------------------------------- -----// gNodeValue Updater Part 2 ---------------------------------------------
     public List<int> NodeValueMapIndexer(List<int> nodeValueMap)
@@ -219,8 +226,8 @@ public class BoardGenerator : MonoBehaviour
         return nodeValueMap;
     }
 
-
     // --------------------------------------------- // gNodeValue Updater Part 3 ---------------------------------------------
+                                                  //* Calls SetGrassTileDisplayLoop
     public void NodeValueUpdater(List<int> nodeValueMap)
     {
         int arrayIndex = 0;
@@ -255,6 +262,7 @@ public class BoardGenerator : MonoBehaviour
 
     // *---------------------------------------- SHEEP GROUP METHODS ----------------------------------------
                                 //* Loops over gNodeList and assigns adjacent Nodes 
+                                            //* CALLED IN START() METHOD
     
     public void AdjacentSheepNodeMapper(List<GameObject> gNodeList)
     {

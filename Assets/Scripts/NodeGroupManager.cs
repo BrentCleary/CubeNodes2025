@@ -112,10 +112,10 @@ public class NodeGroupManager : MonoBehaviour
         foreach(NodeGroup nodeGroup in AllGroupList)
         {
             int totalGroupLiberties = 0;
-            List<GameObject> currentGroup = nodeGroup.GroupNodeList;
+            List<GameObject> currentGroupList = nodeGroup.GroupNodeList;
             List<GameObject> libertyNodes = new List<GameObject>();
 
-            foreach(GameObject node in currentGroup)
+            foreach(GameObject node in currentGroupList)
             {
                 NodeScript nodeScript = node.GetComponent<NodeScript>();
 
@@ -154,35 +154,15 @@ public class NodeGroupManager : MonoBehaviour
             Debug.Log("currentGroup Liberties are " + totalGroupLiberties);
             Debug.Log("GroupLiberties property is " + nodeGroup.GroupLiberties);
             
+            if(nodeGroup.GroupLiberties == 0)
+            {
+                DeleteNodeGroup(nodeGroup.GroupID);
+            }
+
             totalGroupLiberties = 0;
             libertyNodes.Clear();
 
         }
     }
 
-    public void UpdateAllNodeGroups()
-    {
-        foreach(NodeGroup nodeGroup in AllGroupList)
-        {
-            List<GameObject> currentGroup = nodeGroup.GroupNodeList;
-
-            if(nodeGroup.GroupLiberties == 0)
-            {
-                foreach(GameObject node in currentGroup)
-                {
-                    NodeScript nodeScript = node.GetComponent<NodeScript>();
-
-                    nodeScript.EmptySheepSetter();
-                    nodeScript.SetGrassTileDisplayLoop();
-
-                }
-
-                DeleteNodeGroup(nodeGroup.GroupID);
-            }
-            
-        }
-        // BoardGenerator Script
-        List<int> nodeValueMap = boardGeneratorScript.NodeValueMapper();
-        boardGeneratorScript.NodeValueUpdater(nodeValueMap);
-    }
 }
