@@ -109,21 +109,21 @@ public class TargetNode : MonoBehaviour
         // Check if the left mouse button was clicked
         if (nodeSelected && parentNodeScript.placeAbleBool == true && Input.GetKeyDown(KeyCode.Mouse0))
         {
-            parentNodeScript.BlackSheepSetter();
-            parentNodeScript.SetGrassTileDisplayLoop();
+            parentNodeScript.BlackSheepSetter();                                    // Set Node to BlackSheepValue
 
-            List<int> nodeValueMap = boardGeneratorScript.NodeValueMapper();
-            boardGeneratorScript.NodeValueUpdater(nodeValueMap);
+            AssignSheepToGroups();                                                  // Assign All Groups
+            List<int> zeroGroupIds = nodeGroupManagerScript.CalculateGroupLiberties();                       // Update All Group Liberties
 
-            AssignSheepToGroups();
+            nodeGroupManagerScript.UpdateZeroLibertyGroups(zeroGroupIds);                                                                        // Delete Groups with 0 Liberties
 
-            nodeGroupManagerScript.CalculateGroupLiberties();
+            // Update Sheep Value of All Nodes
+
+            List<int> nodeValueMap = boardGeneratorScript.NodeValueMapper();        // Map Node Values
+            boardGeneratorScript.NodeValueUpdater(nodeValueMap);                    // Update Board Node Display
+
+            // Update Node Value of All Nodes
 
 
-            // BoardGenerator Script
-            // List<int> newNodeMap = boardGeneratorScript.NodeValueMapper();
-            // newNodeMap = boardGeneratorScript.NodeValueMapIndexer(newNodeMap);
-            // boardGeneratorScript.NodeValueUpdater(newNodeMap);
             // Debug.Log("Black Sheep Set");
         }
     }

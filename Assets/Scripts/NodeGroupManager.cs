@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using System.Linq;
 
 public class NodeGroupManager : MonoBehaviour
 {
@@ -112,14 +113,19 @@ public class NodeGroupManager : MonoBehaviour
     //* ---------------------------------------- CalculateGroupLiberties ----------------------------------------
                                     //*  - Calculates Liberties of all NodeGroups
     // Calculates and Updates Liberties for All Groups and stones on the board
-    public void CalculateGroupLiberties() 
+    // Loops over List of All Groups, Looks at adjacent nodes for each node in group
+    // Adds value of node to total liberties, adds node to list so it is not counted twice
+    // Returns a list of Groups with Liberties == 0 for deletion in other method
+    public List<int> CalculateGroupLiberties() 
     {
+        List<int> zeroLibertyGroupID = new List<int>();
+
         foreach(NodeGroup nodeGroup in AllGroupList)
         {
             int totalGroupLiberties = 0;
             List<GameObject> currentGroupList = nodeGroup.GroupNodeList;
             List<GameObject> libertyNodes = new List<GameObject>();
-
+            
             foreach(GameObject node in currentGroupList)
             {
                 NodeScript nodeScript = node.GetComponent<NodeScript>();
@@ -159,10 +165,50 @@ public class NodeGroupManager : MonoBehaviour
             Debug.Log("currentGroup Liberties are " + totalGroupLiberties);
             Debug.Log("GroupLiberties property is " + nodeGroup.GroupLiberties);
 
+            if(nodeGroup.GroupLiberties == 0)
+            {
+                zeroLibertyGroupID.Add(nodeGroup.GroupID);
+            }
+
             totalGroupLiberties = 0;
             libertyNodes.Clear();
-
         }
+        return zeroLibertyGroupID;
+    }
+
+
+    public void UpdateZeroLibertyGroups(List<int> zeroLibertyGroupID)               // Receives the zeroLibertyGroupID list from CalculateGrouLiberties()
+    {
+        List<NodeGroup> zeroGroupList = new List<NodeGroup>();                      // Create a new list for sorting
+
+        foreach(NodeGroup nodeGroup in AllGroupList)                                // Look through list of All Groups
+        {
+            if(zeroLibertyGroupID.Contains(nodeGroup.GroupID))                      // If the zeroList contains the ID of a Zero'd Node Group
+            {
+                zeroGroupList.Add(nodeGroup);                                       // Add it to the zeroGroupList for updating
+            }
+
+            foreach(NodeGroup zeroGroup in zeroGroupList)                           // Loop of new list of Zero liberty Groups
+            {   
+                if(zeroGroup.GroupNodeList.Count > 1)                               // If the group has more than 1 stone 
+                {
+                    List<GameObject> zeroList = zeroGroup.GroupNodeList;            // Get a list of the Nodes in the group
+
+                    foreach(GameObject zeroNode in zeroList)                        // For each Node
+                    {
+                        NodeScript zeroScript = zeroNode.GetComponent<NodeScript>();    // Get the script of the node
+                        
+                        zeroScript.sheepValue = zeroScript.sheepValueList[0];       // Update the Sheep Value to 0 (Sheep is removed)
+                        zeroScript.libertyValue = zeroScript.libertyValueList[1];   // Update the Liberty Value to 1 (It has an empty neighbor)
+                        zeroScript.placeAbleBool = zeroScript.placeAbleValueList[1];   // Update the Liberty Value to 1 (It has an empty neighbor)
+                    
+                    }
+                }
+                // TODO LOGIC HERE FOR KO AND OTHER SINGLE NODE SITUATIONS          // Update this space for KO an other empty single space logic
+            
+            }
+        }
+
     }
 
 }
