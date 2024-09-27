@@ -14,8 +14,7 @@ public class BoardGenerator : MonoBehaviour
 
     //* ---------------------------------------- PROPERTIES ----------------------------------------
     // MasterNode for default Value for Reference
-    private GameObject masterNode;    
-    private NodeScript masterNodeScript;
+    private GameObject masterNode;
 
     [SerializeField] public GameObject[,] gNodeArray;
     [SerializeField] public List<GameObject> gNodeList;
@@ -45,7 +44,6 @@ public class BoardGenerator : MonoBehaviour
         Debug.Log("Board Generator Started");
 
         masterNode = GameObject.Find("MasterNode");
-        masterNodeScript = masterNode.GetComponent<NodeScript>();
 
         gNodeArray = new GameObject[arrayColumnLength, arrayRowLength];
         arrayTotalNodes = arrayColumnLength * arrayRowLength;
@@ -195,20 +193,20 @@ public class BoardGenerator : MonoBehaviour
     // --------------------------------------------- // gNodeValue Updater Part 1 ---------------------------------------------
     public List<int> NodeValueMapper()          // Displays Array based on nodeValues
     {
-        List<int> nodeValueMap = new List<int>();  // List to hold update values for arrayNodes
+        List<int> nodeValueMap = new List<int>();                               // List to hold update values for arrayNodes
         
         // Reset all node liberty values to 1
-        foreach(GameObject node in gNodeList){         // Loops over all nodes in gNodeList    
-            NodeScript nodeScript = node.GetComponent<NodeScript>();  // Set liberty value based on masterNode
+        foreach(GameObject node in gNodeList){                                  // Loops over all nodes in gNodeList    
+            NodeScript nodeScript = node.GetComponent<NodeScript>();            // Set liberty value based on masterNode
             // Node Holds No Sheep
             if(nodeScript.sheepValue == nodeScript.sheepValueList[0]){
-                nodeValueMap.Add(masterNodeScript.nodeValueList[4]);     // Assigns max NodeValue to each position
-                nodeScript.libertyValue = nodeScript.libertyValueList[1];
+                nodeValueMap.Add(nodeScript.nodeValueList[4]);                  // Assigns max NodeValue to each position
+                nodeScript.libertyValue = nodeScript.libertyValueList[1];       // Assigns libertyValue  1  each position
             }
             // Node does Hold Sheep
             else {
-                nodeValueMap.Add(masterNodeScript.nodeValueList[0]);     // Assigns max NodeValue to each position
-                nodeScript.libertyValue = nodeScript.libertyValueList[0];
+                nodeValueMap.Add(nodeScript.nodeValueList[0]);                  // Assigns min NodeValue to each position
+                nodeScript.libertyValue = nodeScript.libertyValueList[0];       // Assigns libertyValue  0  each position
             }
         }
         
