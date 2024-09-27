@@ -24,6 +24,9 @@ public class TargetNode : MonoBehaviour
     public bool nodeSelected = false;
 
 
+    // 09/05/24
+    //METHOD FOR ZERO LIBERTY GROUP ERASE TESTING
+    List<int> zeroGroupIds = new List<int>();
 
 
 
@@ -33,7 +36,6 @@ public class TargetNode : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
         grassContainer = gameObject.transform.parent.gameObject;
 
         // node reference - parent reference
@@ -59,7 +61,7 @@ public class TargetNode : MonoBehaviour
     void Update()
     {
         PlaceBlackSheepMethod();
-        PlaceWhiteSheepMethod();
+        // PlaceWhiteSheepMethod();
     }
 
 
@@ -112,9 +114,9 @@ public class TargetNode : MonoBehaviour
             parentNodeScript.BlackSheepSetter();                                    // Set Node to BlackSheepValue
 
             AssignSheepToGroups();                                                  // Assign All Groups
-            List<int> zeroGroupIds = nodeGroupManagerScript.CalculateGroupLiberties();                       // Update All Group Liberties
+            zeroGroupIds = nodeGroupManagerScript.CalculateGroupLiberties();                       // Update All Group Liberties
 
-            nodeGroupManagerScript.UpdateZeroLibertyGroups(zeroGroupIds);                                                                        // Delete Groups with 0 Liberties
+            // nodeGroupManagerScript.UpdateZeroLibertyGroups(zeroGroupIds);                                                                        // Delete Groups with 0 Liberties
 
             // Update Sheep Value of All Nodes
 
@@ -123,11 +125,15 @@ public class TargetNode : MonoBehaviour
 
             // Update Node Value of All Nodes
 
-
             // Debug.Log("Black Sheep Set");
         }
     }
+    
+    
 
+
+
+    // 09/05/2024 - Method Commented out to user Mouse1 for testing
     public void PlaceWhiteSheepMethod()
     {
         // Check if the right mouse button was clicked
@@ -160,10 +166,6 @@ public class TargetNode : MonoBehaviour
     }
 
 
-    public void RemoveDeadGroupsMethod()
-    {
-
-    }
 
 
     //* ---------------------------------------- ON MOUSE ENTER/EXIT METHODS ----------------------------------------

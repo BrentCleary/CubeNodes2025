@@ -36,6 +36,7 @@ public class NodeScript : MonoBehaviour
     public GameObject rightNode;
     public GameObject topNode;
     public GameObject bottomNode;
+    
     // Adjacent Node Scripts
     public NodeScript leftNodeScript;
     public NodeScript rightNodeScript;
@@ -120,6 +121,7 @@ public class NodeScript : MonoBehaviour
 
     }
 
+
     public void WhiteSheepSetter()              // Sets node to Black Sheep Object
     {
         sheepValue = sheepValueList[2];         // Set sheep value to whiteSheep index
@@ -136,6 +138,8 @@ public class NodeScript : MonoBehaviour
         
         sheepTileList[sheepValue].SetActive(isActive);      // Set Current SheepTile active 
         Debug.Log(gameObject.name + " is " + sheepTileList[sheepValue].GetComponent<MeshRenderer>().enabled);
+
+        
     }
 
 
@@ -152,7 +156,7 @@ public class NodeScript : MonoBehaviour
             sheepTileList[i].SetActive(!isActive);      // Sets all SheepTiles to inactive      // Sets all SheepTiles to inactive    // Sets all SheepTiles to inactive
         }
         
-        sheepTileList[sheepValue].SetActive(isActive);      // Set Current SheepTile active 
+        // sheepTileList[sheepValue].SetActive(isActive);      // Set Current SheepTile active 
         Debug.Log(gameObject.name + " is " + sheepTileList[sheepValue].GetComponent<MeshRenderer>().enabled);
     }
 

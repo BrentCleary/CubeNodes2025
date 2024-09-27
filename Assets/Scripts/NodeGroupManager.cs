@@ -4,6 +4,7 @@ using JetBrains.Annotations;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using System.Linq;
+using System.Globalization;
 
 public class NodeGroupManager : MonoBehaviour
 {
@@ -177,38 +178,41 @@ public class NodeGroupManager : MonoBehaviour
     }
 
 
-    public void UpdateZeroLibertyGroups(List<int> zeroLibertyGroupID)               // Receives the zeroLibertyGroupID list from CalculateGrouLiberties()
-    {
-        List<NodeGroup> zeroGroupList = new List<NodeGroup>();                      // Create a new list for sorting
+    // public void UpdateZeroLibertyGroups(List<int> zeroLibertyGroupID)               // Receives the zeroLibertyGroupID list from CalculateGrouLiberties()
+    // {
+    //     List<NodeGroup> zeroGroupList = new List<NodeGroup>();                      // Create a new list for sorting
 
-        foreach(NodeGroup nodeGroup in AllGroupList)                                // Look through list of All Groups
-        {
-            if(zeroLibertyGroupID.Contains(nodeGroup.GroupID))                      // If the zeroList contains the ID of a Zero'd Node Group
-            {
-                zeroGroupList.Add(nodeGroup);                                       // Add it to the zeroGroupList for updating
-            }
+    //     foreach(NodeGroup nodeGroup in AllGroupList)                                // Look through list of All Groups
+    //     {
+    //         if(zeroLibertyGroupID.Contains(nodeGroup.GroupID))                      // If the zeroList contains the ID of a Zero'd Node Group
+    //         {
+    //             zeroGroupList.Add(nodeGroup);                                       // Add it to the zeroGroupList for updating
+    //         }
 
-            foreach(NodeGroup zeroGroup in zeroGroupList)                           // Loop of new list of Zero liberty Groups
-            {   
-                if(zeroGroup.GroupNodeList.Count > 1)                               // If the group has more than 1 stone 
-                {
-                    List<GameObject> zeroList = zeroGroup.GroupNodeList;            // Get a list of the Nodes in the group
+    //         foreach(NodeGroup zeroGroup in zeroGroupList)                           // Loop of new list of Zero liberty Groups
+    //         {   
+    //             Debug.Log("ZeroGroup Liberties are " + zeroGroup.GroupLiberties);
+    //             if(zeroGroup.GroupNodeList.Count > 1)                               // If the group has more than 1 stone 
+    //             {
+    //                 List<GameObject> zeroList = zeroGroup.GroupNodeList;            // Get a list of the Nodes in the group
 
-                    foreach(GameObject zeroNode in zeroList)                        // For each Node
-                    {
-                        NodeScript zeroScript = zeroNode.GetComponent<NodeScript>();    // Get the script of the node
+    //                 foreach(GameObject zeroNode in zeroList)                        // For each Node
+    //                 {
+    //                     Debug.Log("Setting Node " + zeroNode.name + " to empty");
+    //                     NodeScript zeroScript = zeroNode.GetComponent<NodeScript>();    // Get the script of the node
                         
-                        zeroScript.sheepValue = zeroScript.sheepValueList[0];       // Update the Sheep Value to 0 (Sheep is removed)
-                        zeroScript.libertyValue = zeroScript.libertyValueList[1];   // Update the Liberty Value to 1 (It has an empty neighbor)
-                        zeroScript.placeAbleBool = zeroScript.placeAbleValueList[1];   // Update the Liberty Value to 1 (It has an empty neighbor)
-                    
-                    }
-                }
-                // TODO LOGIC HERE FOR KO AND OTHER SINGLE NODE SITUATIONS          // Update this space for KO an other empty single space logic
+    //                     zeroScript.sheepValue = zeroScript.sheepValueList[0];       // Update the Sheep Value to 0 (Sheep is removed)
+    //                     zeroScript.libertyValue = zeroScript.libertyValueList[1];   // Update the Liberty Value to 1 (It has an empty neighbor)
+    //                     zeroScript.placeAbleBool = zeroScript.placeAbleValueList[1];   // Update the Liberty Value to 1 (It has an empty neighbor)
+    //                     zeroScript.EmptySheepSetter();
+    //                 }
+    //             }
+    //             // TODO LOGIC HERE FOR KO AND OTHER SINGLE NODE SITUATIONS          // Update this space for KO an other empty single space logic
             
-            }
-        }
+    //         }
+    //     }
+        
 
-    }
+    // }
 
 }

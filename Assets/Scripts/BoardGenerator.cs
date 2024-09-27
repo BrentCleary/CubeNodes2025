@@ -21,9 +21,10 @@ public class BoardGenerator : MonoBehaviour
     [SerializeField] public List<GameObject> gNodeList;
     
     // ! Array Size Controls
-    private int arrayColumnLength = 5;                  // Array Dimensions - Column
-    private int arrayRowLength = 5;                     // Array Dimensions - Row
-    private int arrayTotalNodes;
+    private int arrayColumnLength = 9;                  // Array Dimensions - Column
+    private int arrayRowLength = 9;                     // Array Dimensions - Row
+    private int nodeSpacingValue = 2;                   // Space Between Nodes
+    private int arrayTotalNodes;                        // arrayColumnLength * arrayRowLength
 
     public GameObject nodePrefab;
     public List<int> startNodeValueMap;
@@ -52,10 +53,10 @@ public class BoardGenerator : MonoBehaviour
         gNodeList = new List<GameObject>();
         gNodeArrayTransform = gameObject.transform;
 
-        NodeGenerator();
-        NodePositionSetter();
+        InstantiateNodes();
+        SetNodeTransformPosition();
         
-        GenerateNodeArray();
+        BuildNodeArray();
         AdjacentSheepNodeMapper(gNodeList);
 
         // Generate Initial Value Map
@@ -74,7 +75,7 @@ public class BoardGenerator : MonoBehaviour
 
     // *---------------------------------------- BOARD NODE CREATION METHODS ----------------------------------------
                                                //* Called in Start Method
-    public void NodeGenerator()
+    public void InstantiateNodes()
     {
         for(int i = 1; i <= arrayTotalNodes; i++) {
             GameObject gNode = Instantiate(nodePrefab, gNodeArrayTransform);
@@ -84,12 +85,12 @@ public class BoardGenerator : MonoBehaviour
     }
 
 
-    public void NodePositionSetter()
+    public void SetNodeTransformPosition()
     {
         int nodeCounter = 0;                                // Increments Node reference in gNodeList 
         for(int i = 0; i < arrayColumnLength; i ++){         // Assigns positions to each gNode in gNodeArray
             for(int j = 0; j < arrayRowLength; j ++){
-                gNodeList[nodeCounter].transform.position = new Vector3(i * 2.0f, 0, j * 2.0f); // Example positioning
+                gNodeList[nodeCounter].transform.position = new Vector3(i * nodeSpacingValue, 0, j * nodeSpacingValue); // Example positioning
                 nodeCounter++;
             }
         }
@@ -97,13 +98,11 @@ public class BoardGenerator : MonoBehaviour
 
 
 
-
-
     // *---------------------------------------- ARRAY GENERATION AND VALUE SET METHODS ----------------------------------------
                                                     //* Called in Start Method
 
     // ------------------------------ //* gNodeArray Assigner 0 ------------------------------
-    public void GenerateNodeArray()                         // Generate a Length x Row array containing Nodes contained gNodeList
+    public void BuildNodeArray()                         // Generate a Length x Row array containing Nodes contained gNodeList
     {               
         int nodeCounter = 0;                                // Increments Node reference in gNodeList 
         for(int i = 0; i < arrayColumnLength; i ++){         // Assigns positions to each gNode in gNodeArray
@@ -122,6 +121,60 @@ public class BoardGenerator : MonoBehaviour
             }
         }
     }
+
+
+
+    // *---------------------------------------- SHEEP GROUP METHODS ----------------------------------------
+                                //* Loops over gNodeList and assigns adjacent Nodes 
+                                            //* CALLED IN START() METHOD
+    
+    public void AdjacentSheepNodeMapper(List<GameObject> gNodeList)
+    {
+        foreach(GameObject currentNode in gNodeList)
+        {
+            NodeScript nodeScript = currentNode.GetComponent<NodeScript>();
+            int[] arrayPos = nodeScript.arrayPosition;   
+        
+            // Left index
+            if(arrayPos[0] == 0){      // left index is not out of range 
+                nodeScript.leftNode = null;
+            }
+            if(arrayPos[0] != 0){      // left index is a node
+                nodeScript.leftNode = gNodeArray[arrayPos[0] - 1, arrayPos[1]].gameObject;
+                nodeScript.leftNodeScript = gNodeArray[arrayPos[0] - 1, arrayPos[1]].GetComponent<NodeScript>();
+            }
+
+            // Right index
+            if(arrayPos[0] == arrayColumnLength - 1){      // right index is not out of range 
+                nodeScript.rightNode = null;
+            }
+            else if(arrayPos[0] != arrayColumnLength - 1){      // right index is a node
+                nodeScript.rightNode = gNodeArray[arrayPos[0] + 1, arrayPos[1]].gameObject;
+                nodeScript.rightNodeScript = gNodeArray[arrayPos[0] + 1, arrayPos[1]].GetComponent<NodeScript>();
+            }
+
+            // Bottom index
+            if(arrayPos[1] == 0){      // bottom index is not out of range 
+                nodeScript.bottomNode = null;
+            }
+            if(arrayPos[1] != 0){      // bottom index is a node
+                nodeScript.bottomNode = gNodeArray[arrayPos[0], arrayPos[1] - 1].gameObject;
+                nodeScript.bottomNodeScript = gNodeArray[arrayPos[0], arrayPos[1] - 1].GetComponent<NodeScript>();
+            }
+
+            // Top index
+            if(arrayPos[1] == arrayRowLength - 1){      // top index is not out of range 
+                nodeScript.topNode = null;
+            }
+            else if(arrayPos[1] != arrayRowLength - 1){      // top index is a node
+                nodeScript.topNode = gNodeArray[arrayPos[0], arrayPos[1] + 1].gameObject;
+                nodeScript.topNodeScript = gNodeArray[arrayPos[0], arrayPos[1] + 1].GetComponent<NodeScript>();
+            }
+
+        }
+    }
+
+
 
 
 
@@ -168,6 +221,7 @@ public class BoardGenerator : MonoBehaviour
 
         return nodeValueMapUpdated;
     }
+
 
     // ---------------------------------------- -----// gNodeValue Updater Part 2 ---------------------------------------------
     public List<int> NodeValueMapIndexer(List<int> nodeValueMap)
@@ -255,61 +309,6 @@ public class BoardGenerator : MonoBehaviour
 
         // Debug.Log("gNodeArray Update Complete");
     }
-
-
-
-
-
-    // *---------------------------------------- SHEEP GROUP METHODS ----------------------------------------
-                                //* Loops over gNodeList and assigns adjacent Nodes 
-                                            //* CALLED IN START() METHOD
-    
-    public void AdjacentSheepNodeMapper(List<GameObject> gNodeList)
-    {
-        foreach(GameObject currentNode in gNodeList)
-        {
-            NodeScript nodeScript = currentNode.GetComponent<NodeScript>();
-            int[] arrayPos = nodeScript.arrayPosition;   
-        
-            // Left index
-            if(arrayPos[0] == 0){      // left index is not out of range 
-                nodeScript.leftNode = null;
-            }
-            if(arrayPos[0] != 0){      // left index is a node
-                nodeScript.leftNode = gNodeArray[arrayPos[0] - 1, arrayPos[1]].gameObject;
-                nodeScript.leftNodeScript = gNodeArray[arrayPos[0] - 1, arrayPos[1]].GetComponent<NodeScript>();
-            }
-
-            // Right index
-            if(arrayPos[0] == arrayColumnLength - 1){      // right index is not out of range 
-                nodeScript.rightNode = null;
-            }
-            else if(arrayPos[0] != arrayColumnLength - 1){      // right index is a node
-                nodeScript.rightNode = gNodeArray[arrayPos[0] + 1, arrayPos[1]].gameObject;
-                nodeScript.rightNodeScript = gNodeArray[arrayPos[0] + 1, arrayPos[1]].GetComponent<NodeScript>();
-            }
-
-            // Bottom index
-            if(arrayPos[1] == 0){      // bottom index is not out of range 
-                nodeScript.bottomNode = null;
-            }
-            if(arrayPos[1] != 0){      // bottom index is a node
-                nodeScript.bottomNode = gNodeArray[arrayPos[0], arrayPos[1] - 1].gameObject;
-                nodeScript.bottomNodeScript = gNodeArray[arrayPos[0], arrayPos[1] - 1].GetComponent<NodeScript>();
-            }
-
-            // Top index
-            if(arrayPos[1] == arrayRowLength - 1){      // top index is not out of range 
-                nodeScript.topNode = null;
-            }
-            else if(arrayPos[1] != arrayRowLength - 1){      // top index is a node
-                nodeScript.topNode = gNodeArray[arrayPos[0], arrayPos[1] + 1].gameObject;
-                nodeScript.topNodeScript = gNodeArray[arrayPos[0], arrayPos[1] + 1].GetComponent<NodeScript>();
-            }
-
-        }
-    }
-
 
 
 
