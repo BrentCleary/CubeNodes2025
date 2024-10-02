@@ -33,15 +33,19 @@ public class NodeScript : MonoBehaviour
     //* SHEEP GROUP PARAMETERS
     // Adjacent Nodes
     public GameObject leftNode;
+    public NodeScript leftNodeScript;
+    
     public GameObject rightNode;
+    public NodeScript rightNodeScript;
+    
     public GameObject topNode;
+    public NodeScript topNodeScript;
+    
     public GameObject bottomNode;
+    public NodeScript bottomNodeScript;
     
     // Adjacent Node Scripts
-    public NodeScript leftNodeScript;
-    public NodeScript rightNodeScript;
-    public NodeScript bottomNodeScript;
-    public NodeScript topNodeScript;
+    public List<NodeScript> adjNodeScriptList;
 
     public int leftNodeLibertyVal;
     public int rightNodeLibertyVal;
@@ -62,6 +66,7 @@ public class NodeScript : MonoBehaviour
         libertyValue = 1;
         placeAbleBool = true;
         sheepValue = sheepValueList[0];
+        adjNodeScriptList = new List<NodeScript>() {leftNodeScript, rightNodeScript, bottomNodeScript, topNodeScript};
     }
 
     // Update is called once per frame
@@ -111,6 +116,7 @@ public class NodeScript : MonoBehaviour
 
         // Sets all SheepTiles to inactive
         bool isActive = true;
+        
         for (int i = sheepTileList.Count-1; i >= 0; i--)    
         {
             sheepTileList[i].SetActive(!isActive);      // Sets all SheepTiles to inactive

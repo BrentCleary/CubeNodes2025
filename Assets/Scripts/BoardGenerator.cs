@@ -20,8 +20,8 @@ public class BoardGenerator : MonoBehaviour
     [SerializeField] public List<GameObject> gNodeList;
     
     // ! Array Size Controls
-    private int arrayColumnLength = 9;                  // Array Dimensions - Column
-    private int arrayRowLength = 9;                     // Array Dimensions - Row
+    private int arrayColumnLength = 2;                  // Array Dimensions - Column
+    private int arrayRowLength = 2;                     // Array Dimensions - Row
     private int nodeSpacingValue = 2;                   // Space Between Nodes
     private int arrayTotalNodes;                        // arrayColumnLength * arrayRowLength
 
@@ -182,31 +182,30 @@ public class BoardGenerator : MonoBehaviour
                                                     //* Called in Start Method
                                                     //* Called in TargetNode.cs
     
-    // --------------------------------------------- // Calls Functions 1, 2, 3  ---------------------------------------------
+     // --------------------------------------------- // Calls Functions 1, 2, 3  ---------------------------------------------
     public void BoardUpdaterFunction()
     {
         List<int> nodeValueMap = NodeValueMapper();
-        nodeValueMap = NodeValueMapIndexer(nodeValueMap);
         NodeValueUpdater(nodeValueMap);
     }
 
     // --------------------------------------------- // gNodeValue Updater Part 1 ---------------------------------------------
     public List<int> NodeValueMapper()          // Displays Array based on nodeValues
     {
-        List<int> nodeValueMap = new List<int>();                               // List to hold update values for arrayNodes
+        List<int> nodeValueMap = new List<int>();  // List to hold update values for arrayNodes
         
         // Reset all node liberty values to 1
-        foreach(GameObject node in gNodeList){                                  // Loops over all nodes in gNodeList    
-            NodeScript nodeScript = node.GetComponent<NodeScript>();            // Set liberty value based on masterNode
-            // Node Holds No Sheep
+        foreach(GameObject node in gNodeList){         // Loops over all nodes in gNodeList    
+            NodeScript nodeScript = node.GetComponent<NodeScript>();  // Set liberty value based on masterNode
+            // No Sheep Placed
             if(nodeScript.sheepValue == nodeScript.sheepValueList[0]){
-                nodeValueMap.Add(nodeScript.nodeValueList[4]);                  // Assigns max NodeValue to each position
-                nodeScript.libertyValue = nodeScript.libertyValueList[1];       // Assigns libertyValue  1  each position
+                nodeValueMap.Add(nodeScript.nodeValueList[4]);     // Assigns max NodeValue to each position
+                nodeScript.libertyValue = nodeScript.libertyValueList[1];
             }
-            // Node does Hold Sheep
+            // Sheep placed
             else {
-                nodeValueMap.Add(nodeScript.nodeValueList[0]);                  // Assigns min NodeValue to each position
-                nodeScript.libertyValue = nodeScript.libertyValueList[0];       // Assigns libertyValue  0  each position
+                nodeValueMap.Add(nodeScript.nodeValueList[0]);     // Assigns min NodeValue to each position
+                nodeScript.libertyValue = nodeScript.libertyValueList[0];
             }
         }
         
@@ -219,7 +218,6 @@ public class BoardGenerator : MonoBehaviour
 
         return nodeValueMapUpdated;
     }
-
 
     // ---------------------------------------- -----// gNodeValue Updater Part 2 ---------------------------------------------
     public List<int> NodeValueMapIndexer(List<int> nodeValueMap)
@@ -307,6 +305,79 @@ public class BoardGenerator : MonoBehaviour
 
         // Debug.Log("gNodeArray Update Complete");
     }
+
+
+    public void NodeDisplayUpdate()
+    {
+        foreach(GameObject node in gNodeList)
+        {
+            node.GetComponent<NodeScript>().SetGrassTileDisplayLoop();
+        }
+    }
+
+
+
+    // GNODE LIST MAPPER
+    // public List<int> AdjacentNodeMapIndexer(List<int> nodeValueMap)
+    // {
+    //     // Counter to increment through index in nodeValueMap
+    //     int index = 0;     
+
+    //     // Map node values to nodeValueMap based on current board state
+    //     foreach(GameObject node in gNodeList)
+    //     {
+    //         NodeScript nScript = node.GetComponent<NodeScript>();
+    //         List<NodeScript> adjList = nScript.adjNodeScriptList;
+
+    //         foreach(NodeScript adjScript in adjList)
+    //         {
+    //             if(adjScript == null || adjScript.libertyValue == 0)
+    //             {
+    //                 nodeValueMap[index] -= 1;
+    //                 Debug.Log("Adj Script " + adjScript.name + " is null at " + node.name);
+    //             }
+    //         }
+            
+    //         index += 1;
+    //     }   
+        
+    //     return nodeValueMap;
+    // }
+
+
+
+
+    // --------------------------------------------- // gNodeValue Updater Part 3 ---------------------------------------------
+                                                  //* Calls SetGrassTileDisplayLoop
+    // public void NodeValueListUpdater(List<int> nodeValueMap)
+    // {
+    //     int arrayIndex = 0;
+
+    //     // Map nodeValueMap values to nodeArray
+    //     foreach(GameObject node in gNodeList)
+    //     {         
+
+    //         NodeScript currentNodeScript = node.GetComponent<NodeScript>();
+            
+    //         if(nodeValueMap[arrayIndex] < 0) {
+    //             currentNodeScript.nodeValue = 0;
+    //         }
+    //         else {
+    //             currentNodeScript.nodeValue = nodeValueMap[arrayIndex];
+    //         }
+            
+    //         node.GetComponent<NodeScript>().SetGrassTileDisplayLoop();
+    //         Debug.Log(node.GetComponent<NodeScript>().name + "'s nodeValue is " + node.GetComponent<NodeScript>().nodeValue);
+
+    //         arrayIndex += 1;
+            
+    //     }
+
+    //     // Debug.Log("gNodeArray Update Complete");
+    // }
+
+
+
 
 
 
