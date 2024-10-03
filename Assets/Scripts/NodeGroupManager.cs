@@ -50,11 +50,12 @@ public class NodeGroupManager : MonoBehaviour
                             // * Creates New NodeGroup - Called in TargetNode - Returns GroupID
     public int CreateNewNodeGroup(GameObject node)
     {
-        NodeGroup newNodeGroup = new NodeGroup();
-        newNodeGroup.GroupNodeList.Add(node);
-        Add_To_AllGroupList(newNodeGroup);
+        NodeGroup newGroup = new NodeGroup();
+        newGroup.GroupNodeList.Add(node);
 
-        int groupID = newNodeGroup.GroupID;
+        Add_To_AllGroupList(newGroup);
+
+        int groupID = newGroup.GroupID;
 
         Debug.Log("NodeGM : CreateNewNodeGroup: Group ID: [ " + groupID + " ]");
 
@@ -64,44 +65,34 @@ public class NodeGroupManager : MonoBehaviour
 
 
     //* ---------------------------------------- JoinNodeGroups ----------------------------------------
-                    //* Adds all nodes from Previous Group to New Group by ID - Takes new/prev GroupID
-
-    public List<GameObject> JoinNodeGroups(int newGroupID, int prevGroupID)
+    public List<GameObject> JoinNodeGroups(int newGroupID, int prevGroupID)     //* Adds all nodes from Previous Group to New Group by ID - Takes new/prev GroupID
     {
         NodeGroup prevNodeGroup = RetrieveNodeGroup(prevGroupID);
         NodeGroup newNodeGroup = RetrieveNodeGroup(newGroupID);
 
-        foreach(GameObject node in prevNodeGroup.GroupNodeList)
-        {
+        foreach(GameObject node in prevNodeGroup.GroupNodeList) {
             newNodeGroup.GroupNodeList.Add(node);
         }
-
         Debug.Log("NodeGroupManager:JoinNodeGroups [ " + prevGroupID + " Nodes added to newGroupID " + newGroupID + " ]");
-
         return newNodeGroup.GroupNodeList;
     }
 
 
     //* ---------------------------------------- Add_To_AllGroupList ----------------------------------------
-                                            //* Updates All Group List 
-    public void Add_To_AllGroupList(NodeGroup group)
+    public void Add_To_AllGroupList(NodeGroup group)                                            //* Updates All Group List
     {
         AllGroupList.Add(group);
     }
 
-
     //* ---------------------------------------- RetrieveNodeGroup ----------------------------------------
-                                    //* Returns NodeGroup by NodeScript.groupID 
-
-    public NodeGroup RetrieveNodeGroup(int groupID)
+    public NodeGroup RetrieveNodeGroup(int groupID)                                    //* Returns NodeGroup by NodeScript.groupID 
     {
         NodeGroup nodeGroup = AllGroupList.Find(g => g.GroupID == groupID);
         return nodeGroup;
     }
 
     //* ---------------------------------------- DeleteNodeGroup -----------------------------------------
-                            //* Clears previous group List and removes for AllGroupList 
-    public void DeleteNodeGroup(int prevGroupID)
+    public void DeleteNodeGroup(int prevGroupID)                            //* Clears previous group List and removes for AllGroupList 
     {
         NodeGroup groupToDelete = AllGroupList.Find(g => g.GroupID == prevGroupID);
         
@@ -112,22 +103,17 @@ public class NodeGroupManager : MonoBehaviour
     }
 
     //* ---------------------------------------- CalculateGroupLiberties ----------------------------------------
-                                    //*  - Calculates Liberties of all NodeGroups
-    // Calculates and Updates Liberties for All Groups and stones on the board
-    // Loops over List of All Groups, Looks at adjacent nodes for each node in group
-    // Adds value of node to total liberties, adds node to list so it is not counted twice
-    // Returns a list of Groups with Liberties == 0 for deletion in other method
-    public List<int> CalculateGroupLiberties() 
+    public List<int> CalculateGroupLiberties()                                    //*  - Calculates Liberties of all NodeGroups
     {
         List<int> zeroLibertyGroupID = new List<int>();
 
-        foreach(NodeGroup nodeGroup in AllGroupList)
+        foreach(NodeGroup nodeGroup in AllGroupList)    // Loops over List of All Groups, Looks at adjacent nodes for each node in group
         {
             int totalGroupLiberties = 0;
             List<GameObject> currentGroupList = nodeGroup.GroupNodeList;
             List<GameObject> libertyNodes = new List<GameObject>();
             
-            foreach(GameObject node in currentGroupList)
+            foreach(GameObject node in currentGroupList)    // Adds value of node to total liberties, adds node to list so it is not counted twice
             {
                 NodeScript nodeScript = node.GetComponent<NodeScript>();
 
@@ -166,7 +152,7 @@ public class NodeGroupManager : MonoBehaviour
             Debug.Log("currentGroup Liberties are " + totalGroupLiberties);
             Debug.Log("GroupLiberties property is " + nodeGroup.GroupLiberties);
 
-            if(nodeGroup.GroupLiberties == 0)
+            if(nodeGroup.GroupLiberties == 0)           // Returns a list of Groups with Liberties == 0 for deletion in other method
             {
                 zeroLibertyGroupID.Add(nodeGroup.GroupID);
             }
@@ -178,41 +164,105 @@ public class NodeGroupManager : MonoBehaviour
     }
 
 
-    // public void UpdateZeroLibertyGroups(List<int> zeroLibertyGroupID)               // Receives the zeroLibertyGroupID list from CalculateGrouLiberties()
-    // {
-    //     List<NodeGroup> zeroGroupList = new List<NodeGroup>();                      // Create a new list for sorting
+    public void UpdateZeroLibertyGroups(List<int> zeroLibertyGroupID)               // Receives the zeroLibertyGroupID list from CalculateGrouLiberties()
+    {
+        List<NodeGroup> zeroGroupList = new List<NodeGroup>();                      // Create a new list for sorting
 
-    //     foreach(NodeGroup nodeGroup in AllGroupList)                                // Look through list of All Groups
-    //     {
-    //         if(zeroLibertyGroupID.Contains(nodeGroup.GroupID))                      // If the zeroList contains the ID of a Zero'd Node Group
-    //         {
-    //             zeroGroupList.Add(nodeGroup);                                       // Add it to the zeroGroupList for updating
-    //         }
+        foreach(NodeGroup nodeGroup in AllGroupList)                                // Look through list of All Groups
+        {
+            if(zeroLibertyGroupID.Contains(nodeGroup.GroupID))                      // If the zeroList contains the ID of a Zero'd Node Group
+            {
+                zeroGroupList.Add(nodeGroup);                                       // Add it to the zeroGroupList for updating
+            }
 
-    //         foreach(NodeGroup zeroGroup in zeroGroupList)                           // Loop of new list of Zero liberty Groups
-    //         {   
-    //             Debug.Log("ZeroGroup Liberties are " + zeroGroup.GroupLiberties);
-    //             if(zeroGroup.GroupNodeList.Count > 1)                               // If the group has more than 1 stone 
-    //             {
-    //                 List<GameObject> zeroList = zeroGroup.GroupNodeList;            // Get a list of the Nodes in the group
+            foreach(NodeGroup zeroGroup in zeroGroupList)                           // Loop of new list of Zero liberty Groups
+            {   
+                Debug.Log("ZeroGroup Liberties are " + zeroGroup.GroupLiberties);
+                if(zeroGroup.GroupNodeList.Count > 1)                               // If the group has more than 1 stone 
+                {
+                    List<GameObject> zeroList = zeroGroup.GroupNodeList;            // Get a list of the Nodes in the group
 
-    //                 foreach(GameObject zeroNode in zeroList)                        // For each Node
-    //                 {
-    //                     Debug.Log("Setting Node " + zeroNode.name + " to empty");
-    //                     NodeScript zeroScript = zeroNode.GetComponent<NodeScript>();    // Get the script of the node
+                    foreach(GameObject zeroNode in zeroList)                        // For each Node
+                    {
+                        Debug.Log("Setting Node " + zeroNode.name + " to empty");
+                        NodeScript zeroScript = zeroNode.GetComponent<NodeScript>();    // Get the script of the node
                         
-    //                     zeroScript.sheepValue = zeroScript.sheepValueList[0];       // Update the Sheep Value to 0 (Sheep is removed)
-    //                     zeroScript.libertyValue = zeroScript.libertyValueList[1];   // Update the Liberty Value to 1 (It has an empty neighbor)
-    //                     zeroScript.placeAbleBool = zeroScript.placeAbleValueList[1];   // Update the Liberty Value to 1 (It has an empty neighbor)
-    //                     zeroScript.EmptySheepSetter();
-    //                 }
-    //             }
-    //             // TODO LOGIC HERE FOR KO AND OTHER SINGLE NODE SITUATIONS          // Update this space for KO an other empty single space logic
+                        zeroScript.sheepValue = zeroScript.sheepValueList[0];       // Update the Sheep Value to 0 (Sheep is removed)
+                        zeroScript.libertyValue = zeroScript.libertyValueList[1];   // Update the Liberty Value to 1 (It has an empty neighbor)
+                        zeroScript.placeAbleBool = zeroScript.placeAbleValueList[1];   // Update the Liberty Value to 1 (It has an empty neighbor)
+                        zeroScript.EmptySheepSetter();
+                    }
+                }
+                // TODO LOGIC HERE FOR KO AND OTHER SINGLE NODE SITUATIONS          // Update this space for KO an other empty single space logic
             
-    //         }
-    //     }
+            }
+        }
         
 
-    // }
+    }
+
+
+    //* ---------------------------------------- CalculateGroupLiberties ----------------------------------------
+    public List<int> CalculateGroupLiberties____REFACTOR()                                    //*  - Calculates Liberties of all NodeGroups
+    {
+        List<int> zeroLibertyGroupID = new List<int>();
+
+        foreach(NodeGroup nodeGroup in AllGroupList)    // Loops over List of All Groups, Looks at adjacent nodes for each node in group
+        {
+            int totalGroupLiberties = 0;
+            List<GameObject> currentGroupList = nodeGroup.GroupNodeList;
+            List<GameObject> libertyNodes = new List<GameObject>();
+            
+            foreach(GameObject node in currentGroupList)    // Adds value of node to total liberties, adds node to list so it is not counted twice
+            {
+                NodeScript nodeScript = node.GetComponent<NodeScript>();
+                List<NodeScript> adjScriptList = nodeScript.adjNodeScriptList;
+                
+                if(nodeScript.leftNode != null){
+                    if(!libertyNodes.Contains(nodeScript.leftNode))
+                    {
+                        libertyNodes.Add(nodeScript.leftNode);
+                        totalGroupLiberties += nodeScript.leftNodeScript.libertyValue;
+                    }
+                }
+                if(nodeScript.rightNode != null){
+                    if(!libertyNodes.Contains(nodeScript.rightNode))
+                    {
+                        libertyNodes.Add(nodeScript.rightNode);
+                        totalGroupLiberties += nodeScript.rightNodeScript.libertyValue;
+                    }
+                }
+                if(nodeScript.bottomNode != null){
+                    if(!libertyNodes.Contains(nodeScript.bottomNode))
+                    {
+                        libertyNodes.Add(nodeScript.bottomNode);
+                        totalGroupLiberties += nodeScript.bottomNodeScript.libertyValue;
+                    }
+                }
+                if(nodeScript.topNode != null){
+                    if(!libertyNodes.Contains(nodeScript.topNode))
+                    {
+                        libertyNodes.Add(nodeScript.topNode);
+                        totalGroupLiberties += nodeScript.topNodeScript.libertyValue;
+                    }
+                }
+                // Debug.Log("node liberties are " + nodeScript.libertyValue);
+            }
+            
+            nodeGroup.GroupLiberties = totalGroupLiberties;
+            Debug.Log("currentGroup Liberties are " + totalGroupLiberties);
+            Debug.Log("GroupLiberties property is " + nodeGroup.GroupLiberties);
+
+            if(nodeGroup.GroupLiberties == 0)           // Returns a list of Groups with Liberties == 0 for deletion in other method
+            {
+                zeroLibertyGroupID.Add(nodeGroup.GroupID);
+            }
+
+            totalGroupLiberties = 0;
+            libertyNodes.Clear();
+        }
+        return zeroLibertyGroupID;
+    }
+
 
 }

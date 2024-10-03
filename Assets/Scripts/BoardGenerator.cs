@@ -60,6 +60,7 @@ public class BoardGenerator : MonoBehaviour
         // Generate Initial Value Map
         startNodeValueMap = NodeValueMapper();
         NodeValueUpdater(startNodeValueMap);
+        NodeDisplayUpdate();
     }
 
     // Update is called once per frame
@@ -187,6 +188,7 @@ public class BoardGenerator : MonoBehaviour
     {
         List<int> nodeValueMap = NodeValueMapper();
         NodeValueUpdater(nodeValueMap);
+        NodeDisplayUpdate();
     }
 
     // --------------------------------------------- // gNodeValue Updater Part 1 ---------------------------------------------
@@ -296,7 +298,7 @@ public class BoardGenerator : MonoBehaviour
                     currentNodeScript.nodeValue = nodeValueMap[arrayIndex];
                 }
                 
-                currentNode.GetComponent<NodeScript>().SetGrassTileDisplayLoop();
+                // currentNode.GetComponent<NodeScript>().SetGrassTileDisplayLoop();
                 // Debug.Log(currentNode.GetComponent<NodeScript>().name + "'s nodeValue is " + currentNode.GetComponent<NodeScript>().nodeValue);
 
                 arrayIndex += 1;

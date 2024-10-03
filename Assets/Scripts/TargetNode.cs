@@ -122,6 +122,7 @@ public class TargetNode : MonoBehaviour
 
             List<int> nodeValueMap = boardGeneratorScript.NodeValueMapper();        // Map Node Values
             boardGeneratorScript.NodeValueUpdater(nodeValueMap);                    // Update Board Node Display
+            boardGeneratorScript.NodeDisplayUpdate();
 
             // Update Node Value of All Nodes
 
@@ -145,6 +146,7 @@ public class TargetNode : MonoBehaviour
             // BoardGenerator Script
             List<int> nodeValueMap = boardGeneratorScript.NodeValueMapper();
             boardGeneratorScript.NodeValueUpdater(nodeValueMap);
+            boardGeneratorScript.NodeDisplayUpdate();
 
             // Debug.Log("White Sheep Set!");
         }
