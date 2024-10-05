@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -11,6 +12,7 @@ public class TargetNode : MonoBehaviour
     public GameObject grassContainer;
     public GameObject parentNode;
     public GameObject nodeArray;
+    public Camera mainCamera;
 
     public Material selectionMaterial;
     private List<Renderer> tileRendererList;
@@ -19,14 +21,8 @@ public class TargetNode : MonoBehaviour
     private NodeScript parentNodeScript;
     private BoardGenerator boardGeneratorScript;
     private NodeGroupManager nodeGroupManagerScript;
-    // private NodeArrayScript nodeArrayScript; // Replaced by boardGeneratorScript
 
     public bool nodeSelected = false;
-
-
-    // 09/05/24
-    //METHOD FOR ZERO LIBERTY GROUP ERASE TESTING
-    List<int> zeroGroupIds = new List<int>();
 
 
 
@@ -113,16 +109,22 @@ public class TargetNode : MonoBehaviour
         {
             parentNodeScript.BlackSheepSetter();                                    // Set Node to BlackSheepValue
 
-            AssignSheepToGroups();                                                  // Assign All Groups
-            zeroGroupIds = nodeGroupManagerScript.CalculateGroupLiberties();                       // Update All Group Liberties
 
-            // nodeGroupManagerScript.UpdateZeroLibertyGroups(zeroGroupIds);                                                                        // Delete Groups with 0 Liberties
+            AssignSheepToGroups();                                                  // Assign All Groups
+            // nodeGroupManagerScript.AssignSheepToGroups(parentNode);
+            nodeGroupManagerScript.CalculateGroupLiberties();                       // Update All Group Liberties
+
+            List<int> zeroGroupIds = new List<int>();
+            zeroGroupIds = nodeGroupManagerScript.GetZeroLibertyGroupID();                       // Update All Group Liberties
+            nodeGroupManagerScript.UpdateZeroLibertyGroups(zeroGroupIds);                                                                        // Delete Groups with 0 Liberties
+
 
             // Update Sheep Value of All Nodes
+            // List<int> nodeValueMap = boardGeneratorScript.NodeValueMapper();        // Map Node Values
+            // boardGeneratorScript.NodeValueUpdater(nodeValueMap);                    // Update Board Node Display
+            // boardGeneratorScript.NodeDisplayUpdate();
 
-            List<int> nodeValueMap = boardGeneratorScript.NodeValueMapper();        // Map Node Values
-            boardGeneratorScript.NodeValueUpdater(nodeValueMap);                    // Update Board Node Display
-            boardGeneratorScript.NodeDisplayUpdate();
+            boardGeneratorScript.BoardUpdaterFunction();
 
             // Update Node Value of All Nodes
 
@@ -158,7 +160,9 @@ public class TargetNode : MonoBehaviour
         if (nodeSelected && Input.GetKeyDown(KeyCode.Mouse2))
         {
             parentNodeScript.EmptySheepSetter();
-            parentNodeScript.SetGrassTileDisplayLoop();
+
+            // 10/03/24 - Commented out. Already called in UpdateLoop - Test
+            // parentNodeScript.SetGrassTileDisplayLoop();
 
             List<int> nodeValueMap = boardGeneratorScript.NodeValueMapper();
             boardGeneratorScript.NodeValueUpdater(nodeValueMap);
@@ -177,7 +181,7 @@ public class TargetNode : MonoBehaviour
     {
 
         // Create new NodeGroup, assign groupID
-        parentNodeScript.groupID = nodeGroupManagerScript.CreateNewNodeGroup(parentNode);
+        parentNodeScript.groupID = nodeGroupManagerScript.CreateNewGroup(parentNode);
         int parentNodeGroupID = parentNodeScript.groupID;
         
         // Adjacent Node Scripts
@@ -193,14 +197,14 @@ public class TargetNode : MonoBehaviour
         {
             int leftNodeGroupID = leftNodeScript.groupID;
 
-            List<GameObject> nodeGroup = nodeGroupManagerScript.JoinNodeGroups(parentNodeGroupID, leftNodeGroupID);
+            List<GameObject> nodeGroup = nodeGroupManagerScript.JoinGroups(parentNodeGroupID, leftNodeGroupID);
 
             foreach(GameObject node in nodeGroup)
             {
                 node.GetComponent<NodeScript>().groupID = parentNodeGroupID;
             }
 
-            nodeGroupManagerScript.DeleteNodeGroup(leftNodeGroupID);
+            nodeGroupManagerScript.DeleteGroup(leftNodeGroupID);
 
         }
 
@@ -211,7 +215,7 @@ public class TargetNode : MonoBehaviour
 
             if(rightNodeGroupID != parentNodeGroupID)
             {
-                List<GameObject> nodeGroup = nodeGroupManagerScript.JoinNodeGroups(parentNodeGroupID, rightNodeGroupID);
+                List<GameObject> nodeGroup = nodeGroupManagerScript.JoinGroups(parentNodeGroupID, rightNodeGroupID);
 
                 foreach(GameObject node in nodeGroup)
                 {
@@ -221,7 +225,7 @@ public class TargetNode : MonoBehaviour
                     Debug.Log("newNodeID's are " + node.GetComponent<NodeScript>().groupID);
                 }
 
-                nodeGroupManagerScript.DeleteNodeGroup(rightNodeGroupID);
+                nodeGroupManagerScript.DeleteGroup(rightNodeGroupID);
 
                 Debug.Log("New Node added to GroupID: " + rightNodeScript.groupID);
             }
@@ -234,7 +238,7 @@ public class TargetNode : MonoBehaviour
 
             if(bottomNodeGroupID != parentNodeGroupID)
             {
-                List<GameObject> nodeGroup = nodeGroupManagerScript.JoinNodeGroups(parentNodeGroupID, bottomNodeGroupID);
+                List<GameObject> nodeGroup = nodeGroupManagerScript.JoinGroups(parentNodeGroupID, bottomNodeGroupID);
 
                 foreach(GameObject node in nodeGroup)
                 {
@@ -244,7 +248,7 @@ public class TargetNode : MonoBehaviour
                     Debug.Log("newNodeID's are " + node.GetComponent<NodeScript>().groupID);
                 }
 
-                nodeGroupManagerScript.DeleteNodeGroup(bottomNodeGroupID);
+                nodeGroupManagerScript.DeleteGroup(bottomNodeGroupID);
 
                 Debug.Log("New Node added to GroupID: " + bottomNodeScript.groupID);
             }
@@ -257,7 +261,7 @@ public class TargetNode : MonoBehaviour
             
             if(topNodeGroupID != parentNodeGroupID)
             {
-                List<GameObject> nodeGroup = nodeGroupManagerScript.JoinNodeGroups(parentNodeGroupID, topNodeGroupID);
+                List<GameObject> nodeGroup = nodeGroupManagerScript.JoinGroups(parentNodeGroupID, topNodeGroupID);
 
                 foreach(GameObject node in nodeGroup)
                 {
@@ -267,7 +271,7 @@ public class TargetNode : MonoBehaviour
                     Debug.Log("newNodeID's are " + node.GetComponent<NodeScript>().groupID);
                 }
 
-                nodeGroupManagerScript.DeleteNodeGroup(topNodeGroupID);
+                nodeGroupManagerScript.DeleteGroup(topNodeGroupID);
 
                 Debug.Log("New Node added to GroupID: " + topNodeScript.groupID);
             }
@@ -316,8 +320,4 @@ public class TargetNode : MonoBehaviour
     // }
 
 
-    public void RemoveGroupsWithZeroLiberties()
-    {
-
-    }
 }

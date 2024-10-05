@@ -79,6 +79,7 @@ public class BoardGenerator : MonoBehaviour
         for(int i = 1; i <= arrayTotalNodes; i++) {
             GameObject gNode = Instantiate(nodePrefab, gNodeArrayTransform);
             gNode.name = "Node (" + i + ")";
+            gNode.GetComponent<NodeScript>().nodeID = i;                            //! Sets NodeID in NodeScript
             gNodeList.Add(gNode);
         }
     }
@@ -180,19 +181,16 @@ public class BoardGenerator : MonoBehaviour
 
 
     // *---------------------------------------- NODE VALUE DISPLAY AND UPDATE METHODS ----------------------------------------
-                                                    //* Called in Start Method
-                                                    //* Called in TargetNode.cs
-    
-     // --------------------------------------------- // Calls Functions 1, 2, 3  ---------------------------------------------
-    public void BoardUpdaterFunction()
+                                            //* Called in Start Method and TargetNode.cs
+    public void BoardUpdaterFunction()                                      // Calls Functions 1, 2, 3, 4  --------------
     {
         List<int> nodeValueMap = NodeValueMapper();
         NodeValueUpdater(nodeValueMap);
         NodeDisplayUpdate();
     }
 
-    // --------------------------------------------- // gNodeValue Updater Part 1 ---------------------------------------------
-    public List<int> NodeValueMapper()          // Displays Array based on nodeValues
+    // --------------------------------------------- // BoardUpdater Part 1 ---------------------------------------------
+    public List<int> NodeValueMapper()                                      // Displays Array based on nodeValues
     {
         List<int> nodeValueMap = new List<int>();  // List to hold update values for arrayNodes
         
@@ -220,9 +218,8 @@ public class BoardGenerator : MonoBehaviour
 
         return nodeValueMapUpdated;
     }
-
-    // ---------------------------------------- -----// gNodeValue Updater Part 2 ---------------------------------------------
-    public List<int> NodeValueMapIndexer(List<int> nodeValueMap)
+    // ---------------------------------------- -----// BoardUpdater Part 2 //* Called in Step 1 ------------------------
+    public List<int> NodeValueMapIndexer(List<int> nodeValueMap)            // Maps nodeValues for updating in Step 3
     {
         // Counter to increment through index in nodeValueMap
         int mapIndex = 0;     
@@ -277,10 +274,8 @@ public class BoardGenerator : MonoBehaviour
 
         return nodeValueMap;
     }
-
-    // --------------------------------------------- // gNodeValue Updater Part 3 ---------------------------------------------
-                                                  //* Calls SetGrassTileDisplayLoop
-    public void NodeValueUpdater(List<int> nodeValueMap)
+    // --------------------------------------------- // BoardUpdater Part 3 ---------------------------------------------
+    public void NodeValueUpdater(List<int> nodeValueMap)                    // Sets Node Display values to Map Values
     {
         int arrayIndex = 0;
 
@@ -307,9 +302,8 @@ public class BoardGenerator : MonoBehaviour
 
         // Debug.Log("gNodeArray Update Complete");
     }
-
-
-    public void NodeDisplayUpdate()
+    // --------------------------------------------- // BoardUpdater Part 4 ---------------------------------------------
+    public void NodeDisplayUpdate()                                         // Calls SetGrassTileDisplayLoop on each Node
     {
         foreach(GameObject node in gNodeList)
         {

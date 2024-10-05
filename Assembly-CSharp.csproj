@@ -43,6 +43,7 @@
      <Compile Include="Assets\Scripts\NodeArrayScript.cs" />
      <Compile Include="Assets\Scripts\TargetNode.cs" />
      <Compile Include="Assets\Scripts\NodeScript.cs" />
+     <Compile Include="Assets\Scripts\MouseRayCast.cs" />
      <Compile Include="Assets\Scripts\NodeGroupManager.cs" />
      <Compile Include="Assets\Scripts\BoardUpdater.cs" />
      <Compile Include="Assets\Scripts\BoardGenerator.cs" />

@@ -84,6 +84,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4528337800545275979, guid: cdc4fa16048608e4d9602256a1c84177, type: 3}
+      propertyPath: tileMaterialList.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4716341144831533674, guid: cdc4fa16048608e4d9602256a1c84177, type: 3}
       propertyPath: m_Name
       value: GrassTile (0)

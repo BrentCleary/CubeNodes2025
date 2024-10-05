@@ -13,6 +13,8 @@ public class NodeScript : MonoBehaviour
 {
 
     //* ---------------------------------------- PROPERTIES ----------------------------------------
+    public int nodeID;   // Set on Initialization in BoardGenerator
+
     public int nodeValue;
     public List<int> nodeValueList = new List<int> { 0, 1, 2, 3, 4 };   // Node Values when not occupied
     public List<GameObject> GrassTileList = new List<GameObject> {};
@@ -54,7 +56,7 @@ public class NodeScript : MonoBehaviour
 
     public List<Node> sheepGroupList;
 
-    public int groupID = -1;   // -1 is default groupID for Ungrouped-Nodes used for checking status
+    public int groupID = -1;
 
 
     //* ---------------------------------------- START AND UPDATE METHODS ----------------------------------------
@@ -97,7 +99,7 @@ public class NodeScript : MonoBehaviour
             GrassTileList[i].SetActive(!isActive);
         }
 
-        Debug.Log("SetGTLoop: "+ gameObject.name +" | nodeValue = " + nodeValue);
+        // Debug.Log("SetGTLoop: "+ gameObject.name +" | nodeValue = " + nodeValue);
     }
 
 
@@ -155,6 +157,8 @@ public class NodeScript : MonoBehaviour
         libertyValue = libertyValueList[1];     // Set libertyValue to 1
         nodeValue = nodeValueList[4];           // nodeValue is reset to 4
         placeAbleBool = true;
+        groupID = -1;
+
 
         bool isActive = true;
         for (int i = sheepTileList.Count-1; i >= 0; i--)    

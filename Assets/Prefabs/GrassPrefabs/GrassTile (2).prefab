@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2360429227669401270}
   - component: {fileID: 4799100760626353639}
   - component: {fileID: 1895477931911568058}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: GrassTile (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
