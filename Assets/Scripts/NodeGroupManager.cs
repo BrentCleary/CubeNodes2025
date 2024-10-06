@@ -52,6 +52,7 @@ public class NodeGroupManager : MonoBehaviour
     public int CreateNewGroup(GameObject node)      //  Creates New Group - Called in TargetNode - Returns GroupID
     {
         Group newGroup = new Group();
+        newGroup.GRP_SheepVal = node.GetComponent<NodeScript>().sheepValue;
         newGroup.NodeList.Add(node);
         
         Add_To_AllGroupList(newGroup);
