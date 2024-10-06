@@ -21,6 +21,7 @@ public class NodeGroupManager : MonoBehaviour
         public int GroupID {get; private set;}
         public int GroupLiberties;
         public List<GameObject> NodeList = new List<GameObject>();
+        public int GRP_SheepVal;
 
         // Constructor
         public Group() // Increment the counter and assign it to GroupID
@@ -33,7 +34,6 @@ public class NodeGroupManager : MonoBehaviour
     public List<Group> AllGroupList = new List<Group>();
     
 
-
     // Start is called before the first frame update
     void Start()
     {
@@ -45,8 +45,6 @@ public class NodeGroupManager : MonoBehaviour
     {
         
     }
-
-
 
 
 
@@ -113,7 +111,6 @@ public class NodeGroupManager : MonoBehaviour
         Debug.Log("GroupManager:JoinGroups [ " + prevGroupID + " Nodes added to newGroupID " + newGroupID + " ]");
         return newGroup.NodeList;
     }
-
 
 
     //* ---------------------------------------- CalculateGroupLiberties ----------------------------------------
@@ -183,7 +180,6 @@ public class NodeGroupManager : MonoBehaviour
                 zeroLibertyGroupList.Add(group.GroupID);
             }
         }
-
         return zeroLibertyGroupList;
     }
 
@@ -192,7 +188,7 @@ public class NodeGroupManager : MonoBehaviour
     {
         List<Group> zeroGroupList = new List<Group>();                                  // Create a new list for sorting
 
-        foreach(Group group in AllGroupList)                                           // Look through list of All Groups
+        foreach(Group group in AllGroupList)                                            // Look through list of All Groups
         {    
             if(zeroGroupIDList.Contains(group.GroupID)){                                // If the zeroList contains the ID of a Zero'd Node Group
                 zeroGroupList.Add(group);                                               // Add it to the zeroGroupList for updating
@@ -200,7 +196,7 @@ public class NodeGroupManager : MonoBehaviour
 
             foreach(Group zeroGroup in zeroGroupList)                                   // Loop of new list of Zero liberty Groups
             {   
-                if(zeroGroup.NodeList.Count > 1)                                        // If the group has more than 1 stone. Allows for captures. 
+                if(zeroGroup.NodeList.Count > 1)                                        //! If the group has more than 1 stone. Allows for captures in KO.
                 {
                     List<GameObject> zeroList = zeroGroup.NodeList;                     // Get a list of the Nodes in the group
 

@@ -56,8 +56,8 @@ public class TargetNode : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        PlaceBlackSheepMethod();
-        // PlaceWhiteSheepMethod();
+        PlaceBlackSheep_OnClick();
+        PlaceWhiteSheep_OnClick();
     }
 
 
@@ -101,7 +101,7 @@ public class TargetNode : MonoBehaviour
     //* ---------------------------------------- PLACE SHEEP METHODS ----------------------------------------
                     //* Sets Sheep on selected Node and calls BoardGeneratorScript to reset display
                                 //* Calls BoardGeneratorScript and NodeScript 
-    public void PlaceBlackSheepMethod()
+    public void PlaceBlackSheep_OnClick()
     {
         // Check if the left mouse button was clicked
         if (nodeSelected && parentNodeScript.placeAbleBool == true && Input.GetKeyDown(KeyCode.Mouse0))
@@ -115,9 +115,10 @@ public class TargetNode : MonoBehaviour
     public void PlaceWhiteSheep_OnClick()
     {
         // Check if the right mouse button was clicked
-        if (nodeSelected && Input.GetKeyDown(KeyCode.Mouse1))
+        if (nodeSelected && parentNodeScript.placeAbleBool == true && Input.GetKeyDown(KeyCode.Mouse1))
         {
             parentNodeScript.PlaceWhiteSheepMethod();
+            nodeSelected = false;
         }
     }
 

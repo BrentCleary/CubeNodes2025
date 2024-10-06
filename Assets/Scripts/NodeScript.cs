@@ -166,7 +166,6 @@ public class NodeScript : MonoBehaviour
         placeAbleBool = true;
         groupID = -1;
 
-
         bool isActive = true;
         for (int i = sheepTileList.Count-1; i >= 0; i--)    
         {
@@ -186,10 +185,25 @@ public class NodeScript : MonoBehaviour
     public void PlaceBlackSheepMethod()
     {
         // Check if the left mouse button was clicked
-        if (placeAbleBool == true && Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            BlackSheepSetter();                                                                  // Set Node to BlackSheepValue
+        BlackSheepSetter();                                                                  // Set Node to BlackSheepValue
 
+        nodeGroupManagerScript.AssignSheepToGroups(gameObject);                              // Assign All Groups
+        // nodeGroupManagerScript.AssignSheepToGroups(parentNode);
+        nodeGroupManagerScript.CalculateGroupLiberties();                                    // Update All Group Liberties
+
+        List<int> zeroGroupIds = new List<int>();
+        zeroGroupIds = nodeGroupManagerScript.GetZeroLibertyGroupID();                       // Update All Group Liberties
+        nodeGroupManagerScript.UpdateZeroLibertyGroups(zeroGroupIds);                        // Delete Groups with 0 Liberties
+
+        boardGeneratorScript.BoardUpdaterFunction();
+
+    }
+    
+
+    // 09/05/2024 - Method Commented out to user Mouse1 for testing
+    public void PlaceWhiteSheepMethod()
+    {
+            WhiteSheepSetter();
             nodeGroupManagerScript.AssignSheepToGroups(gameObject);                              // Assign All Groups
             // nodeGroupManagerScript.AssignSheepToGroups(parentNode);
             nodeGroupManagerScript.CalculateGroupLiberties();                                    // Update All Group Liberties
@@ -199,20 +213,6 @@ public class NodeScript : MonoBehaviour
             nodeGroupManagerScript.UpdateZeroLibertyGroups(zeroGroupIds);                        // Delete Groups with 0 Liberties
 
             boardGeneratorScript.BoardUpdaterFunction();
-        }
-    }
-    
-
-    // 09/05/2024 - Method Commented out to user Mouse1 for testing
-    public void PlaceWhiteSheepMethod()
-    {
-            WhiteSheepSetter();
-            SetGrassTileDisplayLoop();
-
-            // BoardGenerator Script
-            List<int> nodeValueMap = boardGeneratorScript.NodeValueMapper();
-            boardGeneratorScript.NodeValueUpdater(nodeValueMap);
-            boardGeneratorScript.NodeDisplayUpdate();
     }
 
 
@@ -225,7 +225,7 @@ public class NodeScript : MonoBehaviour
 
             List<int> nodeValueMap = boardGeneratorScript.NodeValueMapper();
             boardGeneratorScript.NodeValueUpdater(nodeValueMap);
-            
+
     }
 
 

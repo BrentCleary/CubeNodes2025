@@ -71,7 +71,6 @@ public class BoardGenerator : MonoBehaviour
 
 
 
-
     // *---------------------------------------- BOARD NODE CREATION METHODS ----------------------------------------
                                                //* Called in Start Method
     public void InstantiateNodes()
@@ -173,9 +172,6 @@ public class BoardGenerator : MonoBehaviour
 
         }
     }
-
-
-
 
 
 
@@ -310,6 +306,8 @@ public class BoardGenerator : MonoBehaviour
             node.GetComponent<NodeScript>().SetGrassTileDisplayLoop();
         }
     }
+
+
 
 
 
