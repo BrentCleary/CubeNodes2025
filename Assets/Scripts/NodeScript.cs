@@ -12,6 +12,8 @@ using UnityEngine.Tilemaps;
 public class NodeScript : MonoBehaviour
 {
 
+
+
     //* ---------------------------------------- PROPERTIES ----------------------------------------
     public int nodeID;   // Set on Initialization in BoardGenerator
 
@@ -58,6 +60,11 @@ public class NodeScript : MonoBehaviour
 
     public int groupID = -1;
 
+    public GameObject nodeArray;
+
+    public BoardGenerator boardGeneratorScript;
+    public NodeGroupManager nodeGroupManagerScript;
+
 
     //* ---------------------------------------- START AND UPDATE METHODS ----------------------------------------
                                      //* Sets Initial Node Values to Default on Creation 
@@ -69,6 +76,12 @@ public class NodeScript : MonoBehaviour
         placeAbleBool = true;
         sheepValue = sheepValueList[0];
         adjNodeScriptList = new List<NodeScript>() {leftNodeScript, rightNodeScript, bottomNodeScript, topNodeScript};
+
+        // Get reference to Node Array and scripts
+        nodeArray = transform.parent.gameObject;
+        boardGeneratorScript = nodeArray.GetComponent<BoardGenerator>();
+        nodeGroupManagerScript = nodeArray.GetComponent<NodeGroupManager>();
+
     }
 
     // Update is called once per frame
@@ -76,8 +89,6 @@ public class NodeScript : MonoBehaviour
     {
         // NodeValueSetterDebug();
     }
-
-
 
 
 
@@ -104,8 +115,6 @@ public class NodeScript : MonoBehaviour
 
 
 
-
-
     // *---------------------------------------- SHEEP SETTER  METHODS ----------------------------------------
                                           //* Called in TargetNode Script 
 
@@ -129,7 +138,6 @@ public class NodeScript : MonoBehaviour
 
     }
 
-
     public void WhiteSheepSetter()              // Sets node to Black Sheep Object
     {
         sheepValue = sheepValueList[2];         // Set sheep value to whiteSheep index
@@ -150,7 +158,6 @@ public class NodeScript : MonoBehaviour
         
     }
 
-
     public void EmptySheepSetter()              // Sets node to Empty Sheep Object
     {
         sheepValue = sheepValueList[0];         // Set sheep value to emptySheep index
@@ -170,6 +177,56 @@ public class NodeScript : MonoBehaviour
         Debug.Log(gameObject.name + " is " + sheepTileList[sheepValue].GetComponent<MeshRenderer>().enabled);
     }
 
+
+
+
+//* ---------------------------------------- PLACE SHEEP METHODS ----------------------------------------
+                    //* Sets Sheep on selected Node and calls BoardGeneratorScript to reset display
+                                //* Calls BoardGeneratorScript and NodeScript 
+    public void PlaceBlackSheepMethod()
+    {
+        // Check if the left mouse button was clicked
+        if (placeAbleBool == true && Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            BlackSheepSetter();                                                                  // Set Node to BlackSheepValue
+
+            nodeGroupManagerScript.AssignSheepToGroups(gameObject);                              // Assign All Groups
+            // nodeGroupManagerScript.AssignSheepToGroups(parentNode);
+            nodeGroupManagerScript.CalculateGroupLiberties();                                    // Update All Group Liberties
+
+            List<int> zeroGroupIds = new List<int>();
+            zeroGroupIds = nodeGroupManagerScript.GetZeroLibertyGroupID();                       // Update All Group Liberties
+            nodeGroupManagerScript.UpdateZeroLibertyGroups(zeroGroupIds);                        // Delete Groups with 0 Liberties
+
+            boardGeneratorScript.BoardUpdaterFunction();
+        }
+    }
+    
+
+    // 09/05/2024 - Method Commented out to user Mouse1 for testing
+    public void PlaceWhiteSheepMethod()
+    {
+            WhiteSheepSetter();
+            SetGrassTileDisplayLoop();
+
+            // BoardGenerator Script
+            List<int> nodeValueMap = boardGeneratorScript.NodeValueMapper();
+            boardGeneratorScript.NodeValueUpdater(nodeValueMap);
+            boardGeneratorScript.NodeDisplayUpdate();
+    }
+
+
+    public void PlaceEmptySheepMethod()
+    {
+            EmptySheepSetter();
+
+            // 10/03/24 - Commented out. Already called in UpdateLoop - Test
+            // parentNodeScript.SetGrassTileDisplayLoop();
+
+            List<int> nodeValueMap = boardGeneratorScript.NodeValueMapper();
+            boardGeneratorScript.NodeValueUpdater(nodeValueMap);
+            
+    }
 
 
 

@@ -207,13 +207,13 @@ public class NodeGroupManager : MonoBehaviour
                     foreach(GameObject zeroNode in zeroList)                            // For each Node
                     {
                         NodeScript zeroScript = zeroNode.GetComponent<NodeScript>();    // Get the script of the node
-                        zeroScript.EmptySheepSetter();
+                        zeroScript.PlaceEmptySheepMethod();
 
                         Debug.Log("Setting Node " + zeroNode.name + " to empty");
                     }
                 }
 
-                // TODO LOGIC HERE FOR KO AND OTHER SINGLE NODE SITUATIONS          // Update this space for KO an other empty single space logic
+                // TODO LOGIC HERE FOR KO AND OTHER SINGLE NODE SITUATIONS                // Update this space for KO an other empty single space logic
             
             }
         }
@@ -225,33 +225,142 @@ public class NodeGroupManager : MonoBehaviour
     }
 
 
-    public void AssignSheepToGroups(GameObject node)
+    //* ---------------------------------------- ON MOUSE ENTER/EXIT METHODS ----------------------------------------
+                            //* Highlights/Resets selected Nodes Color by changing GrassTiles materials 
+
+    public void AssignSheepToGroups(GameObject targetNode)
     {
-        NodeScript newScript = node.GetComponent<NodeScript>();                          // Get NodeScript from newNode
-        newScript.groupID = CreateNewGroup(node);                                        // Create new NodeGroup, assign groupID
+        NodeScript nodeScript = targetNode.GetComponent<NodeScript>();
 
-        List<NodeScript> adjScriptList = newScript.adjNodeScriptList;                       // Get List of AdjacentScripts
+        // Create new NodeGroup, assign groupID
+        nodeScript.groupID = CreateNewGroup(targetNode);
+        int targetNodeGroupID = nodeScript.groupID;
+        
+        // Adjacent Node Scripts
+        NodeScript leftNodeScript = nodeScript.leftNodeScript;
+        NodeScript rightNodeScript = nodeScript.rightNodeScript;
+        NodeScript bottomNodeScript = nodeScript.bottomNodeScript;
+        NodeScript topNodeScript = nodeScript.topNodeScript;
 
-        foreach(NodeScript adjScript in adjScriptList)                                      // Loop over all AdjScripts
+
+        //* FIRST CHECK OCCURS ON LEFT NODE
+        // Left Node Found
+        if(leftNodeScript != null && leftNodeScript.sheepValue == nodeScript.sheepValue)
         {
-            if(adjScript != null && adjScript.sheepValue == newScript.sheepValue)           // If script is not null, and matches sheepValue (Same color)
+            int leftNodeGroupID = leftNodeScript.groupID;
+
+            List<GameObject> nodeGroup = JoinGroups(targetNodeGroupID, leftNodeGroupID);
+
+            foreach(GameObject crntNode in nodeGroup)
             {
-                int adjGroupID = adjScript.groupID;                                         // Save GroupID reference to Delete at end of Method
+                crntNode.GetComponent<NodeScript>().groupID = targetNodeGroupID;
+            }
 
-                if(adjScript.groupID != newScript.groupID)                                  // If they are not in the same group
+            DeleteGroup(leftNodeGroupID);
+
+        }
+
+        // Right Node Found
+        if(rightNodeScript != null && rightNodeScript.sheepValue == nodeScript.sheepValue)
+        {
+            int rightNodeGroupID = rightNodeScript.groupID;
+
+            if(rightNodeGroupID != targetNodeGroupID)
+            {
+                List<GameObject> nodeGroup = JoinGroups(targetNodeGroupID, rightNodeGroupID);
+
+                foreach(GameObject crntNode in nodeGroup)
                 {
-                    List<GameObject> newGroup = JoinGroups(newScript.groupID, adjScript.groupID);   // Join (Add) all nodes in adjGroup to newGroup
-
-                    foreach(GameObject groupNode in newGroup)
-                    {
-                        groupNode.GetComponent<NodeScript>().groupID = newScript.groupID;        // Set all newGroup nodes to new ID
-                    }
+                    Debug.Log("parentNodeID is " + targetNodeGroupID);
+                    Debug.Log("prevNodeID's are " + crntNode.GetComponent<NodeScript>().groupID);
+                    crntNode.GetComponent<NodeScript>().groupID = targetNodeGroupID;
+                    Debug.Log("newNodeID's are " + crntNode.GetComponent<NodeScript>().groupID);
                 }
-                DeleteGroup(adjGroupID);                                                 // Delete adjGroup by GroupID
+
+                DeleteGroup(rightNodeGroupID);
+
+                Debug.Log("New Node added to GroupID: " + rightNodeScript.groupID);
             }
         }
 
+        // Bottom Node Found
+        if(bottomNodeScript != null && bottomNodeScript.sheepValue == nodeScript.sheepValue)
+        {
+            int bottomNodeGroupID = bottomNodeScript.groupID;
+
+            if(bottomNodeGroupID != targetNodeGroupID)
+            {
+                List<GameObject> nodeGroup = JoinGroups(targetNodeGroupID, bottomNodeGroupID);
+
+                foreach(GameObject crntNode in nodeGroup)
+                {
+                    Debug.Log("parentNodeID is " + targetNodeGroupID);
+                    Debug.Log("prevNodeID's are " + crntNode.GetComponent<NodeScript>().groupID);
+                    crntNode.GetComponent<NodeScript>().groupID = targetNodeGroupID;
+                    Debug.Log("newNodeID's are " + crntNode.GetComponent<NodeScript>().groupID);
+                }
+
+                DeleteGroup(bottomNodeGroupID);
+
+                Debug.Log("New Node added to GroupID: " + bottomNodeScript.groupID);
+            }
+        }
+
+        // Top Node Found
+        if(topNodeScript != null && topNodeScript.sheepValue == nodeScript.sheepValue)
+        {
+            int topNodeGroupID = topNodeScript.groupID;
+            
+            if(topNodeGroupID != targetNodeGroupID)
+            {
+                List<GameObject> nodeGroup = JoinGroups(targetNodeGroupID, topNodeGroupID);
+
+                foreach(GameObject crntNode in nodeGroup)
+                {
+                    Debug.Log("parentNodeID is " + targetNodeGroupID);
+                    Debug.Log("prevNodeID's are " + crntNode.GetComponent<NodeScript>().groupID);
+                    crntNode.GetComponent<NodeScript>().groupID = targetNodeGroupID;
+                    Debug.Log("newNodeID's are " + crntNode.GetComponent<NodeScript>().groupID);
+                }
+
+                DeleteGroup(topNodeGroupID);
+
+                Debug.Log("New Node added to GroupID: " + topNodeScript.groupID);
+            }
+        }
     }
+
+
+
+
+
+    // public void AssignSheepToGroups_REFACTOR(GameObject node)
+    // {
+    //     NodeScript newScript = node.GetComponent<NodeScript>();                          // Get NodeScript from newNode
+    //     newScript.groupID = CreateNewGroup(node);                                        // Create new NodeGroup, assign groupID
+
+    //     List<NodeScript> adjScriptList = newScript.adjNodeScriptList;                       // Get List of AdjacentScripts
+
+    //     foreach(NodeScript adjScript in adjScriptList)                                      // Loop over all AdjScripts
+    //     {
+    //         if(adjScript != null && adjScript.sheepValue == newScript.sheepValue)           // If script is not null, and matches sheepValue (Same color)
+    //         {
+    //             int adjGroupID = adjScript.groupID;                                         // Save GroupID reference to Delete at end of Method
+
+    //             if(adjScript.groupID != newScript.groupID)                                  // If they are not in the same group
+    //             {
+    //                 List<GameObject> newGroup = JoinGroups(newScript.groupID, adjScript.groupID);   // Join (Add) all nodes in adjGroup to newGroup
+
+    //                 foreach(GameObject groupNode in newGroup)
+    //                 {
+    //                     groupNode.GetComponent<NodeScript>().groupID = newScript.groupID;        // Set all newGroup nodes to new ID
+    //                 }
+    //             }
+    //             DeleteGroup(adjGroupID);                                                 // Delete adjGroup by GroupID
+    //         }
+    //     }
+
+    // }
 
 
 }
