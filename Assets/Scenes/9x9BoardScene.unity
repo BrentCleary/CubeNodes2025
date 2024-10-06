@@ -548,7 +548,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   rayCastMouseSelect: 0
-  hitObject: {fileID: 0}
 --- !u!1 &2046333930
 GameObject:
   m_ObjectHideFlags: 0

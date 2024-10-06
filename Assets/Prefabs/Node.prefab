@@ -49,6 +49,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08bafebac0c53b54d94262384bf22edd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  nodeID: 0
   nodeValue: 0
   nodeValueList: 0000000001000000020000000300000004000000
   GrassTileList:
@@ -67,17 +68,21 @@ MonoBehaviour:
   libertyValueList: 0000000001000000
   placeAbleBool: 0
   placeAbleValueList: 0001
-  settingState: 0
-  settingSheep: 0
   arrayPosition: 0000000000000000
   leftNode: {fileID: 0}
-  rightNode: {fileID: 0}
-  topNode: {fileID: 0}
-  bottomNode: {fileID: 0}
   leftNodeScript: {fileID: 0}
+  rightNode: {fileID: 0}
   rightNodeScript: {fileID: 0}
-  bottomNodeScript: {fileID: 0}
+  topNode: {fileID: 0}
   topNodeScript: {fileID: 0}
+  bottomNode: {fileID: 0}
+  bottomNodeScript: {fileID: 0}
+  adjNodeScriptList: []
+  leftNodeLibertyVal: 0
+  rightNodeLibertyVal: 0
+  bottomNodeLibertyVal: 0
+  topNodeLibertyVal: 0
+  groupID: -1
 --- !u!65 &-5659864391004206637
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -97,8 +102,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1, y: 0.5, z: 1}
+  m_Center: {x: 0, y: -0.25, z: 0}
 --- !u!1001 &1946680968570904741
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -107,6 +112,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8988802235557534299}
     m_Modifications:
+    - target: {fileID: 2718317031189295122, guid: 519b49229779432458f316f18c394a37, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3339159357018591726, guid: 519b49229779432458f316f18c394a37, type: 3}
       propertyPath: m_Name
       value: GrassContainer

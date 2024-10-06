@@ -11,6 +11,7 @@ public class NodeGroupManager : MonoBehaviour
 {
     public BoardGenerator boardGeneratorScript;
     public NodeScript nodeScript;
+    public TargetNode targetNodeScript;
 
     [System.Serializable]
     public class Group
@@ -191,7 +192,8 @@ public class NodeGroupManager : MonoBehaviour
     {
         List<Group> zeroGroupList = new List<Group>();                                  // Create a new list for sorting
 
-        foreach(Group group in AllGroupList){                                           // Look through list of All Groups
+        foreach(Group group in AllGroupList)                                           // Look through list of All Groups
+        {    
             if(zeroGroupIDList.Contains(group.GroupID)){                                // If the zeroList contains the ID of a Zero'd Node Group
                 zeroGroupList.Add(group);                                               // Add it to the zeroGroupList for updating
             }

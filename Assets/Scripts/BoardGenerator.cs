@@ -20,8 +20,8 @@ public class BoardGenerator : MonoBehaviour
     [SerializeField] public List<GameObject> gNodeList;
     
     // ! Array Size Controls
-    private int arrayColumnLength = 2;                  // Array Dimensions - Column
-    private int arrayRowLength = 2;                     // Array Dimensions - Row
+    private int arrayColumnLength = 3;                  // Array Dimensions - Column
+    private int arrayRowLength = 3;                     // Array Dimensions - Row
     private int nodeSpacingValue = 2;                   // Space Between Nodes
     private int arrayTotalNodes;                        // arrayColumnLength * arrayRowLength
 

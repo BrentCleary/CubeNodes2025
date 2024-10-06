@@ -166,6 +166,7 @@ public class TargetNode : MonoBehaviour
 
             List<int> nodeValueMap = boardGeneratorScript.NodeValueMapper();
             boardGeneratorScript.NodeValueUpdater(nodeValueMap);
+            nodeSelected = false;
 
             Debug.Log("Empty Sheep Set!");
         }
