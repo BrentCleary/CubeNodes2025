@@ -19,8 +19,8 @@ public class TargetNode : MonoBehaviour
     public List<Material> tileMaterialList;
 
     private NodeScript parentNodeScript;
-    private BoardGenerator boardGeneratorScript;
-    private NodeGroupManager nodeGroupManagerScript;
+    private BoardGenerator brd_Gntr_Script;
+    private NodeGroupManager ND_Grp_Mngr_Scrp;
 
     public bool nodeSelected = false;
 
@@ -40,10 +40,10 @@ public class TargetNode : MonoBehaviour
         
         // board array reference - highest parent
         nodeArray = parentNode.transform.parent.gameObject;
-        boardGeneratorScript = nodeArray.GetComponent<BoardGenerator>();
+        brd_Gntr_Script = nodeArray.GetComponent<BoardGenerator>();
 
         // get NodeGroupManagerScript
-        nodeGroupManagerScript = nodeArray.GetComponent<NodeGroupManager>();
+        ND_Grp_Mngr_Scrp = nodeArray.GetComponent<NodeGroupManager>();
 
         tileRendererList = grassContainer.GetComponentsInChildren<Renderer>().ToList();
         
@@ -104,7 +104,7 @@ public class TargetNode : MonoBehaviour
     public void PlaceBlackSheep_OnClick()
     {
         // Check if the left mouse button was clicked
-        if (nodeSelected && parentNodeScript.placeAbleBool == true && Input.GetKeyDown(KeyCode.Mouse0))
+        if (nodeSelected && parentNodeScript.placeAble == true && Input.GetKeyDown(KeyCode.Mouse0))
         {
             parentNodeScript.PlaceBlackSheepMethod();
             nodeSelected = false;
@@ -115,7 +115,7 @@ public class TargetNode : MonoBehaviour
     public void PlaceWhiteSheep_OnClick()
     {
         // Check if the right mouse button was clicked
-        if (nodeSelected && parentNodeScript.placeAbleBool == true && Input.GetKeyDown(KeyCode.Mouse1))
+        if (nodeSelected && parentNodeScript.placeAble == true && Input.GetKeyDown(KeyCode.Mouse1))
         {
             parentNodeScript.PlaceWhiteSheepMethod();
             nodeSelected = false;
@@ -141,7 +141,7 @@ public class TargetNode : MonoBehaviour
     // {
 
     //     // Create new NodeGroup, assign groupID
-    //     parentNodeScript.groupID = nodeGroupManagerScript.CreateNewGroup(parentNode);
+    //     parentNodeScript.groupID = ND_Grp_Mngr_Scrp.CreateNewGroup(parentNode);
     //     int parentNodeGroupID = parentNodeScript.groupID;
         
     //     // Adjacent Node Scripts
@@ -153,28 +153,28 @@ public class TargetNode : MonoBehaviour
 
     //     //* FIRST CHECK OCCURS ON LEFT NODE
     //     // Left Node Found
-    //     if(leftNodeScript != null && leftNodeScript.sheepValue == parentNodeScript.sheepValue)
+    //     if(leftNodeScript != null && leftNodeScript.sheepVal == parentNodeScript.sheepVal)
     //     {
     //         int leftNodeGroupID = leftNodeScript.groupID;
 
-    //         List<GameObject> nodeGroup = nodeGroupManagerScript.JoinGroups(parentNodeGroupID, leftNodeGroupID);
+    //         List<GameObject> nodeGroup = ND_Grp_Mngr_Scrp.JoinGroups(parentNodeGroupID, leftNodeGroupID);
 
     //         foreach(GameObject node in nodeGroup)
     //         {
     //             node.GetComponent<NodeScript>().groupID = parentNodeGroupID;
     //         }
 
-    //         nodeGroupManagerScript.DeleteGroup(leftNodeGroupID);
+    //         ND_Grp_Mngr_Scrp.DeleteGroup(leftNodeGroupID);
     //     }
 
     //     // Right Node Found
-    //     if(rightNodeScript != null && rightNodeScript.sheepValue == parentNodeScript.sheepValue)
+    //     if(rightNodeScript != null && rightNodeScript.sheepVal == parentNodeScript.sheepVal)
     //     {
     //         int rightNodeGroupID = rightNodeScript.groupID;
 
     //         if(rightNodeGroupID != parentNodeGroupID)
     //         {
-    //             List<GameObject> nodeGroup = nodeGroupManagerScript.JoinGroups(parentNodeGroupID, rightNodeGroupID);
+    //             List<GameObject> nodeGroup = ND_Grp_Mngr_Scrp.JoinGroups(parentNodeGroupID, rightNodeGroupID);
 
     //             foreach(GameObject node in nodeGroup)
     //             {
@@ -184,20 +184,20 @@ public class TargetNode : MonoBehaviour
     //                 Debug.Log("newNodeID's are " + node.GetComponent<NodeScript>().groupID);
     //             }
 
-    //             nodeGroupManagerScript.DeleteGroup(rightNodeGroupID);
+    //             ND_Grp_Mngr_Scrp.DeleteGroup(rightNodeGroupID);
 
     //             Debug.Log("New Node added to GroupID: " + rightNodeScript.groupID);
     //         }
     //     }
 
     //     // Bottom Node Found
-    //     if(bottomNodeScript != null && bottomNodeScript.sheepValue == parentNodeScript.sheepValue)
+    //     if(bottomNodeScript != null && bottomNodeScript.sheepVal == parentNodeScript.sheepVal)
     //     {
     //         int bottomNodeGroupID = bottomNodeScript.groupID;
 
     //         if(bottomNodeGroupID != parentNodeGroupID)
     //         {
-    //             List<GameObject> nodeGroup = nodeGroupManagerScript.JoinGroups(parentNodeGroupID, bottomNodeGroupID);
+    //             List<GameObject> nodeGroup = ND_Grp_Mngr_Scrp.JoinGroups(parentNodeGroupID, bottomNodeGroupID);
 
     //             foreach(GameObject node in nodeGroup)
     //             {
@@ -207,20 +207,20 @@ public class TargetNode : MonoBehaviour
     //                 Debug.Log("newNodeID's are " + node.GetComponent<NodeScript>().groupID);
     //             }
 
-    //             nodeGroupManagerScript.DeleteGroup(bottomNodeGroupID);
+    //             ND_Grp_Mngr_Scrp.DeleteGroup(bottomNodeGroupID);
 
     //             Debug.Log("New Node added to GroupID: " + bottomNodeScript.groupID);
     //         }
     //     }
 
     //     // Top Node Found
-    //     if(topNodeScript != null && topNodeScript.sheepValue == parentNodeScript.sheepValue)
+    //     if(topNodeScript != null && topNodeScript.sheepVal == parentNodeScript.sheepVal)
     //     {
     //         int topNodeGroupID = topNodeScript.groupID;
             
     //         if(topNodeGroupID != parentNodeGroupID)
     //         {
-    //             List<GameObject> nodeGroup = nodeGroupManagerScript.JoinGroups(parentNodeGroupID, topNodeGroupID);
+    //             List<GameObject> nodeGroup = ND_Grp_Mngr_Scrp.JoinGroups(parentNodeGroupID, topNodeGroupID);
 
     //             foreach(GameObject node in nodeGroup)
     //             {
@@ -230,7 +230,7 @@ public class TargetNode : MonoBehaviour
     //                 Debug.Log("newNodeID's are " + node.GetComponent<NodeScript>().groupID);
     //             }
 
-    //             nodeGroupManagerScript.DeleteGroup(topNodeGroupID);
+    //             ND_Grp_Mngr_Scrp.DeleteGroup(topNodeGroupID);
 
     //             Debug.Log("New Node added to GroupID: " + topNodeScript.groupID);
     //         }
@@ -253,15 +253,15 @@ public class TargetNode : MonoBehaviour
     //     NodeScriptList.Add(bottomNodeScript);
     //     NodeScriptList.Add(topNodeScript);
 
-    //     foreach(NodeScript nodeScript in NodeScriptList)
+    //     foreach(NodeScript NDScript in NodeScriptList)
     //     {
     //         // Top Node Found
-    //         if(nodeScript != null && nodeScript.sheepValue == parentNodeScript.sheepValue)
+    //         if(NDScript != null && NDScript.sheepVal == parentNodeScript.sheepVal)
     //         {
-    //             int nodeGroupID = nodeScript.groupID;
+    //             int nodeGroupID = NDScript.groupID;
     //             int parentNodeGroupID = parentNodeScript.groupID;
 
-    //             List<GameObject> nodeGroup = nodeGroupManagerScript.JoinNodeGroups(parentNodeGroupID, nodeGroupID);
+    //             List<GameObject> nodeGroup = ND_Grp_Mngr_Scrp.JoinNodeGroups(parentNodeGroupID, nodeGroupID);
 
     //             foreach(GameObject node in nodeGroup)
     //             {
@@ -271,9 +271,9 @@ public class TargetNode : MonoBehaviour
     //                 Debug.Log("newNodeID's are " + node.GetComponent<NodeScript>().groupID);
     //             }
 
-    //             nodeGroupManagerScript.DeleteNodeGroup(nodeGroupID);
+    //             ND_Grp_Mngr_Scrp.DeleteNodeGroup(nodeGroupID);
 
-    //             Debug.Log("New Node added to GroupID: " + nodeScript.groupID);
+    //             Debug.Log("New Node added to GroupID: " + NDScript.groupID);
     //         }
     //     }
     // }

@@ -355,7 +355,6 @@
 "Assets/Scripts/BoardGenerator.cs"
 "Assets/Scripts/BoardUpdater.cs"
 "Assets/Scripts/MouseRayCast.cs"
-"Assets/Scripts/NodeArrayScript.cs"
 "Assets/Scripts/NodeGroupManager.cs"
 "Assets/Scripts/NodeScript.cs"
 "Assets/Scripts/TargetNode.cs"

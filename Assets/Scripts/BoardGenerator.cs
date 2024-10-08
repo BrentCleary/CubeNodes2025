@@ -27,7 +27,7 @@ public class BoardGenerator : MonoBehaviour
 
     public GameObject nodePrefab;
     public List<int> startNodeValueMap;
-    public List<int> currentNodeValueMap;
+    public List<int> currentNDValueMap;
 
     public Transform gNodeArrayTransform;
 
@@ -58,8 +58,8 @@ public class BoardGenerator : MonoBehaviour
         AdjacentSheepNodeMapper(gNodeList);
 
         // Generate Initial Value Map
-        startNodeValueMap = NodeValueMapper();
-        NodeValueUpdater(startNodeValueMap);
+        startNodeValueMap = CreateNodeValueMap();
+        UpdateBoardNodeValues(startNodeValueMap);
         NodeDisplayUpdate();
     }
 
@@ -109,9 +109,9 @@ public class BoardGenerator : MonoBehaviour
                 gNodeArray[i,j] = gNodeList[nodeCounter];   // Set curent gNodeList object to current array position
                 
                 // Maps Board Array position for reference
-                NodeScript nodeScript = gNodeList[nodeCounter].GetComponent<NodeScript>();
-                nodeScript.arrayPosition[0] = i;
-                nodeScript.arrayPosition[1] = j;
+                NodeScript NDScript = gNodeList[nodeCounter].GetComponent<NodeScript>();
+                NDScript.arrayPosition[0] = i;
+                NDScript.arrayPosition[1] = j;
                 
                 // Add Array Position to Node Name
                 gNodeArray[i,j].name = gNodeArray[i,j].name + " [" + i + "," + j+ "]";
@@ -129,45 +129,45 @@ public class BoardGenerator : MonoBehaviour
     
     public void AdjacentSheepNodeMapper(List<GameObject> gNodeList)
     {
-        foreach(GameObject currentNode in gNodeList)
+        foreach(GameObject currentND in gNodeList)
         {
-            NodeScript nodeScript = currentNode.GetComponent<NodeScript>();
-            int[] arrayPos = nodeScript.arrayPosition;   
+            NodeScript NDScript = currentND.GetComponent<NodeScript>();
+            int[] arrayPos = NDScript.arrayPosition;   
         
             // Left index
             if(arrayPos[0] == 0){      // left index is not out of range 
-                nodeScript.leftNode = null;
+                NDScript.leftND = null;
             }
             if(arrayPos[0] != 0){      // left index is a node
-                nodeScript.leftNode = gNodeArray[arrayPos[0] - 1, arrayPos[1]].gameObject;
-                nodeScript.leftNodeScript = gNodeArray[arrayPos[0] - 1, arrayPos[1]].GetComponent<NodeScript>();
+                NDScript.leftND = gNodeArray[arrayPos[0] - 1, arrayPos[1]].gameObject;
+                NDScript.leftNDScript = gNodeArray[arrayPos[0] - 1, arrayPos[1]].GetComponent<NodeScript>();
             }
 
             // Right index
             if(arrayPos[0] == arrayColumnLength - 1){      // right index is not out of range 
-                nodeScript.rightNode = null;
+                NDScript.rightND = null;
             }
             else if(arrayPos[0] != arrayColumnLength - 1){      // right index is a node
-                nodeScript.rightNode = gNodeArray[arrayPos[0] + 1, arrayPos[1]].gameObject;
-                nodeScript.rightNodeScript = gNodeArray[arrayPos[0] + 1, arrayPos[1]].GetComponent<NodeScript>();
+                NDScript.rightND = gNodeArray[arrayPos[0] + 1, arrayPos[1]].gameObject;
+                NDScript.rightNDScript = gNodeArray[arrayPos[0] + 1, arrayPos[1]].GetComponent<NodeScript>();
             }
 
             // Bottom index
             if(arrayPos[1] == 0){      // bottom index is not out of range 
-                nodeScript.bottomNode = null;
+                NDScript.bottomND = null;
             }
             if(arrayPos[1] != 0){      // bottom index is a node
-                nodeScript.bottomNode = gNodeArray[arrayPos[0], arrayPos[1] - 1].gameObject;
-                nodeScript.bottomNodeScript = gNodeArray[arrayPos[0], arrayPos[1] - 1].GetComponent<NodeScript>();
+                NDScript.bottomND = gNodeArray[arrayPos[0], arrayPos[1] - 1].gameObject;
+                NDScript.bottomNDScript = gNodeArray[arrayPos[0], arrayPos[1] - 1].GetComponent<NodeScript>();
             }
 
             // Top index
             if(arrayPos[1] == arrayRowLength - 1){      // top index is not out of range 
-                nodeScript.topNode = null;
+                NDScript.topND = null;
             }
             else if(arrayPos[1] != arrayRowLength - 1){      // top index is a node
-                nodeScript.topNode = gNodeArray[arrayPos[0], arrayPos[1] + 1].gameObject;
-                nodeScript.topNodeScript = gNodeArray[arrayPos[0], arrayPos[1] + 1].GetComponent<NodeScript>();
+                NDScript.topND = gNodeArray[arrayPos[0], arrayPos[1] + 1].gameObject;
+                NDScript.topNDScript = gNodeArray[arrayPos[0], arrayPos[1] + 1].GetComponent<NodeScript>();
             }
 
         }
@@ -180,86 +180,88 @@ public class BoardGenerator : MonoBehaviour
                                             //* Called in Start Method and TargetNode.cs
     public void BoardUpdaterFunction()                                      // Calls Functions 1, 2, 3, 4  --------------
     {
-        List<int> nodeValueMap = NodeValueMapper();
-        NodeValueUpdater(nodeValueMap);
+        List<int> NDValueMap = CreateNodeValueMap();
+        UpdateBoardNodeValues(NDValueMap);
         NodeDisplayUpdate();
     }
 
     // --------------------------------------------- // BoardUpdater Part 1 ---------------------------------------------
-    public List<int> NodeValueMapper()                                      // Displays Array based on nodeValues
+    public List<int> CreateNodeValueMap()                                      // Displays Array based on nodeValues
     {
-        List<int> nodeValueMap = new List<int>();  // List to hold update values for arrayNodes
+        List<int> NDValueMap = new List<int>();  // List to hold update values for arrayNodes
         
         // Reset all node liberty values to 1
         foreach(GameObject node in gNodeList){         // Loops over all nodes in gNodeList    
-            NodeScript nodeScript = node.GetComponent<NodeScript>();  // Set liberty value based on masterNode
+            NodeScript NDScript = node.GetComponent<NodeScript>();  // Set liberty value based on masterNode
             // No Sheep Placed
-            if(nodeScript.sheepValue == nodeScript.sheepValueList[0]){
-                nodeValueMap.Add(nodeScript.nodeValueList[4]);     // Assigns max NodeValue to each position
-                nodeScript.libertyValue = nodeScript.libertyValueList[1];
+            if(NDScript.sheepVal == NDScript.sheepValList[0]){
+                NDValueMap.Add(NDScript.NDValueList[4]);     // Assigns max NodeValue to each position
+                
+                NDScript.libertyVal = NDScript.libertyValList[1];
             }
             // Sheep placed
             else {
-                nodeValueMap.Add(nodeScript.nodeValueList[0]);     // Assigns min NodeValue to each position
-                nodeScript.libertyValue = nodeScript.libertyValueList[0];
+                NDValueMap.Add(NDScript.NDValueList[0]);     // Assigns min NodeValue to each position
+                
+                NDScript.libertyVal = NDScript.libertyValList[0];
             }
         }
         
-        // Update nodeValueMap based on position and board state
-        List<int> nodeValueMapUpdated = NodeValueMapIndexer(nodeValueMap);
+        // Update NDValueMap based on position and board state
+        List<int> NDValueMapUpdated = MapNewNodeValues(NDValueMap);
 
-        // NodeValueMapDebugDisplayValue(nodeValueMap);  // DEBUG METHOD 
+        // NodeValueMapDebugDisplayValue(NDValueMap);  // DEBUG METHOD 
 
         // Debug.Log("gNodeArray nodeValues Mapped to List");
 
-        return nodeValueMapUpdated;
+        return NDValueMapUpdated;
     }
     // ---------------------------------------- -----// BoardUpdater Part 2 //* Called in Step 1 ------------------------
-    public List<int> NodeValueMapIndexer(List<int> nodeValueMap)            // Maps nodeValues for updating in Step 3
+    public List<int> MapNewNodeValues(List<int> NDValueMap)            // Maps nodeValues for updating in Step 3
     {
-        // Counter to increment through index in nodeValueMap
+        // Counter to increment through index in NDValueMap
         int mapIndex = 0;     
 
-        // Map node values to nodeValueMap based on current board state
+        // Map node values to NDValueMap based on current board state
         for(int i = 0; i < arrayColumnLength; i++){         // Assigns positions to each gNode in gNodeArray
             for(int j = 0; j < arrayRowLength; j++){                
                 // Left Index Check
                 if(j == 0){      // Check left index is not out of range 
-                    nodeValueMap[mapIndex] -= 1;
+                    NDValueMap[mapIndex] -= 1;
                 }
                 if(j != 0){      // Check left position
-                    if(gNodeArray[i, j-1].GetComponent<NodeScript>().libertyValue == 0){     // Check left mapIndex is not null
-                        nodeValueMap[mapIndex] -= 1;
+                    if(gNodeArray[i, j-1].GetComponent<NodeScript>().libertyVal == 0){     // Check left mapIndex is not null
+                        NDValueMap[mapIndex] -= 1;
                     }
                 }
 
                 // Right Index Check
                 if(j == arrayRowLength-1){      // Check right mapIndex is not out of range 
-                    nodeValueMap[mapIndex] -= 1;
+                    NDValueMap[mapIndex] -= 1;
                 }
                 if(j != arrayRowLength-1){       // Check right position
-                    if(gNodeArray[i, j+1].GetComponent<NodeScript>().libertyValue == 0){     // Check right mapIndex is not null
-                        nodeValueMap[mapIndex] -= 1;
+                    if(gNodeArray[i, j+1].GetComponent<NodeScript>().libertyVal == 0){     // Check right mapIndex is not null
+                        NDValueMap[mapIndex] -= 1;
                     }
                 }
 
                 // Top Index Check
                 if(i == 0){      // Check top mapIndex is not out of range 
-                    nodeValueMap[mapIndex] -= 1;
+                    NDValueMap[mapIndex] -= 1;
                 }
                 if(i != 0){      //  Check top position
-                    if(gNodeArray[i-1, j].GetComponent<NodeScript>().libertyValue == 0){
-                        nodeValueMap[mapIndex] -= 1;
+                    if(gNodeArray[i-1, j].GetComponent<NodeScript>().libertyVal == 0){
+                        NDValueMap[mapIndex] -= 1;
                     }
                 }
 
                 // Bottom Index Check
                 if(i == arrayColumnLength-1){      // Check bottom mapIndex is not out of range 
-                    nodeValueMap[mapIndex] -= 1;
+                    NDValueMap[mapIndex] -= 1;
                 }
                 if(i != arrayColumnLength-1){      // Check bottom position 
-                    if(gNodeArray[i+1, j].GetComponent<NodeScript>().libertyValue == 0){
-                        nodeValueMap[mapIndex] -= 1;
+                    if(gNodeArray[i+1, j].GetComponent<NodeScript>().libertyVal == 0){
+                        NDValueMap[mapIndex] -= 1;
                     }
                 }
 
@@ -268,29 +270,29 @@ public class BoardGenerator : MonoBehaviour
         }
         // Debug.Log("gNodeArray MapIndex Updated");
 
-        return nodeValueMap;
+        return NDValueMap;
     }
     // --------------------------------------------- // BoardUpdater Part 3 ---------------------------------------------
-    public void NodeValueUpdater(List<int> nodeValueMap)                    // Sets Node Display values to Map Values
+    public void UpdateBoardNodeValues(List<int> NDValueMap)                    // Sets Node Display values to Map Values
     {
         int arrayIndex = 0;
 
-        // Map nodeValueMap values to nodeArray
+        // Map NDValueMap values to NDArray
         for(int i = 0; i < arrayColumnLength; i++){         // Assigns positions to each gNode in gNodeArray
             for(int j = 0; j < arrayRowLength; j++){
-                GameObject currentNode = gNodeArray[i,j];
-                NodeScript currentNodeScript = currentNode.GetComponent<NodeScript>();
+                GameObject currentND = gNodeArray[i,j];
+                NodeScript currentNDScript = currentND.GetComponent<NodeScript>();
                 
                 // TODO - Update here to check state of node to change liberty Value
-                if(nodeValueMap[arrayIndex] < 0) {
-                    currentNodeScript.nodeValue = 0;
+                if(NDValueMap[arrayIndex] < 0) {
+                    currentNDScript.NDValue = 0;
                 }
                 else {
-                    currentNodeScript.nodeValue = nodeValueMap[arrayIndex];
+                    currentNDScript.NDValue = NDValueMap[arrayIndex];
                 }
                 
-                // currentNode.GetComponent<NodeScript>().SetGrassTileDisplayLoop();
-                // Debug.Log(currentNode.GetComponent<NodeScript>().name + "'s nodeValue is " + currentNode.GetComponent<NodeScript>().nodeValue);
+                // currentND.GetComponent<NodeScript>().SetGrassTileDisplayLoop();
+                // Debug.Log(currentND.GetComponent<NodeScript>().name + "'s NDValue is " + currentND.GetComponent<NodeScript>().NDValue);
 
                 arrayIndex += 1;
             }
@@ -312,22 +314,22 @@ public class BoardGenerator : MonoBehaviour
 
 
     // GNODE LIST MAPPER
-    // public List<int> AdjacentNodeMapIndexer(List<int> nodeValueMap)
+    // public List<int> AdjacentNodeMapIndexer(List<int> NDValueMap)
     // {
-    //     // Counter to increment through index in nodeValueMap
+    //     // Counter to increment through index in NDValueMap
     //     int index = 0;     
 
-    //     // Map node values to nodeValueMap based on current board state
+    //     // Map node values to NDValueMap based on current board state
     //     foreach(GameObject node in gNodeList)
     //     {
     //         NodeScript nScript = node.GetComponent<NodeScript>();
-    //         List<NodeScript> adjList = nScript.adjNodeScriptList;
+    //         List<NodeScript> adjList = nScript.adjNDScriptList;
 
     //         foreach(NodeScript adjScript in adjList)
     //         {
-    //             if(adjScript == null || adjScript.libertyValue == 0)
+    //             if(adjScript == null || adjScript.libertyVal == 0)
     //             {
-    //                 nodeValueMap[index] -= 1;
+    //                 NDValueMap[index] -= 1;
     //                 Debug.Log("Adj Script " + adjScript.name + " is null at " + node.name);
     //             }
     //         }
@@ -335,7 +337,7 @@ public class BoardGenerator : MonoBehaviour
     //         index += 1;
     //     }   
         
-    //     return nodeValueMap;
+    //     return NDValueMap;
     // }
 
 
@@ -343,25 +345,25 @@ public class BoardGenerator : MonoBehaviour
 
     // --------------------------------------------- // gNodeValue Updater Part 3 ---------------------------------------------
                                                   //* Calls SetGrassTileDisplayLoop
-    // public void NodeValueListUpdater(List<int> nodeValueMap)
+    // public void NodeValueListUpdater(List<int> NDValueMap)
     // {
     //     int arrayIndex = 0;
 
-    //     // Map nodeValueMap values to nodeArray
+    //     // Map NDValueMap values to NDArray
     //     foreach(GameObject node in gNodeList)
     //     {         
 
-    //         NodeScript currentNodeScript = node.GetComponent<NodeScript>();
+    //         NodeScript currentNDScript = node.GetComponent<NodeScript>();
             
-    //         if(nodeValueMap[arrayIndex] < 0) {
-    //             currentNodeScript.nodeValue = 0;
+    //         if(NDValueMap[arrayIndex] < 0) {
+    //             currentNDScript.NDValue = 0;
     //         }
     //         else {
-    //             currentNodeScript.nodeValue = nodeValueMap[arrayIndex];
+    //             currentNDScript.NDValue = NDValueMap[arrayIndex];
     //         }
             
     //         node.GetComponent<NodeScript>().SetGrassTileDisplayLoop();
-    //         Debug.Log(node.GetComponent<NodeScript>().name + "'s nodeValue is " + node.GetComponent<NodeScript>().nodeValue);
+    //         Debug.Log(node.GetComponent<NodeScript>().name + "'s NDValue is " + node.GetComponent<NodeScript>().NDValue);
 
     //         arrayIndex += 1;
             
@@ -400,7 +402,7 @@ public class BoardGenerator : MonoBehaviour
         
         for(int i = 0; i < arrayColumnLength; i ++){
             for(int j = 0; j < arrayRowLength; j ++){
-                rowValues += gNodeArray[i,j].GetComponent<NodeScript>().nodeValue + "  ";   
+                rowValues += gNodeArray[i,j].GetComponent<NodeScript>().NDValue + "  ";   
             }
             rowValues += "\n";
         }
@@ -413,7 +415,7 @@ public class BoardGenerator : MonoBehaviour
         
         for(int i = 0; i < arrayColumnLength; i ++){
             for(int j = 0; j < arrayRowLength; j ++){
-                rowValues += gNodeArray[i,j].GetComponent<NodeScript>().sheepValue + "  ";   
+                rowValues += gNodeArray[i,j].GetComponent<NodeScript>().sheepVal + "  ";   
             }
             rowValues += "\n";
         }
@@ -427,12 +429,12 @@ public class BoardGenerator : MonoBehaviour
         {
             for(int j = 0; j < arrayRowLength; j++)
             {
-                GameObject currentNode = gNodeArray[i,j];
-                NodeScript currentNodeScript = currentNode.GetComponent<NodeScript>();
+                GameObject currentND = gNodeArray[i,j];
+                NodeScript currentNDScript = currentND.GetComponent<NodeScript>();
                 
-                currentNodeScript.BlackSheepSetter();           // Resets nodeValue of all Nodes to 4 before Setting
+                currentNDScript.BlackSheepSetter();           // Resets NDValue of all Nodes to 4 before Setting
 
-                currentNode.GetComponent<NodeScript>().SetGrassTileDisplayLoop();
+                currentND.GetComponent<NodeScript>().SetGrassTileDisplayLoop();
             }
         }
     }
@@ -443,12 +445,12 @@ public class BoardGenerator : MonoBehaviour
         {
             for(int j = 0; j < arrayRowLength; j++)
             {
-                GameObject currentNode = gNodeArray[i,j];
-                NodeScript currentNodeScript = currentNode.GetComponent<NodeScript>();
+                GameObject currentND = gNodeArray[i,j];
+                NodeScript currentNDScript = currentND.GetComponent<NodeScript>();
                 
-                currentNodeScript.WhiteSheepSetter();           // Resets nodeValue of all Nodes to 4 before Setting
+                currentNDScript.WhiteSheepSetter();           // Resets NDValue of all Nodes to 4 before Setting
 
-                currentNode.GetComponent<NodeScript>().SetGrassTileDisplayLoop();
+                currentND.GetComponent<NodeScript>().SetGrassTileDisplayLoop();
             }
         }
     }
@@ -459,16 +461,16 @@ public class BoardGenerator : MonoBehaviour
         {
             for(int j = 0; j < arrayRowLength; j++)
             {
-                GameObject currentNode = gNodeArray[i,j];
-                NodeScript currentNodeScript = currentNode.GetComponent<NodeScript>();
+                GameObject currentND = gNodeArray[i,j];
+                NodeScript currentNDScript = currentND.GetComponent<NodeScript>();
                 
-                currentNodeScript.libertyValue = currentNodeScript.libertyValueList[1];     // Set all libertyValue to 1 (Empty sheep object)
+                currentNDScript.libertyVal = currentNDScript.libertyValList[1];     // Set all libertyVal to 1 (Empty sheep object)
 
-                currentNodeScript.EmptySheepSetter();           // Resets nodeValue of all Nodes to 4 before Setting
+                currentNDScript.EmptySheepSetter();           // Resets NDValue of all Nodes to 4 before Setting
 
-                List<int> nodeValueMap = NodeValueMapper();
-                NodeValueUpdater(nodeValueMap);
-                currentNode.GetComponent<NodeScript>().SetGrassTileDisplayLoop();
+                List<int> NDValueMap = CreateNodeValueMap();
+                UpdateBoardNodeValues(NDValueMap);
+                currentND.GetComponent<NodeScript>().SetGrassTileDisplayLoop();
             }
         }
     }
@@ -482,12 +484,12 @@ public class BoardGenerator : MonoBehaviour
     }
 
     // Debug for displaying NodeValueMap - Disabled
-    public void NodeValueMapDebugDisplayValue(List<int> nodeValueMap)
+    public void NodeValueMapDebugDisplayValue(List<int> NDValueMap)
     {
         int debugCounter = 0;
-        foreach(int mapValue in nodeValueMap)
+        foreach(int mapValue in NDValueMap)
         {
-            Debug.Log("nodeValueMapValue[" + debugCounter + "] is " + mapValue);
+            Debug.Log("NDValueMapValue[" + debugCounter + "] is " + mapValue);
             debugCounter += 1;
         }
     }
