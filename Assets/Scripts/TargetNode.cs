@@ -45,11 +45,13 @@ public class TargetNode : MonoBehaviour
         // get NodeGroupManagerScript
         ND_Grp_Mngr_Scrp = nodeArray.GetComponent<NodeGroupManager>();
 
-        tileRendererList = grassContainer.GetComponentsInChildren<Renderer>().ToList();
+
+        // //* Color Settings (Moved into NodeScript 10/07/24)
+        // tileRendererList = grassContainer.GetComponentsInChildren<Renderer>().ToList();
         
-        foreach(Renderer renderer in tileRendererList) {
-            tileMaterialList.Add(renderer.material);
-        }
+        // foreach(Renderer renderer in tileRendererList) {
+        //     tileMaterialList.Add(renderer.material);
+        // }
         
     }
 
@@ -69,31 +71,31 @@ public class TargetNode : MonoBehaviour
     private void OnMouseEnter()
     {
         nodeSelected = true;
-        SetNodeColor_Selected();
+        parentNodeScript.SetNodeColor_Selected();
     }
     
     private void OnMouseExit()
     {
         nodeSelected = false;
-        SetNodeColor_Not_Selected();
+        parentNodeScript.SetNodeColor_Not_Selected();
     }
     
-    //* Color Settings
-    private void SetNodeColor_Selected()
-    {
-        foreach(Renderer renderer in tileRendererList) {
-            renderer.material = selectionMaterial;
-        }
-    }
+    //* Color Settings (Moved into NodeScript 10/07/24)
+    // private void SetNodeColor_Selected()
+    // {
+    //     foreach(Renderer renderer in tileRendererList) {
+    //         renderer.material = selectionMaterial;
+    //     }
+    // }
 
-    private void SetNodeColor_Not_Selected()
-    {
-        int colorCounter = 0;
-        foreach(Renderer renderer in tileRendererList) {
-            renderer.material = tileMaterialList[colorCounter];
-            colorCounter++;
-        }
-    }
+    // private void SetNodeColor_Not_Selected()
+    // {
+    //     int colorCounter = 0;
+    //     foreach(Renderer renderer in tileRendererList) {
+    //         renderer.material = tileMaterialList[colorCounter];
+    //         colorCounter++;
+    //     }
+    // }
 
 
 
@@ -101,6 +103,7 @@ public class TargetNode : MonoBehaviour
     //* ---------------------------------------- PLACE SHEEP METHODS ----------------------------------------
                     //* Sets Sheep on selected Node and calls BoardGeneratorScript to reset display
                                 //* Calls BoardGeneratorScript and NodeScript 
+    
     public void PlaceBlackSheep_OnClick()
     {
         // Check if the left mouse button was clicked

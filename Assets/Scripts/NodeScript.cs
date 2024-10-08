@@ -64,6 +64,13 @@ public class NodeScript : MonoBehaviour
 
     public BoardGenerator brd_Gntr_Script;
     public NodeGroupManager ND_Grp_Mngr_Scrp;
+    public TargetNode Trgt_ND_Script;
+
+    // Node Color Variables
+    public GameObject grassContainer;
+    public Material selectionMaterial;
+    private List<Renderer> tileRendererList;
+    public List<Material> tileMaterialList;
 
 
     //* ---------------------------------------- START AND UPDATE METHODS ----------------------------------------
@@ -82,6 +89,13 @@ public class NodeScript : MonoBehaviour
         brd_Gntr_Script = NDArray.GetComponent<BoardGenerator>();
         ND_Grp_Mngr_Scrp = NDArray.GetComponent<NodeGroupManager>();
 
+        // NodeColor Variables
+        grassContainer = gameObject.transform.Find("GrassContainer").gameObject;
+        tileRendererList = grassContainer.GetComponentsInChildren<Renderer>().ToList();
+        
+        foreach(Renderer renderer in tileRendererList) {
+            tileMaterialList.Add(renderer.material);
+        }
     }
 
     // Update is called once per frame
@@ -102,8 +116,8 @@ public class NodeScript : MonoBehaviour
         {
             GrassTileList[i].GetComponent<MeshRenderer>().enabled = isActive;
             GrassTileList[i].SetActive(isActive);
-
         }
+
         for (int i = NDValueList.Count - 1; i > NDValue; i--)   // Sets all tiles above NDValue false
         {
             GrassTileList[i].GetComponent<MeshRenderer>().enabled = !isActive;
@@ -111,6 +125,26 @@ public class NodeScript : MonoBehaviour
         }
 
         // Debug.Log("SetGTLoop: "+ gameObject.name +" | NDValue = " + NDValue);
+    }
+
+
+    //* ---------------------------------------- NODE COLOR DISPLAY METHODS ----------------------------------------
+                            //* Highlights/Resets selected Nodes Color by changing GrassTiles materials 
+
+    public void SetNodeColor_Selected()
+    {
+        foreach(Renderer renderer in tileRendererList) {
+            renderer.material = selectionMaterial;
+        }
+    }
+
+    public void SetNodeColor_Not_Selected()
+    {
+        int colorCounter = 0;
+        foreach(Renderer renderer in tileRendererList) {
+            renderer.material = tileMaterialList[colorCounter];
+            colorCounter++;
+        }
     }
 
 
@@ -167,11 +201,12 @@ public class NodeScript : MonoBehaviour
         grpID = -1;
 
         bool isActive = true;
-        for (int i = sheepTileList.Count-1; i >= 0; i--)    
-        {
+        for (int i = sheepTileList.Count-1; i >= 0; i--){
             sheepTileList[i].SetActive(!isActive);      // Sets all SheepTiles to inactive      // Sets all SheepTiles to inactive    // Sets all SheepTiles to inactive
         }
         
+        SetNodeColor_Not_Selected();
+
         // sheepTileList[sheepVal].SetActive(isActive);      // Set Current SheepTile active 
         Debug.Log(gameObject.name + " is " + sheepTileList[sheepVal].GetComponent<MeshRenderer>().enabled);
     }
@@ -225,7 +260,7 @@ public class NodeScript : MonoBehaviour
 
             List<int> NDValueMap = brd_Gntr_Script.CreateNodeValueMap();
             brd_Gntr_Script.UpdateBoardNodeValues(NDValueMap);
-            
+
 
 
     }
