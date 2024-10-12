@@ -13,6 +13,10 @@ public class NodeGroupManager : MonoBehaviour
     public NodeScript NDScript;
     public TargetNode targetNDScript;
 
+    public GameObject lastPlacedND;
+    public NodeScript lastNDScript;
+    public int lastNDSheepVal;
+
     [System.Serializable]
     public class Group
     {
@@ -49,12 +53,16 @@ public class NodeGroupManager : MonoBehaviour
 
 
     //* ---------------------------------------- CreateNewGroup  ----------------------------------------
-    public int CreateNewGroup(GameObject node)      //  Creates New Group - Called in TargetNode - Returns GrpID
+    public int CreateNewGroup(GameObject node)                              //  Creates New Group - Called in TargetNode - Returns GrpID
     {
+        lastPlacedND = node;                                              // ! Sets updates the last placed node for Script Reference
+        lastNDScript = lastPlacedND.GetComponent<NodeScript>();
+        lastNDSheepVal = lastNDScript.sheepVal;
+
         Group newGrp = new Group();
         newGrp.Grp_sheepVal = node.GetComponent<NodeScript>().sheepVal;
         newGrp.NodeList.Add(node);
-        
+
         Add_To_AllGrpList(newGrp);
         
         int grpID = newGrp.GrpID;
@@ -117,22 +125,22 @@ public class NodeGroupManager : MonoBehaviour
     public void CalculateGrpLiberties()                                    //  - Updates Liberties of all Groups in AllGrpList
     {
         List<int> zeroGrpIDList = new List<int>();
-
+        int totalGrpLiberties = 0;
+        
         foreach(Group group in AllGrpList)    // Loops over List of All Groups, Looks at adjacent nodes for each node in group
         {
-            int totalGrpLiberties = 0;
             List<GameObject> nodeList = group.NodeList;
-            List<GameObject> libertyNodes = new List<GameObject>();  //! This holds adjacent nodes to prevent double references for liberty values 
+            List<GameObject> libertyNodes = new List<GameObject>();                     //! This holds adjacent nodes to prevent double references for lib values 
             
-            foreach(GameObject node in nodeList)    // Adds value of node to total liberties, adds node to list so it is not counted twice
+            foreach(GameObject node in nodeList)                                        // Adds value of node to total liberties
             {
-                NodeScript NDScript = node.GetComponent<NodeScript>();                // Node script reference to get all information
+                NodeScript NDScript = node.GetComponent<NodeScript>();                  // Node script reference to get all information
 
-                if(NDScript.leftND != null){                                        // If the adj node is not empty
-                    if(libertyNodes.Contains(NDScript.leftND) == false)             // If the node is not already in the script (has been counted)
+                if(NDScript.leftND != null){                                            // If the adj node is not empty
+                    if(libertyNodes.Contains(NDScript.leftND) == false)                 // If the node is not already in the script (has been counted)
                     {
-                        libertyNodes.Add(NDScript.leftND);                          // Add it to the liberty node list
-                        totalGrpLiberties += NDScript.leftNDScript.libertyVal;  // Add it's liberty value to the group ( 1 or 0 )
+                        libertyNodes.Add(NDScript.leftND);                              // Add it to the liberty node list
+                        totalGrpLiberties += NDScript.leftNDScript.libertyVal;          // Add it's liberty value to the group ( 1 or 0 )
                     }
                 }
                 if(NDScript.rightND != null){
@@ -160,7 +168,6 @@ public class NodeGroupManager : MonoBehaviour
             }
             
             group.GrpLiberties = totalGrpLiberties;
-            Debug.Log("currentGroup Liberties are " + totalGrpLiberties);
             Debug.Log("GrpLiberties property is " + group.GrpLiberties);
 
             totalGrpLiberties = 0;
@@ -190,17 +197,15 @@ public class NodeGroupManager : MonoBehaviour
 
         foreach(Group group in AllGrpList)                                            // Look through list of All Groups
         {    
-            if(zeroGrpIDList.Contains(group.GrpID)){                                // If the zeroList contains the ID of a Zero'd Node Group
+            if(zeroGrpIDList.Contains(group.GrpID)){                                  // If the zeroList contains the ID of a Zero'd Node Group
                 zeroGrpList.Add(group);                                               // Add it to the zeroGrpList for updating
             }
 
-            foreach(Group zeroGrp in zeroGrpList)                                   // ? Loop of new list of Zero liberty Groups
-            {   
-                if(zeroGrp.NodeList.Count > 1)                                        //! If the group has more than 1 stone. Allows for captures in KO.
+            foreach(Group zeroGrp in zeroGrpList)                                     // ? Loop of new list of Zero liberty Groups
+            {    
+                if(zeroGrp.Grp_sheepVal != lastNDSheepVal)                            // ! Checks if zeroGroup is the same sheepVal as current player
                 {
-                    List<GameObject> zeroList = zeroGrp.NodeList;                     // Get a list of the Nodes in the group
-
-                    foreach(GameObject zeroNode in zeroList)                            // For each Node
+                    foreach(GameObject zeroNode in zeroGrp.NodeList)                            // For each Node
                     {
                         NodeScript zeroScript = zeroNode.GetComponent<NodeScript>();    // Get the script of the node
                         zeroScript.PlaceEmptySheepMethod();
@@ -222,7 +227,8 @@ public class NodeGroupManager : MonoBehaviour
 
 
     //* ---------------------------------------- ON MOUSE ENTER/EXIT METHODS ----------------------------------------
-                            //* Highlights/Resets selected Nodes Color by changing GrassTiles materials 
+                            //* Highlights/Resets selected Nodes Color by changing GrassTiles materials
+                                            //* Sets Nodes lastPlaced Value
 
     public void AssignSheepToGroups(GameObject targetNode)
     {
@@ -238,22 +244,24 @@ public class NodeGroupManager : MonoBehaviour
         NodeScript bottomNDScript = NDScript.bottomNDScript;
         NodeScript topNDScript = NDScript.topNDScript;
 
-
         //* FIRST CHECK OCCURS ON LEFT NODE
         // Left Node Found
         if(leftNDScript != null && leftNDScript.sheepVal == NDScript.sheepVal)
         {
             int leftNDGrpID = leftNDScript.grpID;
 
-            List<GameObject> nodeGroup = JoinGroups(targetNodeGrpID, leftNDGrpID);
+            if(leftNDGrpID != targetNodeGrpID){
+                List<GameObject> nodeGroup = JoinGroups(targetNodeGrpID, leftNDGrpID);
 
-            foreach(GameObject crntND in nodeGroup)
-            {
-                crntND.GetComponent<NodeScript>().grpID = targetNodeGrpID;
+                foreach(GameObject crntND in nodeGroup) {
+                    NodeScript crntNDScript = crntND.GetComponent<NodeScript>();                // Gets nodeScript
+                    crntNDScript.grpID = targetNodeGrpID;                                       // Sets node to new GrpID
+                    crntNDScript.lastPlaced = false;                                           // Sets lastClicked status to false
+                }
+
+                DeleteGroup(leftNDGrpID);
+                Debug.Log("GrpID " + leftNDGrpID + " deleted. Nodes added to GrpID: " + leftNDScript.grpID);
             }
-
-            DeleteGroup(leftNDGrpID);
-
         }
 
         // Right Node Found
@@ -261,21 +269,17 @@ public class NodeGroupManager : MonoBehaviour
         {
             int rightNDGrpID = rightNDScript.grpID;
 
-            if(rightNDGrpID != targetNodeGrpID)
-            {
+            if(rightNDGrpID != targetNodeGrpID){
                 List<GameObject> nodeGroup = JoinGroups(targetNodeGrpID, rightNDGrpID);
 
-                foreach(GameObject crntND in nodeGroup)
-                {
-                    Debug.Log("parentNodeID is " + targetNodeGrpID);
-                    Debug.Log("prevNodeID's are " + crntND.GetComponent<NodeScript>().grpID);
-                    crntND.GetComponent<NodeScript>().grpID = targetNodeGrpID;
-                    Debug.Log("newNodeID's are " + crntND.GetComponent<NodeScript>().grpID);
+                foreach(GameObject crntND in nodeGroup) {
+                    NodeScript crntNDScript = crntND.GetComponent<NodeScript>();                // Gets nodeScript
+                    crntNDScript.grpID = targetNodeGrpID;                                       // Sets node to new GrpID
+                    crntNDScript.lastPlaced = false;                                           // Sets lastClicked status to false
                 }
 
                 DeleteGroup(rightNDGrpID);
-
-                Debug.Log("New Node added to GrpID: " + rightNDScript.grpID);
+                Debug.Log("GrpID " + rightNDGrpID + " deleted. Nodes added to GrpID: " + rightNDScript.grpID);
             }
         }
 
@@ -284,21 +288,17 @@ public class NodeGroupManager : MonoBehaviour
         {
             int bottomNDGrpID = bottomNDScript.grpID;
 
-            if(bottomNDGrpID != targetNodeGrpID)
-            {
+            if(bottomNDGrpID != targetNodeGrpID) {
                 List<GameObject> nodeGroup = JoinGroups(targetNodeGrpID, bottomNDGrpID);
 
-                foreach(GameObject crntND in nodeGroup)
-                {
-                    Debug.Log("parentNodeID is " + targetNodeGrpID);
-                    Debug.Log("prevNodeID's are " + crntND.GetComponent<NodeScript>().grpID);
-                    crntND.GetComponent<NodeScript>().grpID = targetNodeGrpID;
-                    Debug.Log("newNodeID's are " + crntND.GetComponent<NodeScript>().grpID);
+                foreach(GameObject crntND in nodeGroup) {
+                    NodeScript crntNDScript = crntND.GetComponent<NodeScript>();                // Gets nodeScript
+                    crntNDScript.grpID = targetNodeGrpID;                                       // Sets node to new GrpID
+                    crntNDScript.lastPlaced = false;                                           // Sets lastClicked status to false
                 }
 
                 DeleteGroup(bottomNDGrpID);
-
-                Debug.Log("New Node added to GrpID: " + bottomNDScript.grpID);
+                Debug.Log("GrpID " + bottomNDGrpID + " deleted. Nodes added to GrpID: " + bottomNDScript.grpID);
             }
         }
 
@@ -307,23 +307,21 @@ public class NodeGroupManager : MonoBehaviour
         {
             int topNDGrpID = topNDScript.grpID;
             
-            if(topNDGrpID != targetNodeGrpID)
-            {
+            if(topNDGrpID != targetNodeGrpID) {
                 List<GameObject> nodeGroup = JoinGroups(targetNodeGrpID, topNDGrpID);
 
-                foreach(GameObject crntND in nodeGroup)
-                {
-                    Debug.Log("parentNodeID is " + targetNodeGrpID);
-                    Debug.Log("prevNodeID's are " + crntND.GetComponent<NodeScript>().grpID);
-                    crntND.GetComponent<NodeScript>().grpID = targetNodeGrpID;
-                    Debug.Log("newNodeID's are " + crntND.GetComponent<NodeScript>().grpID);
+                foreach(GameObject crntND in nodeGroup) {
+                    NodeScript crntNDScript = crntND.GetComponent<NodeScript>();                // Gets nodeScript
+                    crntNDScript.grpID = targetNodeGrpID;                                       // Sets node to new GrpID
+                    crntNDScript.lastPlaced = false;                                           // Sets lastClicked status to false
                 }
 
                 DeleteGroup(topNDGrpID);
-
-                Debug.Log("New Node added to GrpID: " + topNDScript.grpID);
+                Debug.Log("GrpID " + topNDScript + " deleted. Nodes added to GrpID: " + topNDScript.grpID);
             }
         }
+
+        NDScript.lastPlaced = true;
     }
 
 

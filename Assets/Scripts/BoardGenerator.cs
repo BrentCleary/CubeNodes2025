@@ -20,9 +20,9 @@ public class BoardGenerator : MonoBehaviour
     [SerializeField] public List<GameObject> gNodeList;
     
     // ! Array Size Controls
-    private int arrayColumnLength = 3;                  // Array Dimensions - Column
-    private int arrayRowLength = 3;                     // Array Dimensions - Row
-    private int nodeSpacingValue = 2;                   // Space Between Nodes
+    public int arrayColumnLength = 19;                  // Array Dimensions - Column
+    public int arrayRowLength = 19;                     // Array Dimensions - Row
+    public float nodeSpacingValue = 1;                   // Space Between Nodes
     private int arrayTotalNodes;                        // arrayColumnLength * arrayRowLength
 
     public GameObject nodePrefab;
@@ -291,7 +291,7 @@ public class BoardGenerator : MonoBehaviour
                     currentNDScript.NDValue = NDValueMap[arrayIndex];
                 }
                 
-                // currentND.GetComponent<NodeScript>().SetGrassTileDisplayLoop();
+                // currentND.GetComponent<NodeScript>().SetGrassTileDisplay();
                 // Debug.Log(currentND.GetComponent<NodeScript>().name + "'s NDValue is " + currentND.GetComponent<NodeScript>().NDValue);
 
                 arrayIndex += 1;
@@ -301,11 +301,11 @@ public class BoardGenerator : MonoBehaviour
         // Debug.Log("gNodeArray Update Complete");
     }
     // --------------------------------------------- // BoardUpdater Part 4 ---------------------------------------------
-    public void NodeDisplayUpdate()                                         // Calls SetGrassTileDisplayLoop on each Node
+    public void NodeDisplayUpdate()                                         // Calls SetGrassTileDisplay on each Node
     {
         foreach(GameObject node in gNodeList)
         {
-            node.GetComponent<NodeScript>().SetGrassTileDisplayLoop();
+            node.GetComponent<NodeScript>().SetGrassTileDisplay();
         }
     }
 
@@ -344,7 +344,7 @@ public class BoardGenerator : MonoBehaviour
 
 
     // --------------------------------------------- // gNodeValue Updater Part 3 ---------------------------------------------
-                                                  //* Calls SetGrassTileDisplayLoop
+                                                  //* Calls SetGrassTileDisplay
     // public void NodeValueListUpdater(List<int> NDValueMap)
     // {
     //     int arrayIndex = 0;
@@ -362,7 +362,7 @@ public class BoardGenerator : MonoBehaviour
     //             currentNDScript.NDValue = NDValueMap[arrayIndex];
     //         }
             
-    //         node.GetComponent<NodeScript>().SetGrassTileDisplayLoop();
+    //         node.GetComponent<NodeScript>().SetGrassTileDisplay();
     //         Debug.Log(node.GetComponent<NodeScript>().name + "'s NDValue is " + node.GetComponent<NodeScript>().NDValue);
 
     //         arrayIndex += 1;
@@ -434,7 +434,7 @@ public class BoardGenerator : MonoBehaviour
                 
                 currentNDScript.BlackSheepSetter();           // Resets NDValue of all Nodes to 4 before Setting
 
-                currentND.GetComponent<NodeScript>().SetGrassTileDisplayLoop();
+                currentND.GetComponent<NodeScript>().SetGrassTileDisplay();
             }
         }
     }
@@ -450,7 +450,7 @@ public class BoardGenerator : MonoBehaviour
                 
                 currentNDScript.WhiteSheepSetter();           // Resets NDValue of all Nodes to 4 before Setting
 
-                currentND.GetComponent<NodeScript>().SetGrassTileDisplayLoop();
+                currentND.GetComponent<NodeScript>().SetGrassTileDisplay();
             }
         }
     }
@@ -470,7 +470,7 @@ public class BoardGenerator : MonoBehaviour
 
                 List<int> NDValueMap = CreateNodeValueMap();
                 UpdateBoardNodeValues(NDValueMap);
-                currentND.GetComponent<NodeScript>().SetGrassTileDisplayLoop();
+                currentND.GetComponent<NodeScript>().SetGrassTileDisplay();
             }
         }
     }

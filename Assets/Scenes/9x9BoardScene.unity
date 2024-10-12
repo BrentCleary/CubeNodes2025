@@ -476,6 +476,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: gNodeArray
       objectReference: {fileID: 0}
+    - target: {fileID: 2197604379766325408, guid: cb171dbc26700d949a241f6311432d8a, type: 3}
+      propertyPath: arrayRowLength
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2197604379766325408, guid: cb171dbc26700d949a241f6311432d8a, type: 3}
+      propertyPath: nodeSpacingValue
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2197604379766325408, guid: cb171dbc26700d949a241f6311432d8a, type: 3}
+      propertyPath: arrayColumnLength
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4111537898157232553, guid: cb171dbc26700d949a241f6311432d8a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
