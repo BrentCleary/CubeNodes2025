@@ -54,11 +54,11 @@ public class NodeScript : MonoBehaviour
     public int rightNDLibertyVal;
     public int bottomNDLibertyVal;
     public int topNDLibertyVal;
-    public int grpID = -1;
+    public int? NDgrpID = null;
 
 
     //* ---------------------------------------- SCRIPT REFERENCES ----------------------------------------
-    public BoardGenerator brd_Gntr_Script;
+    public BoardGenerator Brd_Gntr_Script;
     public NodeGroupManager ND_Grp_Mngr_Scrp;
     public TargetNode Trgt_ND_Script;
 
@@ -86,7 +86,7 @@ public class NodeScript : MonoBehaviour
 
         // Get reference to Node Array and scripts
         NDArray = transform.parent.gameObject;
-        brd_Gntr_Script = NDArray.GetComponent<BoardGenerator>();
+        Brd_Gntr_Script = NDArray.GetComponent<BoardGenerator>();
         ND_Grp_Mngr_Scrp = NDArray.GetComponent<NodeGroupManager>();
 
         // NodeColor Variables
@@ -106,23 +106,32 @@ public class NodeScript : MonoBehaviour
 
 
 
-    //* ---------------------------------------- GRASS TILE DISPLAY METHODS ----------------------------------------
-                                       //* Sets Grass Tile  on/off based on NDValue 
-    public void SetGrassTileDisplay()
-    {
-        bool isActive = true;       // Sets initialize bool
+    //* ---------------------------------------- NodeDisplayUpdate ----------------------------------------
 
+    public void UpdateNodeDisplay()
+    {
+        //* SETS TILE DISPLAY
+        bool tileActive = true;       // Sets initialize bool
         for (int i = NDValue; i >= 0; i--)    // Sets all tiles from NDValue and lower true
         {
-            GrassTileList[i].GetComponent<MeshRenderer>().enabled = isActive;
-            GrassTileList[i].SetActive(isActive);
+            GrassTileList[i].GetComponent<MeshRenderer>().enabled = tileActive;
+            GrassTileList[i].SetActive(tileActive);
         }
-
         for (int i = NDValueList.Count - 1; i > NDValue; i--)   // Sets all tiles above NDValue false
         {
-            GrassTileList[i].GetComponent<MeshRenderer>().enabled = !isActive;
-            GrassTileList[i].SetActive(!isActive);
+            GrassTileList[i].GetComponent<MeshRenderer>().enabled = !tileActive;
+            GrassTileList[i].SetActive(!tileActive);
         }
+
+
+        //* SETS Sheep Display
+        bool sheepActive = true;
+        // Sets all SheepTiles to inactive
+        for (int i = sheepTileList.Count-1; i >= 0; i--)    
+        {
+            sheepTileList[i].SetActive(!sheepActive);                          // Sets all SheepTiles to inactive
+        }
+        sheepTileList[sheepVal].SetActive(sheepActive);                        // Set Current SheepTile active
 
     }
 
@@ -157,18 +166,7 @@ public class NodeScript : MonoBehaviour
         libertyVal = libertyValList[0];                                     // Set libertyVal to 0
         NDValue = NDValueList[0];                                           // NDValue is 0
         placeAble = false;
-
         lastPlaced = true;
-
-        // Sets all SheepTiles to inactive
-        bool isActive = true;
-        
-        for (int i = sheepTileList.Count-1; i >= 0; i--)    
-        {
-            sheepTileList[i].SetActive(!isActive);                          // Sets all SheepTiles to inactive
-        }
-        
-        sheepTileList[sheepVal].SetActive(isActive);                        // Set Current SheepTile active
 
     }
 
@@ -178,18 +176,7 @@ public class NodeScript : MonoBehaviour
         libertyVal = libertyValList[0];                                     // Set libertyVal to 0
         NDValue = NDValueList[0];                                           // NDValue is 0
         placeAble = false;
-
         lastPlaced = true;
-
-        // Sets all SheepTiles to inactive
-        bool isActive = true;
-        for (int i = sheepTileList.Count-1; i >= 0; i--)    
-        {
-            sheepTileList[i].SetActive(!isActive);                          // Sets all SheepTiles to inactive
-        }
-        
-        sheepTileList[sheepVal].SetActive(isActive);                        // Set Current SheepTile active 
-
 
     }
 
@@ -199,17 +186,17 @@ public class NodeScript : MonoBehaviour
         libertyVal = libertyValList[1];                                     // Set libertyVal to 1
         NDValue = NDValueList[4];                                           // NDValue is reset to 4
         placeAble = true;
-        grpID = -1;
+        NDgrpID = null;
+        lastPlaced = false;
 
         bool isActive = true;
+
         for (int i = sheepTileList.Count-1; i >= 0; i--){
             sheepTileList[i].SetActive(!isActive);                          // Sets all SheepTiles to inactive
         }
         
         SetNodeColor_Not_Selected();
 
-        // sheepTileList[sheepVal].SetActive(isActive);                     // Set Current SheepTile active 
-        Debug.Log(gameObject.name + " is " + sheepTileList[sheepVal].GetComponent<MeshRenderer>().enabled);
     }
 
 
@@ -222,16 +209,9 @@ public class NodeScript : MonoBehaviour
     {
         // Check if the left mouse button was clicked
         BlackSheepSetter();                                                                  // Set Node to BlacksheepVal
-
-        ND_Grp_Mngr_Scrp.AssignSheepToGroups(gameObject);                              // Assign All Groups
-        // ND_Grp_Mngr_Scrp.AssignSheepToGroups(parentNode);
-        ND_Grp_Mngr_Scrp.CalculateGrpLiberties();                                    // Update All Group Liberties
-
-        List<int> zeroGrpIDList;
-        zeroGrpIDList = ND_Grp_Mngr_Scrp.GetZeroLibertyGrpID();                       // Update All Group Liberties
-        ND_Grp_Mngr_Scrp.UpdateZeroLibertyGroups(zeroGrpIDList);                        // Delete Groups with 0 Liberties
-
-        brd_Gntr_Script.BoardUpdaterFunction();
+        ND_Grp_Mngr_Scrp.UpdateGroupsMethod(gameObject);
+        Brd_Gntr_Script.BoardValueUpdate();
+        UpdateNodeDisplay();
 
     }
     
@@ -239,30 +219,18 @@ public class NodeScript : MonoBehaviour
     // 09/05/2024 - Method Commented out to user Mouse1 for testing
     public void PlaceWhiteSheepMethod()
     {
-        WhiteSheepSetter();
-        ND_Grp_Mngr_Scrp.AssignSheepToGroups(gameObject);                              // Assign All Groups
-        // ND_Grp_Mngr_Scrp.AssignSheepToGroups(parentNode);
-        ND_Grp_Mngr_Scrp.CalculateGrpLiberties();                                    // Update All Group Liberties
+        WhiteSheepSetter();                                                                  // Set Node to BlacksheepVal
+        ND_Grp_Mngr_Scrp.UpdateGroupsMethod(gameObject);
+        Brd_Gntr_Script.BoardValueUpdate();
+        UpdateNodeDisplay();
 
-        List<int> zeroGrpIDList;
-        zeroGrpIDList = ND_Grp_Mngr_Scrp.GetZeroLibertyGrpID();                       // Update All Group Liberties
-        ND_Grp_Mngr_Scrp.UpdateZeroLibertyGroups(zeroGrpIDList);                        // Delete Groups with 0 Liberties
-
-        brd_Gntr_Script.BoardUpdaterFunction();
     }
 
 
     public void PlaceEmptySheepMethod()
     {
-            EmptySheepSetter();
-
-            // 10/03/24 - Commented out. Already called in UpdateLoop - Test
-            // parentNodeScript.SetGrassTileDisplay();
-
-            List<int> NDValueMap = brd_Gntr_Script.CreateNodeValueMap();
-            brd_Gntr_Script.UpdateBoardNodeValues(NDValueMap);
-
-
+        EmptySheepSetter();
+        UpdateNodeDisplay();
 
     }
 
