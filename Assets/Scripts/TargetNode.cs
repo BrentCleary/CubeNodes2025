@@ -21,6 +21,7 @@ public class TargetNode : MonoBehaviour
     private NodeScript parentNodeScript;
     private BoardGenerator brd_Gntr_Script;
     private NodeGroupManager ND_Grp_Mngr_Scrp;
+    private GameManagerScript GameManager;
 
     public bool nodeSelected = false;
 
@@ -44,6 +45,9 @@ public class TargetNode : MonoBehaviour
 
         // get NodeGroupManagerScript
         ND_Grp_Mngr_Scrp = nodeArray.GetComponent<NodeGroupManager>();
+
+        // get GameManager
+        GameManager = GameObject.Find("GameManager").GetComponent<GameManagerScript>();
 
 
         // //* Color Settings (Moved into NodeScript 10/07/24)
@@ -112,6 +116,8 @@ public class TargetNode : MonoBehaviour
         {
             parentNodeScript.PlaceBlackSheepMethod();
             nodeSelected = false;
+            Debug.Log("PlaceBlackSheep_OnClick");
+
         }
     }
     
@@ -123,6 +129,8 @@ public class TargetNode : MonoBehaviour
         {
             parentNodeScript.PlaceWhiteSheepMethod();
             nodeSelected = false;
+            Debug.Log("PlaceWhiteSheep_OnClick");
+
         }
     }
 

@@ -91,53 +91,60 @@ public class NodeScript : MonoBehaviour
 
         // NodeColor Variables
         grassContainer = gameObject.transform.Find("GrassContainer").gameObject;
-        tileRendererList = grassContainer.GetComponentsInChildren<Renderer>().ToList();
-        
-        foreach(Renderer renderer in tileRendererList) {
-            tileMaterialList.Add(renderer.material);
-        }
+        BuildTileRendererList();
+    
     }
 
     // Update is called once per frame
     void Update()
     {
-        // NodeValueSetterDebug();
+
     }
 
 
 
-    //* ---------------------------------------- NodeDisplayUpdate ----------------------------------------
+    //* ---------------------------------------- NODE DISPLAY METHODS ----------------------------------------
 
-    public void UpdateNodeDisplay()
+    public void UpdateNodeDisplay()                                                 // Updates Node Display 
     {
-        //* SETS TILE DISPLAY
-        bool tileActive = true;       // Sets initialize bool
-        for (int i = NDValue; i >= 0; i--)    // Sets all tiles from NDValue and lower true
+        SetSheepDisplay();
+        SetTileDisplay();
+    }
+
+    public void SetSheepDisplay()
+    {
+        bool sheepActive = true;
+        
+        // Sets all SheepTiles to inactive
+        for (int i = sheepTileList.Count-1; i >= 0; i--)    
+        {
+            sheepTileList[i].SetActive(!sheepActive);                               // Sets all SheepTiles to inactive
+        }
+        sheepTileList[sheepVal].SetActive(sheepActive);                             // Set Current SheepTile active
+    }
+
+    public void SetTileDisplay()
+    {
+        bool tileActive = true;                                                     // Sets initialize bool
+        for (int i = NDValue; i >= 0; i--)                                          // Sets all tiles from NDValue and lower true
         {
             GrassTileList[i].GetComponent<MeshRenderer>().enabled = tileActive;
             GrassTileList[i].SetActive(tileActive);
         }
-        for (int i = NDValueList.Count - 1; i > NDValue; i--)   // Sets all tiles above NDValue false
+        for (int i = NDValueList.Count - 1; i > NDValue; i--)                       // Sets all tiles above NDValue false
         {
             GrassTileList[i].GetComponent<MeshRenderer>().enabled = !tileActive;
             GrassTileList[i].SetActive(!tileActive);
         }
 
-
-        //* SETS Sheep Display
-        bool sheepActive = true;
-        // Sets all SheepTiles to inactive
-        for (int i = sheepTileList.Count-1; i >= 0; i--)    
-        {
-            sheepTileList[i].SetActive(!sheepActive);                          // Sets all SheepTiles to inactive
-        }
-        sheepTileList[sheepVal].SetActive(sheepActive);                        // Set Current SheepTile active
-
+        // SetNodeColor_Not_Selected();
     }
 
 
-    //* ---------------------------------------- NODE COLOR DISPLAY METHODS ----------------------------------------
-                            //* Highlights/Resets selected Nodes Color by changing GrassTiles materials 
+
+
+    //* ---------------------------------------- NODE COLOR SELECT METHODS ----------------------------------------
+                            // Highlights/Resets selected Nodes Color by changing GrassTiles materials 
 
     public void SetNodeColor_Selected()
     {
@@ -155,10 +162,20 @@ public class NodeScript : MonoBehaviour
         }
     }
 
+    public void BuildTileRendererList()
+    {
+        tileRendererList = grassContainer.GetComponentsInChildren<Renderer>().ToList();
+        
+        foreach(Renderer renderer in tileRendererList) {
+            tileMaterialList.Add(renderer.material);
+            Debug.Log("TileRenderList Added: " + renderer.material);
+        }
+    }
+
 
 
     // *---------------------------------------- SHEEP SETTER  METHODS ----------------------------------------
-                                          //* Called in TargetNode Script 
+                                          // Called in TargetNode Script 
 
     public void BlackSheepSetter()                                          // Sets node to Black Sheep Object
     {
@@ -170,7 +187,8 @@ public class NodeScript : MonoBehaviour
 
     }
 
-        public void WhiteSheepSetter()                                      // Sets node to Black Sheep Object
+
+    public void WhiteSheepSetter()                                          // Sets node to Black Sheep Object
     {
         sheepVal = sheepValList[2];                                         // Set sheep value to whiteSheep index
         libertyVal = libertyValList[0];                                     // Set libertyVal to 0
@@ -179,6 +197,7 @@ public class NodeScript : MonoBehaviour
         lastPlaced = true;
 
     }
+
 
     public void EmptySheepSetter()                                          // Sets node to Empty Sheep Object
     {
@@ -189,29 +208,24 @@ public class NodeScript : MonoBehaviour
         NDgrpID = null;
         lastPlaced = false;
 
-        bool isActive = true;
-
-        for (int i = sheepTileList.Count-1; i >= 0; i--){
-            sheepTileList[i].SetActive(!isActive);                          // Sets all SheepTiles to inactive
-        }
-        
-        SetNodeColor_Not_Selected();
-
     }
 
 
 
 
 //* ---------------------------------------- PLACE SHEEP METHODS ----------------------------------------
-                    //* Sets Sheep on selected Node and calls BoardGeneratorScript to reset display
-                                //* Calls BoardGeneratorScript and NodeScript 
+                    // Sets Sheep on selected Node and calls BoardGeneratorScript to reset display
+                                // Calls BoardGeneratorScript and NodeScript 
+                                
     public void PlaceBlackSheepMethod()
     {
         // Check if the left mouse button was clicked
         BlackSheepSetter();                                                                  // Set Node to BlacksheepVal
-        ND_Grp_Mngr_Scrp.UpdateGroupsMethod(gameObject);
         Brd_Gntr_Script.BoardValueUpdate();
-        UpdateNodeDisplay();
+        Brd_Gntr_Script.UpdateBoardDisplay();
+
+        // ND_Grp_Mngr_Scrp.UpdateGroupsMethod(gameObject);
+
 
     }
     
@@ -220,9 +234,10 @@ public class NodeScript : MonoBehaviour
     public void PlaceWhiteSheepMethod()
     {
         WhiteSheepSetter();                                                                  // Set Node to BlacksheepVal
-        ND_Grp_Mngr_Scrp.UpdateGroupsMethod(gameObject);
         Brd_Gntr_Script.BoardValueUpdate();
-        UpdateNodeDisplay();
+        Brd_Gntr_Script.UpdateBoardDisplay();
+        
+        // ND_Grp_Mngr_Scrp.UpdateGroupsMethod(gameObject);
 
     }
 
@@ -230,57 +245,9 @@ public class NodeScript : MonoBehaviour
     public void PlaceEmptySheepMethod()
     {
         EmptySheepSetter();
-        UpdateNodeDisplay();
-
     }
 
 
 
-
-    // *---------------------------------------- SHEEP GROUP METHODS ----------------------------------------
-                                //* Loops over gNodeArray and adjacent sheep in groups 
-    // public void SheepNodeGroupSetter()
-    // {
-    //     if(leftNDScript != null)
-    //     {
-    //         if(leftNDScript.sheepVal == sheepVal)
-    //         {
-    //             leftNDScript.sheepGrpList.Add(gameObject);
-    //         }
-    //     }
-    // }
-
-
-    // *---------------------------------------- DEBUG METHODS ----------------------------------------
-                                          //* Called in Update Method 
-
-    // Test Method for Node Value Setting - Disabled in Update
-    public void NodeValueSetterDebug()
-    {
-        if(Input.GetKeyDown(KeyCode.Keypad0)){  // Press 0 on Keypad to set NDValue to 0
-            Debug.Log("Button Pressed = 0");
-            NDValue = NDValueList[0];
-        }
-
-        if(Input.GetKeyDown(KeyCode.Keypad1)){  // Press 1 on Keypad to set NDValue to 1
-            NDValue = NDValueList[1];
-            Debug.Log("Button Pressed = 1");
-        }
-
-        if(Input.GetKeyDown(KeyCode.Keypad2)){  // Press 2 on Keypad to set NDValue to 2
-            NDValue = NDValueList[2];
-            Debug.Log("Button Pressed = 2");
-        }
-
-        if(Input.GetKeyDown(KeyCode.Keypad3)){  // Press 3 on Keypad to set NDValue to 3
-            NDValue = NDValueList[3];
-            Debug.Log("Button Pressed = 3");
-        }
-
-        if(Input.GetKeyDown(KeyCode.Keypad4)){  // Press 4 on Keypad to set NDValue to 4
-            NDValue = NDValueList[4];
-            Debug.Log("Button Pressed = 4");
-        }
-    }
 
 }
