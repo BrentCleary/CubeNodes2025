@@ -221,11 +221,10 @@ public class NodeScript : MonoBehaviour
     {
         // Check if the left mouse button was clicked
         BlackSheepSetter();                                                                  // Set Node to BlacksheepVal
-        Brd_Gntr_Script.BoardValueUpdate();
+        Brd_Gntr_Script.UpdateBoardNodeValues();
         Brd_Gntr_Script.UpdateBoardDisplay();
 
         // ND_Grp_Mngr_Scrp.UpdateGroupsMethod(gameObject);
-
 
     }
     
@@ -234,7 +233,7 @@ public class NodeScript : MonoBehaviour
     public void PlaceWhiteSheepMethod()
     {
         WhiteSheepSetter();                                                                  // Set Node to BlacksheepVal
-        Brd_Gntr_Script.BoardValueUpdate();
+        Brd_Gntr_Script.UpdateBoardNodeValues();
         Brd_Gntr_Script.UpdateBoardDisplay();
         
         // ND_Grp_Mngr_Scrp.UpdateGroupsMethod(gameObject);

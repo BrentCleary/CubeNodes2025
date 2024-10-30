@@ -20,55 +20,21 @@ public class BoardGenerator : MonoBehaviour
     [SerializeField] public List<GameObject> gNodeList;
     
     // ! Array Size Controls
-    private int arrayColumnLength = 3;                                  // Array Dimensions - Column
-    private int arrayRowLength = 3;                                     // Array Dimensions - Row
-    private int arrayTotalNodes => arrayColumnLength * arrayRowLength;  // arrayColumnLength * arrayRowLength
+    private int arrayColumnLength = 3;                                              // Array Dimensions - Column
+    private int arrayRowLength = 3;                                                 // Array Dimensions - Row
+    private int arrayTotalNodes => arrayColumnLength * arrayRowLength;              // arrayColumnLength * arrayRowLength
     
-    private float nodeSpacingValue = 2;                                 // Space Between Nodes
+    private float nodeSpacingValue = 2;                                             // Space Between Nodes
 
     public GameObject nodePrefab;
     public List<int> startNodeValueMap;
     public List<int> currentNDValueMap;
 
     public Transform gNodeArrayTransform;
-
     public List<Node> sheepGroupList;
 
 
-
-    //* ---------------------------------------- START AND UPDATE METHODS ----------------------------------------
-                                     //* Generates Node GameObjects and gNodeArray 
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
-        // gNodeArray = new GameObject[arrayColumnLength, arrayRowLength];
-        // gNodeArrayTransform = gameObject.transform;
-
-        // gNodeList = new List<GameObject>();
-
-        // InstantiateNodes();
-        // SetNodeTransformPosition();
-        
-        // BuildNodeArray();
-        // AdjacentSheepNodeMapper(gNodeList);
-
-
-        // // Generate Initial Value Map
-        // startNodeValueMap = CreateNodeValueMap();
-        // UpdateBoardNodeValues(startNodeValueMap);
-
-        // foreach(GameObject crntNode in gNodeList)
-        // {
-        //     crntNode.GetComponent<NodeScript>().UpdateNodeDisplay();
-        // }
-
-        // UpdateBoardDisplay();
-    }
-
-
-    public void CreateBoard()
+    public void CreateBoard()  //? Called in GameManager                            // Instantiates Variables, Calls Methods Below
     {
         gNodeArray = new GameObject[arrayColumnLength, arrayRowLength];
         gNodeArrayTransform = gameObject.transform;
@@ -81,10 +47,7 @@ public class BoardGenerator : MonoBehaviour
         BuildNodeArray();
         AdjacentSheepNodeMapper(gNodeList);
     }
-
-
-                                                 //~ Called in CreateBoard Method
-    // *---------------------------------------- BOARD NODE CREATION METHODS ----------------------------------------
+    // *---------------------------------------- CreateBoard Methods ----------------------------------------
     public void InstantiateNodes()                                                  // Instantiates Nodes, Assigns names and values, Adds them to gNodeList
     {
         for(int i = 1; i <= arrayTotalNodes; i++) {
@@ -94,7 +57,6 @@ public class BoardGenerator : MonoBehaviour
             gNodeList.Add(gNode);
         }
     }
-
     public void SetNodeTransformPosition()                                          // Sets Node transform.position ( uses NodeSpacingValue, array vals  )
     {
         int nodeCounter = 0;                                // Increments Node reference in gNodeList 
@@ -105,7 +67,6 @@ public class BoardGenerator : MonoBehaviour
             }
         }
     }
-
     public void BuildNodeArray()                                                    // Generate Array using Length x Row using nodes in gNodeList
     {               
         int nodeCounter = 0;                                                        // Increments Node reference in gNodeList 
@@ -125,7 +86,6 @@ public class BoardGenerator : MonoBehaviour
             }
         }
     }
-
     public void AdjacentSheepNodeMapper(List<GameObject> gNodeList)                 // Loops over gNodeList and assigns adjacent Nodes
     {
         foreach(GameObject crntND in gNodeList)
@@ -173,20 +133,16 @@ public class BoardGenerator : MonoBehaviour
     }
 
 
-
-                                                //~ Called in Start Method and TargetNode.cs
-    // *---------------------------------------- NODE VALUE DISPLAY AND UPDATE METHODS ----------------------------------------
-    public void BoardValueUpdate()                                      // Calls Functions 1, 2, 3 --------------
+    public void UpdateBoardNodeValues()  //? Called GameManager                      // Calls Functions 1, 2, 3 --------------
     {
-        List<int> NDValueMap = CreateNodeValueMap();
-        List<int> NDValueMapUpdated = MapNewNodeValues(NDValueMap);                     // Update NDValueMap based on position and board state
-        UpdateBoardNodeValues(NDValueMapUpdated);
-
+        List<int> NDValueMap = Create_NDValueMap_Step1();
+        List<int> NDValueMapUpdated = Set_NDValueMap_Step2(NDValueMap);                 // Update NDValueMap based on position and board state
+        Update_NDValues_Step3(NDValueMapUpdated);
     }
-
-    // --------------------------------------------- // BoardUpdater Part 1 ---------------------------------------------
-    public List<int> CreateNodeValueMap()                                               // Displays Array based on nodeValues
+    // *---------------------------------------- NODE VALUE DISPLAY AND UPDATE METHODS ----------------------------------------
+    public List<int> Create_NDValueMap_Step1()                                      // Displays Array based on nodeValues
     {
+        
         List<int> NDValueMap = new List<int>();                                         // List to hold update values for arrayNodes
         
         foreach(GameObject crntND in gNodeList)                                         // Loops over all nodes in gNodeList    
@@ -207,9 +163,7 @@ public class BoardGenerator : MonoBehaviour
 
         return NDValueMap;
     }
-
-    // ---------------------------------------- -----// BoardUpdater Part 2             //* Called in Step 1 ------------------------
-    public List<int> MapNewNodeValues(List<int> NDValueMap)            // Maps nodeValues for updating in Step 3
+    public List<int> Set_NDValueMap_Step2(List<int> NDValueMap)                     // Maps nodeValues for updating in Step 3
     {
         List<int> newValueMap = NDValueMap;
 
@@ -264,9 +218,7 @@ public class BoardGenerator : MonoBehaviour
 
         return newValueMap;
     }
-
-    // --------------------------------------------- // BoardUpdater Part 3 ---------------------------------------------
-    public void UpdateBoardNodeValues(List<int> NDValueMap)                    // Sets Node Display values to Map Values
+    public void Update_NDValues_Step3(List<int> NDValueMap)                         // Sets Node Display values to Map Values
     {
         int arrayIndex = 0;
 
@@ -289,18 +241,14 @@ public class BoardGenerator : MonoBehaviour
                     crntNDScript.NDValue = NDValueMap[arrayIndex];
                 }
 
-                Debug.Log(crntND.name + " NDValue is " + crntNDScript.NDValue);
+                // Debug.Log(crntND.name + " NDValue is " + crntNDScript.NDValue);
                 arrayIndex += 1;
             }
         }
     }
 
-
-
-
-                                                 //~ Called in Start Method
     // *---------------------------------------- UPDATE BOARD DISPLAY METHOD ----------------------------------------
-    public void UpdateBoardDisplay()
+    public void UpdateBoardDisplay()  //? Called in GameManager
     {
         foreach(GameObject crntNode in gNodeList)
         {
@@ -310,6 +258,8 @@ public class BoardGenerator : MonoBehaviour
     }
 
 
+
+    /* Depreciated Methods - Commented out for reference
     // GNODE LIST MAPPER
     // public List<int> AdjacentNodeMapIndexer(List<int> NDValueMap)
     // {
@@ -369,6 +319,7 @@ public class BoardGenerator : MonoBehaviour
     //     // Debug.Log("gNodeArray Update Complete");
     // }
 
+    */
 
 }
     

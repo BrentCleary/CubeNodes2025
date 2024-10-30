@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEditor.SceneManagement;
@@ -21,7 +22,7 @@ public class TargetNode : MonoBehaviour
     private NodeScript parentNodeScript;
     private BoardGenerator brd_Gntr_Script;
     private NodeGroupManager ND_Grp_Mngr_Scrp;
-    private GameManagerScript GameManager;
+    private GameManagerScript GameManagerScript;
 
     public bool nodeSelected = false;
 
@@ -47,7 +48,7 @@ public class TargetNode : MonoBehaviour
         ND_Grp_Mngr_Scrp = nodeArray.GetComponent<NodeGroupManager>();
 
         // get GameManager
-        GameManager = GameObject.Find("GameManager").GetComponent<GameManagerScript>();
+        GameManagerScript = GameObject.Find("GameManagerObj").GetComponent<GameManagerScript>();
 
 
         // //* Color Settings (Moved into NodeScript 10/07/24)
@@ -62,7 +63,7 @@ public class TargetNode : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        PlaceBlackSheep_OnClick();
+        PlaceBlackSheep_OnClick_GM();
         PlaceWhiteSheep_OnClick();
     }
 
@@ -84,6 +85,8 @@ public class TargetNode : MonoBehaviour
         parentNodeScript.SetNodeColor_Not_Selected();
     }
     
+
+
     //* Color Settings (Moved into NodeScript 10/07/24)
     // private void SetNodeColor_Selected()
     // {
@@ -107,7 +110,18 @@ public class TargetNode : MonoBehaviour
     //* ---------------------------------------- PLACE SHEEP METHODS ----------------------------------------
                     //* Sets Sheep on selected Node and calls BoardGeneratorScript to reset display
                                 //* Calls BoardGeneratorScript and NodeScript 
-    
+    public void PlaceBlackSheep_OnClick_GM()
+    {
+        // Check if the left mouse button was clicked
+        if (nodeSelected && parentNodeScript.placeAble == true && Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            int nodeID = parentNodeScript.nodeID;
+            GameManagerScript.PlaceBlackSheepMethod_GM(nodeID);
+            nodeSelected = false;
+            Debug.Log("PlaceBlackSheep_OnClick");
+            Debug.Log("BlackSheep GM Response");
+        }
+    }
     
     public void PlaceBlackSheep_OnClick()
     {
