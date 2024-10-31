@@ -18,7 +18,7 @@ public class GameManagerScript : MonoBehaviour
     {
         NDArray = GameObject.Find("gNodeArray");
         Brd_Gntr_Script = NDArray.GetComponent<BoardGenerator>();
-
+        ND_Grp_Mngr_Scrp = NDArray.GetComponent<NodeGroupManager>();
 
     }
 
@@ -44,14 +44,20 @@ public class GameManagerScript : MonoBehaviour
     public void PlaceBlackSheepMethod_GM(int nodeID)
     {
         Debug.Log("BlackSheep GM Response");
+        
         GameObject node = FindNodeWithID(gNodeList, nodeID);
         NodeScript crntNDScript = node.GetComponent<NodeScript>();
 
+        // Update Played Node and Board Value State
         crntNDScript.BlackSheepSetter();                                                                  // Set Node to BlacksheepVal
         Brd_Gntr_Script.UpdateBoardNodeValues();
-        Brd_Gntr_Script.UpdateBoardDisplay();
 
-        // ND_Grp_Mngr_Scrp.UpdateGroupsMethod(gameObject);
+        // Update Node Groups and NodeStates
+        ND_Grp_Mngr_Scrp.UpdateGroups(node);
+
+        // Update Node Values and Board Display
+        Brd_Gntr_Script.UpdateBoardNodeValues();
+        Brd_Gntr_Script.UpdateBoardDisplay();
 
     }
 

@@ -11,13 +11,11 @@ using UnityEngine.UIElements;
 
 public class BoardGenerator : MonoBehaviour
 {
-
     //* ---------------------------------------- PROPERTIES ----------------------------------------
-    // MasterNode for default Value for Reference
-    private GameObject masterNode;
 
-    [SerializeField] public GameObject[,] gNodeArray;
     [SerializeField] public List<GameObject> gNodeList;
+    [SerializeField] public GameObject[,] gNodeArray;
+    public Transform gNodeArrayTransform;
     
     // ! Array Size Controls
     private int arrayColumnLength = 3;                                              // Array Dimensions - Column
@@ -30,11 +28,10 @@ public class BoardGenerator : MonoBehaviour
     public List<int> startNodeValueMap;
     public List<int> currentNDValueMap;
 
-    public Transform gNodeArrayTransform;
     public List<Node> sheepGroupList;
 
 
-    public void CreateBoard()  //? Called in GameManager                            // Instantiates Variables, Calls Methods Below
+    public void CreateBoard()  //? Called in GameManagerScript                      // Instantiates Variables, Calls Methods Below
     {
         gNodeArray = new GameObject[arrayColumnLength, arrayRowLength];
         gNodeArrayTransform = gameObject.transform;
@@ -133,13 +130,13 @@ public class BoardGenerator : MonoBehaviour
     }
 
 
-    public void UpdateBoardNodeValues()  //? Called GameManager                      // Calls Functions 1, 2, 3 --------------
+    public void UpdateBoardNodeValues()  //? Called GameManagerScript               // Calls Functions Step1, Step2, Step3 
     {
         List<int> NDValueMap = Create_NDValueMap_Step1();
         List<int> NDValueMapUpdated = Set_NDValueMap_Step2(NDValueMap);                 // Update NDValueMap based on position and board state
         Update_NDValues_Step3(NDValueMapUpdated);
     }
-    // *---------------------------------------- NODE VALUE DISPLAY AND UPDATE METHODS ----------------------------------------
+    // *---------------------------------------- Node Value Update Methods ----------------------------------
     public List<int> Create_NDValueMap_Step1()                                      // Displays Array based on nodeValues
     {
         
@@ -247,8 +244,9 @@ public class BoardGenerator : MonoBehaviour
         }
     }
 
-    // *---------------------------------------- UPDATE BOARD DISPLAY METHOD ----------------------------------------
-    public void UpdateBoardDisplay()  //? Called in GameManager
+
+    // *---------------------------------------- Node Display Update Method ---------------------------------
+    public void UpdateBoardDisplay()  //? Called in GameManagerScript               // Updated Display of Nodes
     {
         foreach(GameObject crntNode in gNodeList)
         {
