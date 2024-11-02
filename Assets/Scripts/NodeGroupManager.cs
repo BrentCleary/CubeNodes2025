@@ -123,7 +123,7 @@ public class NodeGroupManager : MonoBehaviour
                 GameObject node = GetNodeWithID(All_ND_List, ID);
                 node.GetComponent<NodeScript>().NDgrpID = newGrp.GrpID;
             }
-
+ 
             DeleteGroup(prevGrpID);
         }
 
