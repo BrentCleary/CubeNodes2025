@@ -45,6 +45,7 @@
      <Compile Include="Assets\Scripts\NodeScript.cs" />
      <Compile Include="Assets\Scripts\MouseRayCast.cs" />
      <Compile Include="Assets\Scripts\NodeGroupManager.cs" />
+     <Compile Include="Assets\Scripts\DebugMethods.cs" />
      <Compile Include="Assets\Scripts\BoardGenerator.cs" />
     <Reference Include="UnityEngine">
         <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.6f1-x86_64\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>

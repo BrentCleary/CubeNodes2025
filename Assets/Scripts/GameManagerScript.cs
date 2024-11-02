@@ -45,15 +45,16 @@ public class GameManagerScript : MonoBehaviour
     {
         Debug.Log("BlackSheep GM Response");
         
-        GameObject node = FindNodeWithID(gNodeList, nodeID);
+        GameObject node = ND_Grp_Mngr_Scrp.GetNodeWithID(gNodeList, nodeID);
         NodeScript crntNDScript = node.GetComponent<NodeScript>();
+        int ND_ID = crntNDScript.nodeID;
 
         // Update Played Node and Board Value State
         crntNDScript.BlackSheepSetter();                                                                  // Set Node to BlacksheepVal
         Brd_Gntr_Script.UpdateBoardNodeValues();
 
         // Update Node Groups and NodeStates
-        ND_Grp_Mngr_Scrp.UpdateGroups(node);
+        ND_Grp_Mngr_Scrp.UpdateGroups(ND_ID);
 
         // Update Node Values and Board Display
         Brd_Gntr_Script.UpdateBoardNodeValues();
@@ -62,22 +63,26 @@ public class GameManagerScript : MonoBehaviour
     }
 
 
-
-
-    // ------ Get NODE from nodeID in gNodeArray -------
-    public GameObject FindNodeWithID(List<GameObject> gameObjectList, int targetID)
+    public void PlaceWhiteSheepMethod_GM(int nodeID)
     {
-        foreach (GameObject obj in gameObjectList)
-        {
-            NodeScript nodeScript = obj.GetComponent<NodeScript>();
-            if (nodeScript != null && nodeScript.nodeID == targetID)
-            {
-                return obj; // Found the GameObject with the target ID
-            }
-        }
-        return null; // Return null if no GameObject with the target ID is found
-    }   
+        Debug.Log("WhiteSheep GM Response");
+        
+        GameObject node = ND_Grp_Mngr_Scrp.GetNodeWithID(gNodeList, nodeID);
+        NodeScript crntNDScript = node.GetComponent<NodeScript>();
+        int ND_ID = crntNDScript.nodeID;
 
+        // Update Played Node and Board Value State
+        crntNDScript.WhiteSheepSetter();                                                                  // Set Node to BlacksheepVal
+        Brd_Gntr_Script.UpdateBoardNodeValues();
+
+        // Update Node Groups and NodeStates
+        ND_Grp_Mngr_Scrp.UpdateGroups(ND_ID);
+
+        // Update Node Values and Board Display
+        Brd_Gntr_Script.UpdateBoardNodeValues();
+        Brd_Gntr_Script.UpdateBoardDisplay();
+
+    }
 
 
 }

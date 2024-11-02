@@ -64,7 +64,7 @@ public class TargetNode : MonoBehaviour
     void Update()
     {
         PlaceBlackSheep_OnClick_GM();
-        PlaceWhiteSheep_OnClick();
+        PlaceWhiteSheep_OnClick_GM();
     }
 
 
@@ -118,11 +118,23 @@ public class TargetNode : MonoBehaviour
             int nodeID = parentNodeScript.nodeID;
             GameManagerScript.PlaceBlackSheepMethod_GM(nodeID);
             nodeSelected = false;
-            Debug.Log("PlaceBlackSheep_OnClick");
-            Debug.Log("BlackSheep GM Response");
+            // Debug.Log("PlaceBlackSheep_OnClick");
         }
     }
     
+    // 09/05/2024 - Method Commented out to user Mouse1 for testing
+    public void PlaceWhiteSheep_OnClick_GM()
+    {
+        // Check if the left mouse button was clicked
+        if (nodeSelected && parentNodeScript.placeAble == true && Input.GetKeyDown(KeyCode.Mouse1))
+        {
+            int nodeID = parentNodeScript.nodeID;
+            GameManagerScript.PlaceWhiteSheepMethod_GM(nodeID);
+            nodeSelected = false;
+            // Debug.Log("PlaceBlackSheep_OnClick");
+        }
+    }
+
     public void PlaceBlackSheep_OnClick()
     {
         // Check if the left mouse button was clicked
@@ -130,11 +142,12 @@ public class TargetNode : MonoBehaviour
         {
             parentNodeScript.PlaceBlackSheepMethod();
             nodeSelected = false;
-            Debug.Log("PlaceBlackSheep_OnClick");
+            // Debug.Log("PlaceBlackSheep_OnClick");
 
         }
     }
     
+
     // 09/05/2024 - Method Commented out to user Mouse1 for testing
     public void PlaceWhiteSheep_OnClick()
     {

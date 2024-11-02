@@ -168,7 +168,7 @@ public class NodeScript : MonoBehaviour
         
         foreach(Renderer renderer in tileRendererList) {
             tileMaterialList.Add(renderer.material);
-            Debug.Log("TileRenderList Added: " + renderer.material);
+            // Debug.Log("TileRenderList Added: " + renderer.material);
         }
     }
 

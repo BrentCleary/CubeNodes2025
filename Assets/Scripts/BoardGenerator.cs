@@ -227,7 +227,7 @@ public class BoardGenerator : MonoBehaviour
                 GameObject crntND = gNodeArray[i,j];
                 NodeScript crntNDScript = crntND.GetComponent<NodeScript>();
                 
-                Debug.Log("NDmapValue" + arrayIndex + " is " + NDValueMap[arrayIndex]);
+                // Debug.Log("NDmapValue" + arrayIndex + " is " + NDValueMap[arrayIndex]);
 
                 if(NDValueMap[arrayIndex] < 0) 
                 {
