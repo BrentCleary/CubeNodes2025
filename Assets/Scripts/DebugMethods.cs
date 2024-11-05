@@ -1,24 +1,57 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using Diag = System.Diagnostics;
 using UnityEngine;
 
-public class Example : MonoBehaviour
+public class DebugMethods : MonoBehaviour
 {
     void Start()
     {
         // LogCurrentLine();
     }
 
-    void LogCurrentLine()
+    public void LogCurrentLine()
     {
         Diag.StackTrace stackTrace = new Diag.StackTrace(true);
-        Diag.StackFrame frame = stackTrace.GetFrame(1); // Current method frame - Display name and line number of method containing LogCurrentLine()
+        Diag.StackFrame frame = stackTrace.GetFrame(1); // Current method frame - reference for access to method info()
 
         string fileName = frame.GetFileName(); // Gets file name
         int lineNumber = frame.GetFileLineNumber(); // Gets line number
+        MethodBase method = frame.GetMethod();
 
-        UnityEngine.Debug.Log($"Current line: {lineNumber} in file: {fileName}");
+        UnityEngine.Debug.Log($"Current line: {lineNumber}, {method.Name}, {fileName}");
+    }
+
+
+    public void LogCurrentMethod()
+    {
+        Diag.StackTrace stackTrace = new Diag.StackTrace(true);
+        Diag.StackFrame frame = stackTrace.GetFrame(1); // Current method frame - reference for access to method info()
+
+        string fileName = frame.GetFileName(); // Gets file name
+        int lineNumber = frame.GetFileLineNumber(); // Gets line number
+        MethodBase method = frame.GetMethod();
+
+        UnityEngine.Debug.Log($"Current line: {lineNumber}, {method.Name}, {fileName}");
+    }
+
+        public void LogCallerMethod()
+    {
+        Diag.StackTrace stackTrace = new Diag.StackTrace(true);
+        Diag.StackFrame frame = stackTrace.GetFrame(2); // Current method frame - reference for access to method info()
+
+        string fileName = frame.GetFileName(); // Gets file name
+        int lineNumber = frame.GetFileLineNumber(); // Gets line number
+        MethodBase method = frame.GetMethod();
+
+        UnityEngine.Debug.Log($"Current line: {lineNumber}, {method.Name}, {fileName}");
+    }
+    
+    
+    public void GetMethodName()
+    {
+        Debug.Log($"Method called: {MethodBase.GetCurrentMethod().Name}");
     }
 
     /* ChatGPT Conversation for reference: 11/01/24 - https://chatgpt.com/c/672592ee-f754-8008-839c-90212ae0b9f3

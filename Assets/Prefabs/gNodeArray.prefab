@@ -46,10 +46,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gNodeList: []
+  gNodeArrayTransform: {fileID: 0}
   nodePrefab: {fileID: 2404018319395889093, guid: 2171c39f9063e3e488721af2d1f06815, type: 3}
   startNodeValueMap: 
-  currentNodeValueMap: 
-  gNodeArrayTransform: {fileID: 0}
+  currentNDValueMap: 
 --- !u!114 &5532917717452102617
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62,4 +62,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 490b9e9e254dbdb41acceeccce39a717, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nodeGroupList: []
+  All_Grp_List: []
+  lastND_ID: 0
+  lastND_ShpVal: 0
+  brd_Gntr_Script: {fileID: 0}
+  lastND_Script: {fileID: 0}
+  targetNDScript: {fileID: 0}
+  All_ND_List: []
+  debugScript: {fileID: 0}

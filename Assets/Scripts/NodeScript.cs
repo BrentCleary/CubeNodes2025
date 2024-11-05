@@ -54,7 +54,8 @@ public class NodeScript : MonoBehaviour
     public int rightNDLibertyVal;
     public int bottomNDLibertyVal;
     public int topNDLibertyVal;
-    public int? NDgrpID = null;
+    public int NDgrpID = -1;
+    public bool isInGrp;
 
 
     //* ---------------------------------------- SCRIPT REFERENCES ----------------------------------------
@@ -184,6 +185,7 @@ public class NodeScript : MonoBehaviour
         NDValue = NDValueList[0];                                           // NDValue is 0
         placeAble = false;
         lastPlaced = true;
+        isInGrp = true;
 
     }
 
@@ -195,6 +197,7 @@ public class NodeScript : MonoBehaviour
         NDValue = NDValueList[0];                                           // NDValue is 0
         placeAble = false;
         lastPlaced = true;
+        isInGrp = true;
 
     }
 
@@ -205,8 +208,9 @@ public class NodeScript : MonoBehaviour
         libertyVal = libertyValList[1];                                     // Set libertyVal to 1
         NDValue = NDValueList[4];                                           // NDValue is reset to 4
         placeAble = true;
-        NDgrpID = null;
+        NDgrpID = -1;
         lastPlaced = false;
+        isInGrp = false;
 
     }
 
