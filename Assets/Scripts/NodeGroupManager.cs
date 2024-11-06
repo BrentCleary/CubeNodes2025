@@ -33,23 +33,39 @@ public class NodeGroupManager : MonoBehaviour
     public int lastND_ShpVal;
     public int lastGrpID;
 
+    public int testVariable;
+
 
     public BoardGenerator brd_Gntr_Script;
     public NodeScript lastND_Script;
-    public TargetNode targetNDScript;
-    private List<GameObject> All_ND_List;
 
-    public DebugMethods debugScript;
+    public TargetNode targetNDScript;
+    public int brdScrptDebugTestVar;
+
+    public GameObject debugNodeCheck;
+    public List<GameObject> All_ND_List;
+    
+
+    // public DebugMethods debugScript;
 
     public void Start()
     {
         brd_Gntr_Script = GetComponent<BoardGenerator>();
-        All_ND_List = brd_Gntr_Script.gNodeList;
+        brdScrptDebugTestVar = brd_Gntr_Script.debugTestVar;
         All_Grp_List = new List<Group>();
 
-        debugScript = GetDebugMethods();
+        testVariable = 123;
+
+        // debugScript = GetDebugMethods();
     }
 
+    private void Update()
+    {
+        if (All_ND_List.Count < 1 && brd_Gntr_Script.gNodeList != null)
+        {
+            All_ND_List = brd_Gntr_Script.gNodeList;
+        }
+    }
 
 
     public void UpdateGroups(int crntND_ID) //? Called in GameManagerScript //  
@@ -81,6 +97,9 @@ public class NodeGroupManager : MonoBehaviour
         All_Grp_List.Add(newGrp);        
         lastND_ID = crntND_ID;                                              // ! Sets last placed ND_ID for Script Reference
         lastND_ShpVal = NDScript.sheepVal;
+        
+        debugNodeCheck = crntND;
+        lastGrpID = newGrpID;           // TODO Check on change 
 
         // debugScript.LogCurrentLine();
 
@@ -145,7 +164,7 @@ public class NodeGroupManager : MonoBehaviour
             All_Grp_List.Remove(grpToDelete);
             
             Debug.Log("Group #" + grpToDelete.GrpID + " cleared and deleted.");
-            debugScript.LogCallerMethod();
+            // debugScript.LogCallerMethod();
         }
         else {
             Debug.Log("GrpID was -1");
@@ -373,13 +392,17 @@ public class NodeGroupManager : MonoBehaviour
         lastND_ID = NDScript.nodeID;
     }
 
-    public DebugMethods GetDebugMethods()
-    {
-        GameObject gameManagerObj = GameObject.Find("GameManagerObj");
-        debugScript = gameManagerObj.GetComponent<DebugMethods>();
 
-        return debugScript;
-    }
+
+
+
+    // public DebugMethods GetDebugMethods()
+    // {
+    //     GameObject gameManagerObj = GameObject.Find("GameManagerObj");
+    //     debugScript = gameManagerObj.GetComponent<DebugMethods>();
+
+    //     return debugScript;
+    // }
 
 
 

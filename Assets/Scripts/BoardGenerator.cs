@@ -30,6 +30,7 @@ public class BoardGenerator : MonoBehaviour
 
     public List<Node> sheepGroupList;
 
+    public int debugTestVar = 123;
 
     public void CreateBoard()  //? Called in GameManagerScript                      // Instantiates Variables, Calls Methods Below
     {
