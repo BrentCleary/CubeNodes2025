@@ -60,7 +60,7 @@ public class NodeScript : MonoBehaviour
 
     //* ---------------------------------------- SCRIPT REFERENCES ----------------------------------------
     public BoardGenerator Brd_Gntr_Script;
-    public NodeGroupManager ND_Grp_Mngr_Scrp;
+    public GroupManagerScript ND_Grp_Mngr_Scrp;
     public TargetNode Trgt_ND_Script;
 
 
@@ -88,7 +88,7 @@ public class NodeScript : MonoBehaviour
         // Get reference to Node Array and scripts
         NDArray = transform.parent.gameObject;
         Brd_Gntr_Script = NDArray.GetComponent<BoardGenerator>();
-        ND_Grp_Mngr_Scrp = NDArray.GetComponent<NodeGroupManager>();
+        ND_Grp_Mngr_Scrp = NDArray.GetComponent<GroupManagerScript>();
 
         // NodeColor Variables
         grassContainer = gameObject.transform.Find("GrassContainer").gameObject;

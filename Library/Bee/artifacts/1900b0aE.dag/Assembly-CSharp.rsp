@@ -355,8 +355,8 @@
 "Assets/Scripts/BoardGenerator.cs"
 "Assets/Scripts/DebugMethods.cs"
 "Assets/Scripts/GameManagerScript.cs"
+"Assets/Scripts/GroupManagerScript.cs"
 "Assets/Scripts/MouseRayCast.cs"
-"Assets/Scripts/NodeGroupManager.cs"
 "Assets/Scripts/NodeScript.cs"
 "Assets/Scripts/TargetNode.cs"
 -langversion:9.0

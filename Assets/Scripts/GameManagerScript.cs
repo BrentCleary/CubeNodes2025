@@ -6,8 +6,8 @@ using System.Linq;
 public class GameManagerScript : MonoBehaviour
 {
     //* ---------------------------------------- SCRIPT REFERENCES ----------------------------------------
-    public BoardGenerator Brd_Gntr_Script;
-    public NodeGroupManager ND_Grp_Mngr_Scrp;
+    public BoardGenerator brd_Gntr_Script;
+    public GroupManagerScript ND_Grp_Mngr_Scrp;
     public TargetNode Trgt_ND_Script;
 
     //* ---------------------------------------- OBJECT REFERENCES ----------------------------------------
@@ -17,8 +17,8 @@ public class GameManagerScript : MonoBehaviour
     void Awake()
     {
         NDArray = GameObject.Find("gNodeArray");
-        Brd_Gntr_Script = NDArray.GetComponent<BoardGenerator>();
-        ND_Grp_Mngr_Scrp = NDArray.GetComponent<NodeGroupManager>();
+        brd_Gntr_Script = NDArray.GetComponent<BoardGenerator>();
+        ND_Grp_Mngr_Scrp = NDArray.GetComponent<GroupManagerScript>();
 
     }
 
@@ -26,18 +26,21 @@ public class GameManagerScript : MonoBehaviour
     void Start()
     {
         // Board Generation on Start
-        Brd_Gntr_Script.CreateBoard();
-        Brd_Gntr_Script.UpdateBoardNodeValues();
-        Brd_Gntr_Script.UpdateBoardDisplay();
+        brd_Gntr_Script.CreateBoard();
+        brd_Gntr_Script.UpdateBoardNodeValues();
+        brd_Gntr_Script.UpdateBoardDisplay();
 
-        gNodeList = Brd_Gntr_Script.gNodeList;
+        gNodeList = brd_Gntr_Script.gNodeList;
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (gNodeList.Count < 1 && brd_Gntr_Script.gNodeList != null)
+        {
+            gNodeList = brd_Gntr_Script.gNodeList;
+        }
     }
 
 
@@ -51,15 +54,18 @@ public class GameManagerScript : MonoBehaviour
 
         // Update Played Node and Board Value State
         crntNDScript.BlackSheepSetter();                                                                  // Set Node to BlacksheepVal
-        Brd_Gntr_Script.UpdateBoardNodeValues();
+        brd_Gntr_Script.UpdateBoardNodeValues();
 
         // Update Node Groups and NodeStates
-        ND_Grp_Mngr_Scrp.UpdateGroups(ND_ID);
+        ND_Grp_Mngr_Scrp.CreateGroup_Methods(ND_ID);
+        ND_Grp_Mngr_Scrp.UpdateGroups_Methods();
 
-        // Update Node Values and Board Display
-        Brd_Gntr_Script.UpdateBoardNodeValues();
-        Brd_Gntr_Script.UpdateBoardDisplay();
+        // Update Node Values, Board Display, and GrpLiberties
+        brd_Gntr_Script.UpdateBoardNodeValues();
+        brd_Gntr_Script.UpdateBoardDisplay();
+        ND_Grp_Mngr_Scrp.UpdateGroups_Methods();
 
+        // ND_Grp_Mngr_Scrp.CalculateGrpLiberties();
     }
 
 
@@ -73,14 +79,16 @@ public class GameManagerScript : MonoBehaviour
 
         // Update Played Node and Board Value State
         crntNDScript.WhiteSheepSetter();                                                                  // Set Node to BlacksheepVal
-        Brd_Gntr_Script.UpdateBoardNodeValues();
+        brd_Gntr_Script.UpdateBoardNodeValues();
 
         // Update Node Groups and NodeStates
-        ND_Grp_Mngr_Scrp.UpdateGroups(ND_ID);
+        ND_Grp_Mngr_Scrp.CreateGroup_Methods(ND_ID);
+        ND_Grp_Mngr_Scrp.UpdateGroups_Methods();
 
-        // Update Node Values and Board Display
-        Brd_Gntr_Script.UpdateBoardNodeValues();
-        Brd_Gntr_Script.UpdateBoardDisplay();
+        // Update Node Values, Board Display, and GrpLiberties
+        brd_Gntr_Script.UpdateBoardNodeValues();
+        brd_Gntr_Script.UpdateBoardDisplay();
+        ND_Grp_Mngr_Scrp.UpdateGroups_Methods();
 
     }
 

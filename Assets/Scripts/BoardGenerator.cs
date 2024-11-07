@@ -21,7 +21,6 @@ public class BoardGenerator : MonoBehaviour
     private int arrayColumnLength = 3;                                              // Array Dimensions - Column
     private int arrayRowLength = 3;                                                 // Array Dimensions - Row
     private int arrayTotalNodes => arrayColumnLength * arrayRowLength;              // arrayColumnLength * arrayRowLength
-    
     private float nodeSpacingValue = 2;                                             // Space Between Nodes
 
     public GameObject nodePrefab;
@@ -29,8 +28,6 @@ public class BoardGenerator : MonoBehaviour
     public List<int> currentNDValueMap;
 
     public List<Node> sheepGroupList;
-
-    public int debugTestVar = 123;
 
     public void CreateBoard()  //? Called in GameManagerScript                      // Instantiates Variables, Calls Methods Below
     {

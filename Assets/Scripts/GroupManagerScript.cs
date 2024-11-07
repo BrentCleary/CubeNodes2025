@@ -7,7 +7,7 @@ using System.Linq;
 using System.Globalization;
 using System;
 
-public class NodeGroupManager : MonoBehaviour
+public class GroupManagerScript : MonoBehaviour
 {
     [System.Serializable]
     public class Group
@@ -51,7 +51,6 @@ public class NodeGroupManager : MonoBehaviour
     public void Start()
     {
         brd_Gntr_Script = GetComponent<BoardGenerator>();
-        brdScrptDebugTestVar = brd_Gntr_Script.debugTestVar;
         All_Grp_List = new List<Group>();
 
         testVariable = 123;
@@ -68,12 +67,17 @@ public class NodeGroupManager : MonoBehaviour
     }
 
 
-    public void UpdateGroups(int crntND_ID) //? Called in GameManagerScript //  
+    public void CreateGroup_Methods(int crntND_ID)          //? Called in GameManagerScript //
     {
-        CreateNewGroup(crntND_ID);
-        AssignSheepToGroups(crntND_ID);                                            // Assign All Groups
-        CalculateGrpLiberties();                                                    // Update All Group Liberties
-        DeleteZeroLibertyGroupMethods();
+        CreateNewGroup(crntND_ID);                                                 // Creates newGrp, Associate Properties
+        AssignSheepToGroups(crntND_ID);                                            // Assign Adj Grps to newGrpID
+    }
+
+    public void UpdateGroups_Methods()                      //? Called in GameManagerScript //  
+    {
+        CalculateGrpLiberties();                                                   // Update All Group Liberties
+        DeleteZeroLibertyGroup_Methods();                                          // MethodGroup to Delete Grps with 0 Liberties, Set Empty ND
+        CalculateGrpLiberties();                                                   // Update All Group Liberties (Post ZeroLibGrp Deletion)
     }
 
 
@@ -105,199 +109,6 @@ public class NodeGroupManager : MonoBehaviour
 
         return newGrpID;        
     }
-    
-
-
-    //? ---------------------------------------- STATIC METHODS  ----------------------------------------
-    //* ---------------------------------------- GetNodeWithID ----------------------------------------
-    // ------ Get NODE from nodeID in gNodeArray -------
-    public GameObject GetNodeWithID(List<GameObject> gameObjectList, int targetID)
-    {
-        foreach (GameObject obj in gameObjectList)
-        {
-            NodeScript nodeScript = obj.GetComponent<NodeScript>();
-            if (nodeScript != null && nodeScript.nodeID == targetID)
-            {
-                return obj; // Found the GameObject with the target ID
-            }
-        }
-        return null; // Return null if no GameObject with the target ID is found
-    }
-    
-    //* ---------------------------------------- GetGroup ----------------------------------------
-    public Group GetGroup(int grpID)                                               // Returns Group from AllGrpList by grpID
-    {
-        Group group = All_Grp_List.FirstOrDefault(g => g.GrpID == grpID);
-        
-        return group;
-    }
-
-    //* ---------------------------------------- JoinGroups ----------------------------------------
-    public void JoinGroups(int newGrpID, int prevGrpID)                           // Adds prevGrpIDs to newGrp.ND_ID_List - return newGrp.ND_ID_List 
-    {
-        if(prevGrpID != -1 && prevGrpID != newGrpID)                              // if prevGrpID is not null and doesn't match the newGrp 
-        {
-            Group newGrp = GetGroup(newGrpID);                                      // Get NewGroup 
-            Group prevGrp = GetGroup(prevGrpID);                                    // Get PrevGroup
-
-            foreach(int ID in prevGrp.ND_ID_List)                                   // For each ID in prevGrp 
-            {
-                newGrp.ND_ID_List.Add(ID);                                          // Add ID to newGrp 
-                GameObject node = GetNodeWithID(All_ND_List, ID);                   // Get Node with ID 
-                node.GetComponent<NodeScript>().NDgrpID = newGrp.GrpID;             // Update GrpID on NodeScript 
-            }
-
-            DeleteGroup(prevGrpID);                                                 // Delete prevGrp from All_Grp_List 
-        }
-
-        // DeleteGroup(prevGrpID);
-        // Debug.Log("GroupManager: JoinGroups [ " + prevGrpID + " Nodes added to newGrpID " + newGrpID + " ]");
-        
-    }
-    //* ---------------------------------------- DeleteGroup -----------------------------------------
-    public void DeleteGroup(int delGrpID)                                         // Clears prevGrp Nodelist - Removes prevGrp from AllGrpList 
-    {
-        if(delGrpID != -1 && delGrpID != lastGrpID) 
-        {
-            Group grpToDelete = All_Grp_List.FirstOrDefault(g => g.GrpID == delGrpID);
-            
-            All_Grp_List.Remove(grpToDelete);
-            
-            Debug.Log("Group #" + grpToDelete.GrpID + " cleared and deleted.");
-            // debugScript.LogCallerMethod();
-        }
-        else {
-            Debug.Log("GrpID was -1");
-        }
-    }
-
-    //* ---------------------------------------- CalculateGrpLiberties ----------------------------------------
-    public void CalculateGrpLiberties()                                             // Updates Liberties of all Groups in AllGrpList
-    {
-        int totalGrpLibs = 0;
-        
-        foreach(Group Grp in All_Grp_List)    // Loops over List of All Groups, Looks at adjacent nodes for each node in group
-        {
-            List<GameObject> GrpNDList = new List<GameObject>();
-            
-            foreach(int ND_ID in Grp.ND_ID_List)
-            {
-                GameObject crntND = GetNodeWithID(All_ND_List, ND_ID);
-                GrpNDList.Add(crntND);
-            }
-
-            List<GameObject> countedNDs = new List<GameObject>();                     //! This holds adjacent nodes to prevent double references for lib values 
-            
-            foreach(GameObject crntND in GrpNDList)                                        // Adds value of node to total liberties
-            {
-                NodeScript NDScript = crntND.GetComponent<NodeScript>();                  // Node script reference to get all information
-
-                if(NDScript.leftND != null){                                            // If the adj node is not empty
-                    if(countedNDs.Contains(NDScript.leftND) == false)                 // If the node is not already in the script (has been counted)
-                    {
-                        countedNDs.Add(NDScript.leftND);                              // Add it to the liberty node list
-                        totalGrpLibs += NDScript.leftNDScript.libertyVal;          // Add it's liberty value to the group ( 1 or 0 )
-                    }
-                }
-                if(NDScript.rightND != null){
-                    if(countedNDs.Contains(NDScript.rightND) == false)
-                    {
-                        countedNDs.Add(NDScript.rightND);
-                        totalGrpLibs += NDScript.rightNDScript.libertyVal;
-                    }
-                }
-                if(NDScript.bottomND != null){
-                    if(countedNDs.Contains(NDScript.bottomND) == false)
-                    {
-                        countedNDs.Add(NDScript.bottomND);
-                        totalGrpLibs += NDScript.bottomNDScript.libertyVal;
-                    }
-                }
-                if(NDScript.topND != null){
-                    if(countedNDs.Contains(NDScript.topND) == false)
-                    {
-                        countedNDs.Add(NDScript.topND);
-                        totalGrpLibs += NDScript.topNDScript.libertyVal;
-                    }
-                }
-            }
-            
-            Grp.GrpLibs = totalGrpLibs;
-
-            totalGrpLibs = 0;
-            countedNDs.Clear();
-        }
-
-    }
-
-
-
-
-    //* ---------------------------------------- ZeroLibertyGroup Methods ----------------------------------------
-    public void DeleteZeroLibertyGroupMethods()   //? Called GameManagerScript      // Sets Nodes in ZeroGrps to Empty, Deletes Group
-    {
-        List<int> zeroGrpIDList = GetZeroLibGrpIDList();                       // Update All Group Liberties
-        List<Group> zeroGrpList = GetZeroLibGrp(zeroGrpIDList);                 // Delete Groups with 0 Liberties
-        DeleteZeroLibGrps(zeroGrpList);
-    }
-
-    public List<int> GetZeroLibGrpIDList()                          // STEP 1  // Returns list from AllGrpList with GrpLiberties = 0
-    {
-        List<int> zero_GrpID_List = new List<int>();
-
-        foreach(Group group in All_Grp_List)
-        {
-            if(group.GrpLibs == 0)           // Returns a list of Groups with Liberties == 0 for deletion in other method
-            {
-                if(group.Grp_ShpVal != lastND_ShpVal)
-                {
-                    zero_GrpID_List.Add(group.GrpID);
-                }
-            }
-        }
-        return zero_GrpID_List;
-    }
-
-    public List<Group> GetZeroLibGrp(List<int> zero_GrpID_List)       // STEP 2  // Receives the zeroLibertyGrpID list from CalculateGrouLiberties()
-    {
-        List<Group> zero_Grp_List = new List<Group>();                                    // Create a new list for sorting
-
-        foreach(Group crntGrp in All_Grp_List)                                            // Look through list of All Groups
-        {    
-            if(zero_GrpID_List.Contains(crntGrp.GrpID))                                  // If the zeroList contains the ID of a Zero'd Node Group
-            {
-                zero_Grp_List.Add(crntGrp);                                               // Add it to the zeroGrpList for updating
-            }
-        }
-        return zero_Grp_List;
-    }
-
-    public void DeleteZeroLibGrps(List<Group> zero_Grp_List)            // STEP 3  // Deletes groups in zeroGrpList
-    {
-        if(zero_Grp_List.Count > 0)
-        {
-            foreach(Group zeroGrp in zero_Grp_List)                                   // Loop of new list of Zero liberty Groups
-            {    
-                if(zeroGrp.Grp_ShpVal != lastND_ShpVal)                            // ! Checks if zeroGroup is the same sheepVal as current player
-                {
-                    foreach(int zeroND_ID in zeroGrp.ND_ID_List)                // Get the script of each Node and Set Node to Empty
-                    {
-                        GameObject zeroND = GetNodeWithID(All_ND_List, zeroND_ID);
-                        NodeScript zeroScript = zeroND.GetComponent<NodeScript>(); 
-                        zeroScript.EmptySheepSetter();
-                    }
-                }
-                DeleteGroup(zeroGrp.GrpID);
-            }
-        }
-        else
-        {
-            Debug.Log("No zeroLiberty Groups");
-        }
-    }
-
-
-
     //* ---------------------------------------- AssignSheepToGroups ----------------------------------------
     public void AssignSheepToGroups(int targetND_ID)
     {
@@ -356,6 +167,199 @@ public class NodeGroupManager : MonoBehaviour
             lastND_ID = NDScript.nodeID;
         }
     }
+
+
+    //? ---------------------------------------- STATIC METHODS  ----------------------------------------
+    //* ---------------------------------------- GetNodeWithID ----------------------------------------
+    // ------ Get NODE from nodeID in gNodeArray -------
+    public GameObject GetNodeWithID(List<GameObject> gameObjectList, int targetID)
+    {
+        foreach (GameObject obj in gameObjectList)
+        {
+            NodeScript nodeScript = obj.GetComponent<NodeScript>();
+            if (nodeScript != null && nodeScript.nodeID == targetID)
+            {
+                return obj; // Found the GameObject with the target ID
+            }
+        }
+        return null; // Return null if no GameObject with the target ID is found
+    }
+    
+    //* ---------------------------------------- GetGroup ----------------------------------------
+    public Group GetGroup(int grpID)                                                // Returns Group from AllGrpList by grpID
+    {
+        Group group = All_Grp_List.FirstOrDefault(g => g.GrpID == grpID);
+        
+        return group;
+    }
+
+    //* ---------------------------------------- JoinGroups ----------------------------------------
+    public void JoinGroups(int newGrpID, int prevGrpID)                             // Adds prevGrpIDs to newGrp.ND_ID_List - return newGrp.ND_ID_List 
+    {
+        if(prevGrpID != -1 && prevGrpID != newGrpID)                                // if prevGrpID is not null and doesn't match the newGrp 
+        {
+            Group newGrp = GetGroup(newGrpID);                                      // Get NewGroup 
+            Group prevGrp = GetGroup(prevGrpID);                                    // Get PrevGroup
+
+            foreach(int ID in prevGrp.ND_ID_List)                                   // For each ID in prevGrp 
+            {
+                newGrp.ND_ID_List.Add(ID);                                          // Add ID to newGrp 
+                GameObject node = GetNodeWithID(All_ND_List, ID);                   // Get Node with ID 
+                node.GetComponent<NodeScript>().NDgrpID = newGrp.GrpID;             // Update GrpID on NodeScript 
+            }
+
+            DeleteGroup(prevGrpID);                                                 // Delete prevGrp from All_Grp_List 
+        }
+
+        // DeleteGroup(prevGrpID);
+        // Debug.Log("GroupManager: JoinGroups [ " + prevGrpID + " Nodes added to newGrpID " + newGrpID + " ]");
+        
+    }
+    //* ---------------------------------------- DeleteGroup -----------------------------------------
+    public void DeleteGroup(int delGrpID)                                           // Clears prevGrp Nodelist - Removes prevGrp from AllGrpList 
+    {
+        if(delGrpID != -1 && delGrpID != lastGrpID) 
+        {
+            Group grpToDelete = All_Grp_List.FirstOrDefault(g => g.GrpID == delGrpID);
+            
+            All_Grp_List.Remove(grpToDelete);
+            
+            Debug.Log("Group #" + grpToDelete.GrpID + " cleared and deleted.");
+            // debugScript.LogCallerMethod();
+        }
+        else {
+            Debug.Log("GrpID was -1");
+        }
+    }
+
+    //* ---------------------------------------- CalculateGrpLiberties ----------------------------------------
+    public void CalculateGrpLiberties()                                               // Updates Liberties of all Groups in AllGrpList
+    {
+        int totalGrpLibs = 0;
+        
+        foreach(Group Grp in All_Grp_List)    // Loops over List of All Groups, Looks at adjacent nodes for each node in group
+        {
+            List<GameObject> GrpNDList = new List<GameObject>();
+            
+            foreach(int ND_ID in Grp.ND_ID_List)
+            {
+                GameObject crntND = GetNodeWithID(All_ND_List, ND_ID);
+                GrpNDList.Add(crntND);
+            }
+
+            List<GameObject> countedNDs = new List<GameObject>();                     //! This holds adjacent nodes to prevent double references for lib values 
+            
+            foreach(GameObject crntND in GrpNDList)                                   // Adds value of node to total liberties
+            {
+                NodeScript NDScript = crntND.GetComponent<NodeScript>();              // Node script reference to get all information
+
+                if(NDScript.leftND != null){                                          // If the adj node is not empty
+                    if(countedNDs.Contains(NDScript.leftND) == false)                 // If the node is not already in the script (has been counted)
+                    {
+                        countedNDs.Add(NDScript.leftND);                              // Add it to the liberty node list
+                        totalGrpLibs += NDScript.leftNDScript.libertyVal;             // Add it's liberty value to the group ( 1 or 0 )
+                    }
+                }
+                if(NDScript.rightND != null){
+                    if(countedNDs.Contains(NDScript.rightND) == false)
+                    {
+                        countedNDs.Add(NDScript.rightND);
+                        totalGrpLibs += NDScript.rightNDScript.libertyVal;
+                    }
+                }
+                if(NDScript.bottomND != null){
+                    if(countedNDs.Contains(NDScript.bottomND) == false)
+                    {
+                        countedNDs.Add(NDScript.bottomND);
+                        totalGrpLibs += NDScript.bottomNDScript.libertyVal;
+                    }
+                }
+                if(NDScript.topND != null){
+                    if(countedNDs.Contains(NDScript.topND) == false)
+                    {
+                        countedNDs.Add(NDScript.topND);
+                        totalGrpLibs += NDScript.topNDScript.libertyVal;
+                    }
+                }
+            }
+            
+            Grp.GrpLibs = totalGrpLibs;
+
+            totalGrpLibs = 0;
+            countedNDs.Clear();
+        }
+
+    }
+
+
+
+
+    //* ---------------------------------------- ZeroLibertyGroup Methods ----------------------------------------
+    public void DeleteZeroLibertyGroup_Methods()   //? Called GameManagerScript         // Sets Nodes in ZeroGrps to Empty, Deletes Group
+    {
+        List<int> zeroGrpIDList = GetZeroLibGrpIDList();                                // Update All Group Liberties
+        List<Group> zeroGrpList = GetZeroLibGrp(zeroGrpIDList);                         // Delete Groups with 0 Liberties
+        DeleteZeroLibGrps(zeroGrpList);
+    }
+
+    public List<int> GetZeroLibGrpIDList()                                   // STEP 1  // Returns list from AllGrpList with GrpLiberties = 0
+    {
+        List<int> zero_GrpID_List = new List<int>();
+
+        foreach(Group group in All_Grp_List)
+        {
+            if(group.GrpLibs == 0)           // Returns a list of Groups with Liberties == 0 for deletion in other method
+            {
+                if(group.Grp_ShpVal != lastND_ShpVal)
+                {
+                    zero_GrpID_List.Add(group.GrpID);
+                }
+            }
+        }
+        return zero_GrpID_List;
+    }
+
+    public List<Group> GetZeroLibGrp(List<int> zero_GrpID_List)              // STEP 2  // Receives the zeroLibertyGrpID list from CalculateGrouLiberties()
+    {        
+        List<Group> zero_Grp_List = new List<Group>();                                  // Create a new list for sorting
+        
+        foreach(Group crntGrp in All_Grp_List)                                          // Look through list of All Groups
+        {            
+            if(zero_GrpID_List.Contains(crntGrp.GrpID))                                 // If the zeroList contains the ID of a Zero'd Node Group
+            {        
+                zero_Grp_List.Add(crntGrp);                                             // Add it to the zeroGrpList for updating
+            }
+        }
+        return zero_Grp_List;
+    }
+
+    public void DeleteZeroLibGrps(List<Group> zero_Grp_List)                 // STEP 3  // Deletes groups in zeroGrpList
+    {
+        if(zero_Grp_List.Count > 0)
+        {
+            foreach(Group zeroGrp in zero_Grp_List)                                     // Loop of new list of Zero liberty Groups
+            {    
+                if(zeroGrp.Grp_ShpVal != lastND_ShpVal)                                 // ! Checks if zeroGroup is the same sheepVal as current player
+                {
+                    foreach(int zeroND_ID in zeroGrp.ND_ID_List)                        // Get the script of each Node and Set Node to Empty
+                    {
+                        GameObject zeroND = GetNodeWithID(All_ND_List, zeroND_ID);
+                        NodeScript zeroScript = zeroND.GetComponent<NodeScript>(); 
+                        zeroScript.EmptySheepSetter();
+                    }
+                }
+                DeleteGroup(zeroGrp.GrpID);
+            }
+        }
+        else
+        {
+            Debug.Log("No zeroLiberty Groups");
+        }
+    }
+
+
+
+
 
 
     //* ---------------------------------------- AssignSheepToGroups ----------------------------------------

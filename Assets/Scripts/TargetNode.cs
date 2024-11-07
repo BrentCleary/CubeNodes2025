@@ -11,17 +11,17 @@ public class TargetNode : MonoBehaviour
 {
     //* ---------------------------------------- PROPERTIES ----------------------------------------
     public GameObject grassContainer;
-    public GameObject parentNode;
-    public GameObject nodeArray;
+    public GameObject parentND;
+    public GameObject ND_Array;
     public Camera mainCamera;
 
     public Material selectionMaterial;
     private List<Renderer> tileRendererList;
     public List<Material> tileMaterialList;
 
-    private NodeScript parentNodeScript;
+    private NodeScript parentNDScript;
     private BoardGenerator brd_Gntr_Script;
-    private NodeGroupManager ND_Grp_Mngr_Scrp;
+    private GroupManagerScript ND_Grp_Mngr_Scrp;
     private GameManagerScript GameManagerScript;
 
     public bool nodeSelected = false;
@@ -37,15 +37,15 @@ public class TargetNode : MonoBehaviour
         grassContainer = gameObject.transform.parent.gameObject;
 
         // node reference - parent reference
-        parentNode = grassContainer.transform.parent.gameObject;
-        parentNodeScript = parentNode.GetComponent<NodeScript>();
+        parentND = grassContainer.transform.parent.gameObject;
+        parentNDScript = parentND.GetComponent<NodeScript>();
         
         // board array reference - highest parent
-        nodeArray = parentNode.transform.parent.gameObject;
-        brd_Gntr_Script = nodeArray.GetComponent<BoardGenerator>();
+        ND_Array = parentND.transform.parent.gameObject;
+        brd_Gntr_Script = ND_Array.GetComponent<BoardGenerator>();
 
-        // get NodeGroupManagerScript
-        ND_Grp_Mngr_Scrp = nodeArray.GetComponent<NodeGroupManager>();
+        // get GroupManagerScriptScript
+        ND_Grp_Mngr_Scrp = ND_Array.GetComponent<GroupManagerScript>();
 
         // get GameManager
         GameManagerScript = GameObject.Find("GameManagerObj").GetComponent<GameManagerScript>();
@@ -76,13 +76,13 @@ public class TargetNode : MonoBehaviour
     private void OnMouseEnter()
     {
         nodeSelected = true;
-        parentNodeScript.SetNodeColor_Selected();
+        parentNDScript.SetNodeColor_Selected();
     }
     
     private void OnMouseExit()
     {
         nodeSelected = false;
-        parentNodeScript.SetNodeColor_Not_Selected();
+        parentNDScript.SetNodeColor_Not_Selected();
     }
     
 
@@ -113,9 +113,9 @@ public class TargetNode : MonoBehaviour
     public void PlaceBlackSheep_OnClick_GM()
     {
         // Check if the left mouse button was clicked
-        if (nodeSelected && parentNodeScript.placeAble == true && Input.GetKeyDown(KeyCode.Mouse0))
+        if (nodeSelected && parentNDScript.placeAble == true && Input.GetKeyDown(KeyCode.Mouse0))
         {
-            int nodeID = parentNodeScript.nodeID;
+            int nodeID = parentNDScript.nodeID;
             GameManagerScript.PlaceBlackSheepMethod_GM(nodeID);
             nodeSelected = false;
             // Debug.Log("PlaceBlackSheep_OnClick");
@@ -126,9 +126,9 @@ public class TargetNode : MonoBehaviour
     public void PlaceWhiteSheep_OnClick_GM()
     {
         // Check if the left mouse button was clicked
-        if (nodeSelected && parentNodeScript.placeAble == true && Input.GetKeyDown(KeyCode.Mouse1))
+        if (nodeSelected && parentNDScript.placeAble == true && Input.GetKeyDown(KeyCode.Mouse1))
         {
-            int nodeID = parentNodeScript.nodeID;
+            int nodeID = parentNDScript.nodeID;
             GameManagerScript.PlaceWhiteSheepMethod_GM(nodeID);
             nodeSelected = false;
             // Debug.Log("PlaceBlackSheep_OnClick");
@@ -138,23 +138,22 @@ public class TargetNode : MonoBehaviour
     public void PlaceBlackSheep_OnClick()
     {
         // Check if the left mouse button was clicked
-        if (nodeSelected && parentNodeScript.placeAble == true && Input.GetKeyDown(KeyCode.Mouse0))
+        if (nodeSelected && parentNDScript.placeAble == true && Input.GetKeyDown(KeyCode.Mouse0))
         {
-            parentNodeScript.PlaceBlackSheepMethod();
+            parentNDScript.PlaceBlackSheepMethod();
             nodeSelected = false;
             // Debug.Log("PlaceBlackSheep_OnClick");
 
         }
     }
-    
 
     // 09/05/2024 - Method Commented out to user Mouse1 for testing
     public void PlaceWhiteSheep_OnClick()
     {
         // Check if the right mouse button was clicked
-        if (nodeSelected && parentNodeScript.placeAble == true && Input.GetKeyDown(KeyCode.Mouse1))
+        if (nodeSelected && parentNDScript.placeAble == true && Input.GetKeyDown(KeyCode.Mouse1))
         {
-            parentNodeScript.PlaceWhiteSheepMethod();
+            parentNDScript.PlaceWhiteSheepMethod();
             nodeSelected = false;
             Debug.Log("PlaceWhiteSheep_OnClick");
 
@@ -166,13 +165,13 @@ public class TargetNode : MonoBehaviour
         // Check if the middle mouse button was clicked
         if (nodeSelected && Input.GetKeyDown(KeyCode.Mouse2))
         {
-            parentNodeScript.PlaceEmptySheepMethod();
+            parentNDScript.PlaceEmptySheepMethod();
         }
     }
 
 
 
-    // Commented out 10/05/24 - Method placed in NodeScript
+    /* Commented out 10/05/24 - Method placed in NodeScript
     // //* ---------------------------------------- ON MOUSE ENTER/EXIT METHODS ----------------------------------------
     //                         //* Highlights/Resets selected Nodes Color by changing GrassTiles materials 
 
@@ -316,6 +315,7 @@ public class TargetNode : MonoBehaviour
     //         }
     //     }
     // }
+    */
 
 
 }
