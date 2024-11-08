@@ -293,6 +293,63 @@ public class GroupManagerScript : MonoBehaviour
 
 
 
+        // Calculate Group Capture
+    public bool Check_IsPlaceAble(int ND_ID, int ShpVal)                              // Calculate Group Capture
+    {
+        
+        bool isPlaceAble = false;                                                     // Set isPlaceAble bool default
+
+        GameObject crntND = GetNodeWithID(All_ND_List, ND_ID);                        // Get TargetNode
+        NodeScript crntNDScript = crntND.GetComponent<NodeScript>();                  // Get TargetNode Script
+        List<NodeScript> adjNDScriptList = crntNDScript.adjNDScriptList;              // Get adjNDScriptList to iterate over Group Capture
+        
+        List<int> adjNDGrpID = new List<int>();
+        foreach(NodeScript ND_SCR in adjNDScriptList)                                 // Get ajdND Group ID and add to list
+        {
+            if(!adjNDGrpID.Contains(ND_SCR.NDgrpID))                                  // Check for already added
+            adjNDGrpID.Add(ND_SCR.NDgrpID);                                           // Add to list
+        }
+        
+        List<Group> adjGrpList = new List<Group>();                                   // Get ajd Group and add to list
+        foreach(int grpID in adjNDGrpID)
+        {
+            adjGrpList.Add(GetGroup(grpID));
+        }
+
+        foreach(Group adjGrp in adjGrpList)
+        {
+            if(adjGrp.Grp_ShpVal != ShpVal && adjGrp.GrpLibs == 1)                    // If GrpLibVal is 1 and not same ShpVal (can be captured)
+            {
+                isPlaceAble = true;                                                   // Node can be placed by ShpVal/Player (black or white)
+                return isPlaceAble;                                                   // Return true for isPlaceable
+            }
+        }
+        return isPlaceAble;                                                           // Return False (can't be placed)
+    }
+
+
+
+
+
+
+    public bool Check_For_Ko()
+    {
+        bool isKo = false;
+
+        // Get copy of Board ShpVal State Before Last Move
+        // Compare to Board ShpVal State if Placed
+        // Return True or false (if Ko, return True (isPlaceAble is false))
+
+        return isKo;
+    } 
+
+
+                
+
+
+
+
+
 
     //* ---------------------------------------- ZeroLibertyGroup Methods ----------------------------------------
     public void DeleteZeroLibertyGroup_Methods()   //? Called GameManagerScript         // Sets Nodes in ZeroGrps to Empty, Deletes Group
