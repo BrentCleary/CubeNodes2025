@@ -6,6 +6,7 @@ using UnityEngine;
 using System.Linq;
 using System.Globalization;
 using System;
+using UnityEditor.Build;
 
 public class GroupManagerScript : MonoBehaviour
 {
@@ -46,7 +47,8 @@ public class GroupManagerScript : MonoBehaviour
     public List<GameObject> All_ND_List;
     
 
-    // public DebugMethods debugScript;
+    public DebugMethods debugScript;
+
 
     public void Start()
     {
@@ -67,13 +69,13 @@ public class GroupManagerScript : MonoBehaviour
     }
 
 
-    public void CreateGroup_Methods(int crntND_ID)          //? Called in GameManagerScript //
+    public void CreateGroup_Method(int crntND_ID)          //? Called in GameManagerScript //
     {
         CreateNewGroup(crntND_ID);                                                 // Creates newGrp, Associate Properties
         AssignSheepToGroups(crntND_ID);                                            // Assign Adj Grps to newGrpID
     }
 
-    public void UpdateGroups_Methods()                      //? Called in GameManagerScript //  
+    public void UpdateGroups_Method()                      //? Called in GameManagerScript //  
     {
         CalculateGrpLiberties();                                                   // Update All Group Liberties
         DeleteZeroLibertyGroup_Methods();                                          // MethodGroup to Delete Grps with 0 Liberties, Set Empty ND
@@ -296,35 +298,64 @@ public class GroupManagerScript : MonoBehaviour
         // Calculate Group Capture
     public bool Check_IsPlaceAble(int ND_ID, int ShpVal)                              // Calculate Group Capture
     {
-        
         bool isPlaceAble = false;                                                     // Set isPlaceAble bool default
 
         GameObject crntND = GetNodeWithID(All_ND_List, ND_ID);                        // Get TargetNode
         NodeScript crntNDScript = crntND.GetComponent<NodeScript>();                  // Get TargetNode Script
         List<NodeScript> adjNDScriptList = crntNDScript.adjNDScriptList;              // Get adjNDScriptList to iterate over Group Capture
         
-        List<int> adjNDGrpID = new List<int>();
+        List<int> adjNDGrpIDList = new List<int>();
         foreach(NodeScript ND_SCR in adjNDScriptList)                                 // Get ajdND Group ID and add to list
         {
-            if(!adjNDGrpID.Contains(ND_SCR.NDgrpID))                                  // Check for already added
-            adjNDGrpID.Add(ND_SCR.NDgrpID);                                           // Add to list
-        }
-        
-        List<Group> adjGrpList = new List<Group>();                                   // Get ajd Group and add to list
-        foreach(int grpID in adjNDGrpID)
-        {
-            adjGrpList.Add(GetGroup(grpID));
-        }
-
-        foreach(Group adjGrp in adjGrpList)
-        {
-            if(adjGrp.Grp_ShpVal != ShpVal && adjGrp.GrpLibs == 1)                    // If GrpLibVal is 1 and not same ShpVal (can be captured)
+            if(ND_SCR != null)
             {
-                isPlaceAble = true;                                                   // Node can be placed by ShpVal/Player (black or white)
-                return isPlaceAble;                                                   // Return true for isPlaceable
+                if(!adjNDGrpIDList.Contains(ND_SCR.NDgrpID))                //! Check if not grpID = 0 (newNode) and already added to List
+                adjNDGrpIDList.Add(ND_SCR.NDgrpID);                                           // Add to list
             }
         }
-        return isPlaceAble;                                                           // Return False (can't be placed)
+        
+        if(adjNDGrpIDList != null)                                                        // adjND are not all empty
+        {
+            List<Group> adjGrpList = new List<Group>();                                   // Get ajd Group and add to list
+            foreach(int grpID in adjNDGrpIDList)
+            {
+                if(grpID != 0)
+                {
+                    adjGrpList.Add(GetGroup(grpID));
+                }
+                else
+                {
+                    isPlaceAble = true;                                                   // Node can be placed by ShpVal/Player (black or white)
+                    Debug.Log("isPlaceAble = " + isPlaceAble);
+                    debugScript.LogCallerMethod();
+                    return isPlaceAble;
+                }
+            }
+
+            foreach(Group adjGrp in adjGrpList)
+            {
+                if(adjGrp != null)
+                {
+                    if(adjGrp.Grp_ShpVal != ShpVal && adjGrp.GrpLibs == 1)                    // If GrpLibVal is 1 and not same ShpVal (can be captured)
+                    {
+                        isPlaceAble = true;                                                   // Node can be placed by ShpVal/Player (black or white)
+                        Debug.Log("isPlaceAble = " + isPlaceAble);
+                        debugScript.LogCallerMethod();
+                        return isPlaceAble;                                                   // Return true for isPlaceable
+                    }
+                }
+            }
+            
+            Debug.Log("isPlaceAble = " + isPlaceAble);
+            debugScript.LogCallerMethod();
+            return isPlaceAble;                                                           // Return False (can't be placed)
+        }
+
+        isPlaceAble = true;
+        Debug.Log("isPlaceAble = " + isPlaceAble);
+        debugScript.LogCallerMethod();
+        return isPlaceAble;
+
     }
 
 
@@ -457,13 +488,13 @@ public class GroupManagerScript : MonoBehaviour
 
 
 
-    // public DebugMethods GetDebugMethods()
-    // {
-    //     GameObject gameManagerObj = GameObject.Find("GameManagerObj");
-    //     debugScript = gameManagerObj.GetComponent<DebugMethods>();
+    public DebugMethods GetDebugMethods()
+    {
+        GameObject gameManagerObj = GameObject.Find("GameManagerObj");
+        debugScript = gameManagerObj.GetComponent<DebugMethods>();
 
-    //     return debugScript;
-    // }
+        return debugScript;
+    }
 
 
 
@@ -471,20 +502,20 @@ public class GroupManagerScript : MonoBehaviour
 
     // public void AssignSheepToGroups_REFACTOR(GameObject node)
     // {
-    //     NodeScript newScript = node.GetComponent<NodeScript>();                          // Get NodeScript from newNode
-    //     newScript.NDgrpID = CreateNewGroup(node);                                        // Create new NodeGroup, assign NDgrpID
+    //     NodeScript newScript = node.GetComponent<NodeScript>();                                  // Get NodeScript from newNode
+    //     newScript.NDgrpID = CreateNewGroup(node);                                                // Create new NodeGroup, assign NDgrpID
 
-    //     List<NodeScript> adjScriptList = newScript.adjNDScriptList;                       // Get List of AdjacentScripts
+    //     List<NodeScript> adjScriptList = newScript.adjNDScriptList;                              // Get List of AdjacentScripts
 
-    //     foreach(NodeScript adjScript in adjScriptList)                                      // Loop over all AdjScripts
-    //     {
-    //         if(adjScript != null && adjScript.sheepVal == newScript.sheepVal)           // If script is not null, and matches sheepVal (Same color)
-    //         {
-    //             int adjGrpID = adjScript.NDgrpID;                                         // Save GrpID reference to Delete at end of Method
+    //     foreach(NodeScript adjScript in adjScriptList)                                           // Loop over all AdjScripts
+    //     {        
+    //         if(adjScript != null && adjScript.sheepVal == newScript.sheepVal)                    // If script is not null, and matches sheepVal (Same color)
+    //         {        
+    //             int adjGrpID = adjScript.NDgrpID;                                                // Save GrpID reference to Delete at end of Method
 
-    //             if(adjScript.NDgrpID != newScript.NDgrpID)                                  // If they are not in the same group
+    //             if(adjScript.NDgrpID != newScript.NDgrpID)                                       // If they are not in the same group
     //             {
-    //                 List<GameObject> newGrp = JoinGroups(newScript.NDgrpID, adjScript.NDgrpID);   // Join (Add) all nodes in adjGroup to newGrp
+    //                 List<GameObject> newGrp = JoinGroups(newScript.NDgrpID, adjScript.NDgrpID);  // Join (Add) all nodes in adjGroup to newGrp
 
     //                 foreach(GameObject groupNode in newGrp)
     //                 {

@@ -36,7 +36,7 @@ public class DebugMethods : MonoBehaviour
         UnityEngine.Debug.Log($"Current line: {lineNumber}, {method.Name}, {fileName}");
     }
 
-        public void LogCallerMethod()
+    public void LogCallerMethod()
     {
         Diag.StackTrace stackTrace = new Diag.StackTrace(true);
         Diag.StackFrame frame = stackTrace.GetFrame(2); // Current method frame - reference for access to method info()

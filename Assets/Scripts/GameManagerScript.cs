@@ -51,21 +51,27 @@ public class GameManagerScript : MonoBehaviour
         GameObject node = ND_Grp_Mngr_Scrp.GetNodeWithID(gNodeList, nodeID);
         NodeScript crntNDScript = node.GetComponent<NodeScript>();
         int ND_ID = crntNDScript.nodeID;
+        int shpVal = crntNDScript.sheepVal;
+    
+        bool isPlaceAble = ND_Grp_Mngr_Scrp.Check_IsPlaceAble(ND_ID, shpVal);
+        if(isPlaceAble)
+        {
+            // Update Played Node and Board Value State
+            crntNDScript.BlackSheepSetter();                                                                  // Set Node to BlacksheepVal
+            brd_Gntr_Script.UpdateBoardNodeValues();
 
-        // Update Played Node and Board Value State
-        crntNDScript.BlackSheepSetter();                                                                  // Set Node to BlacksheepVal
-        brd_Gntr_Script.UpdateBoardNodeValues();
+            // Update Node Groups and NodeStates
+            ND_Grp_Mngr_Scrp.CreateGroup_Method(ND_ID);
+            ND_Grp_Mngr_Scrp.UpdateGroups_Method();
 
-        // Update Node Groups and NodeStates
-        ND_Grp_Mngr_Scrp.CreateGroup_Methods(ND_ID);
-        ND_Grp_Mngr_Scrp.UpdateGroups_Methods();
+            // Update Node Values, Board Display, and GrpLiberties
+            brd_Gntr_Script.UpdateBoardNodeValues();
+            brd_Gntr_Script.UpdateBoardDisplay();
+            ND_Grp_Mngr_Scrp.UpdateGroups_Method();
 
-        // Update Node Values, Board Display, and GrpLiberties
-        brd_Gntr_Script.UpdateBoardNodeValues();
-        brd_Gntr_Script.UpdateBoardDisplay();
-        ND_Grp_Mngr_Scrp.UpdateGroups_Methods();
+            // ND_Grp_Mngr_Scrp.CalculateGrpLiberties();
+        }
 
-        // ND_Grp_Mngr_Scrp.CalculateGrpLiberties();
     }
 
 
@@ -76,20 +82,24 @@ public class GameManagerScript : MonoBehaviour
         GameObject node = ND_Grp_Mngr_Scrp.GetNodeWithID(gNodeList, nodeID);
         NodeScript crntNDScript = node.GetComponent<NodeScript>();
         int ND_ID = crntNDScript.nodeID;
+        int shpVal = crntNDScript.sheepVal;
+    
+        bool isPlaceAble = ND_Grp_Mngr_Scrp.Check_IsPlaceAble(ND_ID, shpVal);
+        if(isPlaceAble)
+        {
+            // Update Played Node and Board Value State
+            crntNDScript.WhiteSheepSetter();                                                                  // Set Node to BlacksheepVal
+            brd_Gntr_Script.UpdateBoardNodeValues();
 
-        // Update Played Node and Board Value State
-        crntNDScript.WhiteSheepSetter();                                                                  // Set Node to BlacksheepVal
-        brd_Gntr_Script.UpdateBoardNodeValues();
+            // Update Node Groups and NodeStates
+            ND_Grp_Mngr_Scrp.CreateGroup_Method(ND_ID);
+            ND_Grp_Mngr_Scrp.UpdateGroups_Method();
 
-        // Update Node Groups and NodeStates
-        ND_Grp_Mngr_Scrp.CreateGroup_Methods(ND_ID);
-        ND_Grp_Mngr_Scrp.UpdateGroups_Methods();
-
-        // Update Node Values, Board Display, and GrpLiberties
-        brd_Gntr_Script.UpdateBoardNodeValues();
-        brd_Gntr_Script.UpdateBoardDisplay();
-        ND_Grp_Mngr_Scrp.UpdateGroups_Methods();
-
+            // Update Node Values, Board Display, and GrpLiberties
+            brd_Gntr_Script.UpdateBoardNodeValues();
+            brd_Gntr_Script.UpdateBoardDisplay();
+            ND_Grp_Mngr_Scrp.UpdateGroups_Method();
+        }
     }
 
 
