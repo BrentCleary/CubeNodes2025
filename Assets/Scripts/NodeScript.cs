@@ -208,7 +208,7 @@ public class NodeScript : MonoBehaviour
         libertyVal = libertyValList[1];                                     // Set libertyVal to 1
         NDValue = NDValueList[4];                                           // NDValue is reset to 4
         placeAble = true;
-        NDgrpID = 0;
+        NDgrpID = -1;
         lastPlaced = false;
         isInGrp = false;
 

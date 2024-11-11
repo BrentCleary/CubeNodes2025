@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using System.Reflection;
+using Diag = System.Diagnostics;
 using System.Linq;
 using System.Globalization;
 using System;
@@ -57,7 +59,7 @@ public class GroupManagerScript : MonoBehaviour
 
         testVariable = 123;
 
-        // debugScript = GetDebugMethods();
+        debugScript = GetDebugMethods();
     }
 
     private void Update()
@@ -296,65 +298,80 @@ public class GroupManagerScript : MonoBehaviour
 
 
         // Calculate Group Capture
-    public bool Check_IsPlaceAble(int ND_ID, int ShpVal)                              // Calculate Group Capture
+    public bool Check_IsPlaceAble(int ND_ID, int crntShpVal)                              // Calculate Group Capture
     {
-        bool isPlaceAble = false;                                                     // Set isPlaceAble bool default
+        bool isPlaceAble = false;                                                     // Set isPlaceAble bool default at false
 
         GameObject crntND = GetNodeWithID(All_ND_List, ND_ID);                        // Get TargetNode
         NodeScript crntNDScript = crntND.GetComponent<NodeScript>();                  // Get TargetNode Script
         List<NodeScript> adjNDScriptList = crntNDScript.adjNDScriptList;              // Get adjNDScriptList to iterate over Group Capture
         
-        List<int> adjNDGrpIDList = new List<int>();
+        List<int> adjND_GrpIDList = new List<int>();
+        List<Group> adjGrpList = new List<Group>();                                   // Get ajd Group and add to list
+
+        //? --------------------------------------------------------------------------// Get AdjGrpID and AdjGrp Lists
         foreach(NodeScript ND_SCR in adjNDScriptList)                                 // Get ajdND Group ID and add to list
         {
-            if(ND_SCR != null)
+            if(ND_SCR != null && adjND_GrpIDList.Contains(ND_SCR.NDgrpID) == false)   // If ND_SCR not null and not already in List
             {
-                if(!adjNDGrpIDList.Contains(ND_SCR.NDgrpID))                //! Check if not grpID = 0 (newNode) and already added to List
-                adjNDGrpIDList.Add(ND_SCR.NDgrpID);                                           // Add to list
+                adjND_GrpIDList.Add(ND_SCR.NDgrpID);                                  // Add to list
             }
         }
-        
-        if(adjNDGrpIDList != null)                                                        // adjND are not all empty
+        if(adjND_GrpIDList.Count > 0)                                                 // adjND are not all empty
         {
-            List<Group> adjGrpList = new List<Group>();                                   // Get ajd Group and add to list
-            foreach(int grpID in adjNDGrpIDList)
+            foreach(int grpID in adjND_GrpIDList)
             {
-                if(grpID != 0)
+                if(grpID == -1)                                                       // If grpID is -1, node is empty
+                {
+                    isPlaceAble = true;
+                    Debug.Log("isPlaceAble = " + isPlaceAble);
+                    debugScript.LogCurrentMethod();
+                    return isPlaceAble;                                               //~ Return true
+                }
+                if(grpID >= 0)                                                        // if grpID is not default -1 (has been assigned a group)
                 {
                     adjGrpList.Add(GetGroup(grpID));
                 }
-                else
-                {
-                    isPlaceAble = true;                                                   // Node can be placed by ShpVal/Player (black or white)
-                    Debug.Log("isPlaceAble = " + isPlaceAble);
-                    debugScript.LogCallerMethod();
-                    return isPlaceAble;
-                }
             }
-
-            foreach(Group adjGrp in adjGrpList)
-            {
-                if(adjGrp != null)
-                {
-                    if(adjGrp.Grp_ShpVal != ShpVal && adjGrp.GrpLibs == 1)                    // If GrpLibVal is 1 and not same ShpVal (can be captured)
-                    {
-                        isPlaceAble = true;                                                   // Node can be placed by ShpVal/Player (black or white)
-                        Debug.Log("isPlaceAble = " + isPlaceAble);
-                        debugScript.LogCallerMethod();
-                        return isPlaceAble;                                                   // Return true for isPlaceable
-                    }
-                }
-            }
-            
-            Debug.Log("isPlaceAble = " + isPlaceAble);
-            debugScript.LogCallerMethod();
-            return isPlaceAble;                                                           // Return False (can't be placed)
         }
 
-        isPlaceAble = true;
+        //? --------------------------------------------------------------------------// Check isPlaceable Status
+        if(adjGrpList.Count == 0)                                                     // If no Grps in List (All Nodes are empty)
+        {
+            isPlaceAble = true;
+            Debug.Log("isPlaceAble = " + isPlaceAble);
+            debugScript.LogCurrentMethod();
+            return isPlaceAble;                                                       //~ Return true
+        }
+
+        foreach(Group adjGrp in adjGrpList)
+        {
+            if(adjGrp.Grp_ShpVal != crntShpVal && adjGrp.GrpLibs == 1)            // If adjGrp is not same ShpVal and liberties = 1 (can be captured)
+            {
+                isPlaceAble = true;
+                Debug.Log("isPlaceAble = " + isPlaceAble);
+                debugScript.LogCurrentMethod();
+                return isPlaceAble;                                               //~ Return true
+            }
+            
+            if(adjGrp.Grp_ShpVal == crntShpVal && adjGrp.GrpLibs > 1)    // adjGrp is ShpVal and GrpLibs greater than 1
+            {
+                isPlaceAble = true;
+                Debug.Log("isPlaceAble = " + isPlaceAble);
+                debugScript.LogCurrentMethod();
+                return isPlaceAble;                                               //~ Return true
+            }
+        }
+        
         Debug.Log("isPlaceAble = " + isPlaceAble);
-        debugScript.LogCallerMethod();
-        return isPlaceAble;
+        foreach(Group adjGrp in adjGrpList)
+        {
+            Debug.Log("Group " +  adjGrp.GrpID +  " libs : " + adjGrp.GrpLibs + " ShpVal: " + adjGrp.Grp_ShpVal);
+            Debug.Log("Placed ShpVal: " + crntShpVal);
+        }
+        
+        debugScript.LogCurrentMethod();
+        return isPlaceAble;                                                           //~ Return false by Default
 
     }
 

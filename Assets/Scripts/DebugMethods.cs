@@ -20,7 +20,7 @@ public class DebugMethods : MonoBehaviour
         int lineNumber = frame.GetFileLineNumber(); // Gets line number
         MethodBase method = frame.GetMethod();
 
-        UnityEngine.Debug.Log($"Current line: {lineNumber}, {method.Name}, {fileName}");
+        Debug.Log($"Current line: {lineNumber}, {method.Name}, {fileName}");
     }
 
 
@@ -33,7 +33,7 @@ public class DebugMethods : MonoBehaviour
         int lineNumber = frame.GetFileLineNumber(); // Gets line number
         MethodBase method = frame.GetMethod();
 
-        UnityEngine.Debug.Log($"Current line: {lineNumber}, {method.Name}, {fileName}");
+        Debug.Log($"Current line: {lineNumber}, {method.Name}, {fileName}");
     }
 
     public void LogCallerMethod()
@@ -45,7 +45,7 @@ public class DebugMethods : MonoBehaviour
         int lineNumber = frame.GetFileLineNumber(); // Gets line number
         MethodBase method = frame.GetMethod();
 
-        UnityEngine.Debug.Log($"Current line: {lineNumber}, {method.Name}, {fileName}");
+        Debug.Log($"Current line: {lineNumber}, {method.Name}, {fileName}");
     }
     
     

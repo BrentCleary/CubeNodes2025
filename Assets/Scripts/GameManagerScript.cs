@@ -51,7 +51,7 @@ public class GameManagerScript : MonoBehaviour
         GameObject node = ND_Grp_Mngr_Scrp.GetNodeWithID(gNodeList, nodeID);
         NodeScript crntNDScript = node.GetComponent<NodeScript>();
         int ND_ID = crntNDScript.nodeID;
-        int shpVal = crntNDScript.sheepVal;
+        int shpVal = crntNDScript.sheepValList[1];
     
         bool isPlaceAble = ND_Grp_Mngr_Scrp.Check_IsPlaceAble(ND_ID, shpVal);
         if(isPlaceAble)
@@ -82,7 +82,7 @@ public class GameManagerScript : MonoBehaviour
         GameObject node = ND_Grp_Mngr_Scrp.GetNodeWithID(gNodeList, nodeID);
         NodeScript crntNDScript = node.GetComponent<NodeScript>();
         int ND_ID = crntNDScript.nodeID;
-        int shpVal = crntNDScript.sheepVal;
+        int shpVal = crntNDScript.sheepValList[2];
     
         bool isPlaceAble = ND_Grp_Mngr_Scrp.Check_IsPlaceAble(ND_ID, shpVal);
         if(isPlaceAble)
