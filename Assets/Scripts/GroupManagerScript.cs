@@ -297,7 +297,6 @@ public class GroupManagerScript : MonoBehaviour
 
 
 
-        // Calculate Group Capture
     public bool Check_IsPlaceAble(int ND_ID, int crntShpVal)                              // Calculate Group Capture
     {
         bool isPlaceAble = false;                                                     // Set isPlaceAble bool default at false
@@ -378,8 +377,6 @@ public class GroupManagerScript : MonoBehaviour
 
 
 
-
-
     public bool Check_For_Ko()
     {
         bool isKo = false;
@@ -389,7 +386,7 @@ public class GroupManagerScript : MonoBehaviour
         // Return True or false (if Ko, return True (isPlaceAble is false))
 
         return isKo;
-    } 
+    }
 
 
                 

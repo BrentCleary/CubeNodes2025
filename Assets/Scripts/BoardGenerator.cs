@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using Unity.PlasticSCM.Editor.WebApi;
 using Unity.VisualScripting;
@@ -18,7 +19,7 @@ public class BoardGenerator : MonoBehaviour
     public Transform gNodeArrayTransform;
     
     // ! Array Size Controls
-    private int arrayColumnLength = 3;                                              // Array Dimensions - Column
+    private int arrayColumnLength = 4;                                              // Array Dimensions - Column
     private int arrayRowLength = 3;                                                 // Array Dimensions - Row
     private int arrayTotalNodes => arrayColumnLength * arrayRowLength;              // arrayColumnLength * arrayRowLength
     private float nodeSpacingValue = 2;                                             // Space Between Nodes
@@ -45,7 +46,7 @@ public class BoardGenerator : MonoBehaviour
     // *---------------------------------------- CreateBoard Methods ----------------------------------------
     public void InstantiateNodes()                                                  // Instantiates Nodes, Assigns names and values, Adds them to gNodeList
     {
-        for(int i = 1; i <= arrayTotalNodes; i++) {
+        for(int i = 0; i < arrayTotalNodes; i++) {
             GameObject gNode = Instantiate(nodePrefab, gNodeArrayTransform);
             gNode.name = "Node (" + i + ")";
             gNode.GetComponent<NodeScript>().nodeID = i;                            //! Sets NodeID in NodeScript
@@ -252,6 +253,75 @@ public class BoardGenerator : MonoBehaviour
             crntNDScrpt.UpdateNodeDisplay();
         }
     }
+
+
+
+    public List<int> Create_ShpValMap()                                      // Displays Array based on nodeValues
+    {
+        
+        List<int> ShpValMap = new List<int>();                                         // List to hold update values for arrayNodes
+        
+        foreach(GameObject crntND in gNodeList)                                         // Loops over all nodes in gNodeList    
+        {    
+            NodeScript NDScript = crntND.GetComponent<NodeScript>();                    // Set liberty value based on masterNode
+
+            ShpValMap.Add(NDScript.sheepVal);
+        }
+
+        return ShpValMap;
+    }
+
+    public bool Check_Map_For_Ko(List<int> prevShpValMap, int ND_ID, int ShpVal)        // Map of board state before last move, ND_ID and Value
+    {
+        bool isKo = false;                                                              // Ko is initially set false
+
+        Debug.Log("prevShpValMap[" + ND_ID + "] : " + prevShpValMap[ND_ID] );
+
+        List<int> newShpValMap = prevShpValMap.ToList();                                         // Create a new copy of ShpValMap for updating and comparing
+        newShpValMap[ND_ID] = ShpVal;                                                   // Change List val to ShpVal at ND_ID index (index list matches ND_ID)
+        Debug.Log("newShpValMap[" + ND_ID + "] : " + newShpValMap[ND_ID] );
+
+        bool sequenceCheck = newShpValMap.SequenceEqual(prevShpValMap);
+        Debug.Log("sequenceCheck: " + sequenceCheck);
+
+            List<int> differingIndices = FindDifferences(newShpValMap, prevShpValMap);
+            if (differingIndices.Count > 0)
+            {
+                Debug.Log("Sequences differ at indices: " + string.Join(", ", differingIndices));
+            }
+            else
+            {
+                Debug.Log("Sequences are identical.");
+            }
+
+        if(sequenceCheck)                                               // Compare to prev ShpValMap for Board state
+        {
+            isKo = true;                                                                // If they match, the move will violate KO rules
+            Debug.Log("** KO is True **");
+        }
+
+        return isKo;                                                                    // Return the Ko bool Value
+    }
+
+
+
+
+    List<int> FindDifferences(List<int> newShpValMap, List<int> prevShpValMap)
+    {
+        List<int> differences = new List<int>();
+
+        for (int i = 0; i < newShpValMap.Count; i++)
+        {
+            if (newShpValMap[i] != prevShpValMap[i])
+            {
+                differences.Add(i); // Record the index where they differ
+            }
+        }
+
+        return differences;
+    
+    }
+
 
 
 
