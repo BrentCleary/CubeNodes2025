@@ -19,8 +19,8 @@ public class BoardGenerator : MonoBehaviour
     public Transform gNodeArrayTransform;
     
     // ! Array Size Controls
-    private int arrayColumnLength = 4;                                              // Array Dimensions - Column
-    private int arrayRowLength = 3;                                                 // Array Dimensions - Row
+    private int arrayColumnLength = 5;                                              // Array Dimensions - Column
+    private int arrayRowLength = 5;                                                 // Array Dimensions - Row
     private int arrayTotalNodes => arrayColumnLength * arrayRowLength;              // arrayColumnLength * arrayRowLength
     private float nodeSpacingValue = 2;                                             // Space Between Nodes
 

@@ -60,16 +60,15 @@ public class GameManagerScript : MonoBehaviour
 
     public void PlaceBlackSheepMethod_GM(int nodeID)
     {
-
         Debug.Log("BlackSheep GM Response");
         
         GameObject node = ND_Grp_Mngr_Scrp.GetNodeWithID(gNodeList, nodeID);
         NodeScript crntNDScript = node.GetComponent<NodeScript>();
         int ND_ID = crntNDScript.nodeID;
-        int shpVal = crntNDScript.sheepValList[1];
+        int shpVal = crntNDScript.sheepValList[1];                                                            // Set blackSheepVal
     
         bool isPlaceAble = ND_Grp_Mngr_Scrp.Check_IsPlaceAble(ND_ID, shpVal);
-        bool isKo = brd_Gntr_Script.Check_Map_For_Ko(crntBoardState, ND_ID, shpVal);
+        bool isKo = brd_Gntr_Script.Check_Map_For_Ko(prevBoardState, ND_ID, shpVal);
 
         Debug.Log("isKo: " + isKo);
 
@@ -89,10 +88,11 @@ public class GameManagerScript : MonoBehaviour
             ND_Grp_Mngr_Scrp.UpdateGroups_Method();
 
             // ND_Grp_Mngr_Scrp.CalculateGrpLiberties();
+            
+            //KO CHECK METHODS
+            prevBoardState = crntBoardState.ToList();
             crntBoardState = brd_Gntr_Script.Create_ShpValMap();
         }
-
-        prevBoardState = crntBoardState.ToList();
 
         prevShpVal = prevBoardState[ND_ID];
         crntShpVal = crntBoardState[ND_ID];
@@ -110,17 +110,17 @@ public class GameManagerScript : MonoBehaviour
         GameObject node = ND_Grp_Mngr_Scrp.GetNodeWithID(gNodeList, nodeID);
         NodeScript crntNDScript = node.GetComponent<NodeScript>();
         int ND_ID = crntNDScript.nodeID;
-        int shpVal = crntNDScript.sheepValList[2];
+        int shpVal = crntNDScript.sheepValList[2];                                                             // Set whiteSheepVal
     
         bool isPlaceAble = ND_Grp_Mngr_Scrp.Check_IsPlaceAble(ND_ID, shpVal);
         bool isKo = brd_Gntr_Script.Check_Map_For_Ko(prevBoardState, ND_ID, shpVal);
 
-
+        Debug.Log("isKo: " + isKo);
 
         if(isPlaceAble && !isKo)
         {
             // Update Played Node and Board Value State
-            crntNDScript.WhiteSheepSetter();                                                                  // Set Node to BlacksheepVal
+            crntNDScript.WhiteSheepSetter();                                                                  // Set Node to whiteSheepVal
             brd_Gntr_Script.UpdateBoardNodeValues();
 
             // Update Node Groups and NodeStates
@@ -131,9 +131,19 @@ public class GameManagerScript : MonoBehaviour
             brd_Gntr_Script.UpdateBoardNodeValues();
             brd_Gntr_Script.UpdateBoardDisplay();
             ND_Grp_Mngr_Scrp.UpdateGroups_Method();
+            
+            // ND_Grp_Mngr_Scrp.CalculateGrpLiberties();
+
+            //KO CHECK METHODS
+            prevBoardState = crntBoardState.ToList();
+            crntBoardState = brd_Gntr_Script.Create_ShpValMap();
         }
 
-        prevBoardState = brd_Gntr_Script.Create_ShpValMap();
+        prevShpVal = prevBoardState[ND_ID];
+        crntShpVal = crntBoardState[ND_ID];
+
+        Debug.Log("prevShpVal: " + prevShpVal);
+        Debug.Log("crntShpVal: " + crntShpVal);
 
     }
 
