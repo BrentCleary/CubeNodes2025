@@ -23,7 +23,7 @@ public class BoardGenerator : MonoBehaviour
     private int arrayRowLength = 5;                                                 // Array Dimensions - Row
     private int arrayTotalNodes => arrayColumnLength * arrayRowLength;              // arrayColumnLength * arrayRowLength
     private float nodeSpacingValue = 2;                                             // Space Between Nodes
-
+ 
     public GameObject nodePrefab;
     public List<int> startNodeValueMap;
     public List<int> currentNDValueMap;
