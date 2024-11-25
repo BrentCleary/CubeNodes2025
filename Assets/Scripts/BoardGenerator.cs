@@ -255,31 +255,28 @@ public class BoardGenerator : MonoBehaviour
     }
 
 
-
-    public List<int> Create_ShpValMap()                                      // Displays Array based on nodeValues
+    // *---------------------------------------- Ko Check Methods ---------------------------------
+    public List<int> Create_ShpValMap()  //? Called in GameManagerScript               // Displays Array based on nodeValues
     {
-        
         List<int> ShpValMap = new List<int>();                                         // List to hold update values for arrayNodes
         
         foreach(GameObject crntND in gNodeList)                                         // Loops over all nodes in gNodeList    
         {    
             NodeScript NDScript = crntND.GetComponent<NodeScript>();                    // Set liberty value based on masterNode
-
             ShpValMap.Add(NDScript.sheepVal);
         }
 
         return ShpValMap;
     }
-
     public bool Check_Map_For_Ko(List<int> prevShpValMap, int ND_ID, int ShpVal)        // Map of board state before last move, ND_ID and Value
     {
         bool isKo = false;                                                              // Ko is initially set false
 
-        Debug.Log("prevShpValMap[" + ND_ID + "] : " + prevShpValMap[ND_ID] );
+        // Debug.Log("prevShpValMap[" + ND_ID + "] : " + prevShpValMap[ND_ID] );
 
         List<int> newShpValMap = prevShpValMap.ToList();                                         // Create a new copy of ShpValMap for updating and comparing
         newShpValMap[ND_ID] = ShpVal;                                                   // Change List val to ShpVal at ND_ID index (index list matches ND_ID)
-        Debug.Log("newShpValMap[" + ND_ID + "] : " + newShpValMap[ND_ID] );
+        // Debug.Log("newShpValMap[" + ND_ID + "] : " + newShpValMap[ND_ID] );
 
         bool sequenceCheck = newShpValMap.SequenceEqual(prevShpValMap);
         Debug.Log("sequenceCheck: " + sequenceCheck);
@@ -298,14 +295,17 @@ public class BoardGenerator : MonoBehaviour
         {
             isKo = true;                                                                // If they match, the move will violate KO rules
             Debug.Log("** KO is True **");
+            LogListValues<int>(prevShpValMap, "prevShpValMap");
+            LogListValues<int>(newShpValMap, "newShpValMap");
+        }
+        else
+        {
+            isKo = false;
         }
 
         return isKo;                                                                    // Return the Ko bool Value
     }
-
-
-
-
+    // DEBUG METHOD FOR KO CHECK METHODS
     List<int> FindDifferences(List<int> newShpValMap, List<int> prevShpValMap)
     {
         List<int> differences = new List<int>();
@@ -322,6 +322,12 @@ public class BoardGenerator : MonoBehaviour
     
     }
 
+
+    void LogListValues<T>(List<T> list, string listName)
+    {
+        string values = string.Join(", ", list);
+        Debug.Log($"{listName} values: [{values}]");
+    }
 
 
 

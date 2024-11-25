@@ -47,9 +47,11 @@ public class GroupManagerScript : MonoBehaviour
 
     public GameObject debugNodeCheck;
     public List<GameObject> All_ND_List;
-    
 
     public DebugMethods debugScript;
+
+
+    public bool perform_Ko_Check;
 
 
     public void Start()
@@ -188,7 +190,6 @@ public class GroupManagerScript : MonoBehaviour
         }
         return null; // Return null if no GameObject with the target ID is found
     }
-    
     //* ---------------------------------------- GetGroup ----------------------------------------
     public Group GetGroup(int grpID)                                                // Returns Group from AllGrpList by grpID
     {
@@ -196,7 +197,6 @@ public class GroupManagerScript : MonoBehaviour
         
         return group;
     }
-
     //* ---------------------------------------- JoinGroups ----------------------------------------
     public void JoinGroups(int newGrpID, int prevGrpID)                             // Adds prevGrpIDs to newGrp.ND_ID_List - return newGrp.ND_ID_List 
     {
@@ -235,7 +235,6 @@ public class GroupManagerScript : MonoBehaviour
             Debug.Log("GrpID was -1");
         }
     }
-
     //* ---------------------------------------- CalculateGrpLiberties ----------------------------------------
     public void CalculateGrpLiberties()                                               // Updates Liberties of all Groups in AllGrpList
     {
@@ -377,25 +376,6 @@ public class GroupManagerScript : MonoBehaviour
 
 
 
-    public bool Check_For_Ko()
-    {
-        bool isKo = false;
-
-        // Get copy of Board ShpVal State Before Last Move
-        // Compare to Board ShpVal State if Placed
-        // Return True or false (if Ko, return True (isPlaceAble is false))
-
-        return isKo;
-    }
-
-
-                
-
-
-
-
-
-
     //* ---------------------------------------- ZeroLibertyGroup Methods ----------------------------------------
     public void DeleteZeroLibertyGroup_Methods()   //? Called GameManagerScript         // Sets Nodes in ZeroGrps to Empty, Deletes Group
     {
@@ -440,7 +420,17 @@ public class GroupManagerScript : MonoBehaviour
         if(zero_Grp_List.Count > 0)
         {
             foreach(Group zeroGrp in zero_Grp_List)                                     // Loop of new list of Zero liberty Groups
-            {    
+            {   
+                if(zeroGrp.ND_ID_List.Count == 1)                                       // If there is a Single Node in the groups to Delete, check for Ko
+                {
+                    perform_Ko_Check = true;
+                    Debug.Log("perform_Ko_Check is True");
+                }
+                else
+                {
+                    perform_Ko_Check = false;
+                }
+
                 if(zeroGrp.Grp_ShpVal != lastND_ShpVal)                                 // ! Checks if zeroGroup is the same sheepVal as current player
                 {
                     foreach(int zeroND_ID in zeroGrp.ND_ID_List)                        // Get the script of each Node and Set Node to Empty
@@ -448,16 +438,49 @@ public class GroupManagerScript : MonoBehaviour
                         GameObject zeroND = GetNodeWithID(All_ND_List, zeroND_ID);
                         NodeScript zeroScript = zeroND.GetComponent<NodeScript>(); 
                         zeroScript.EmptySheepSetter();
+                        zeroScript.SetNodeColor_Not_Selected();
                     }
                 }
                 DeleteGroup(zeroGrp.GrpID);
             }
+
         }
         else
         {
             Debug.Log("No zeroLiberty Groups");
         }
+
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public DebugMethods GetDebugMethods()
+    {
+        GameObject gameManagerObj = GameObject.Find("GameManagerObj");
+        debugScript = gameManagerObj.GetComponent<DebugMethods>();
+
+        return debugScript;
+    }
+
+
+
+
+
+
+
+
+
 
 
 
@@ -497,21 +520,6 @@ public class GroupManagerScript : MonoBehaviour
         NDScript.lastPlaced = true;
         lastND_ID = NDScript.nodeID;
     }
-
-
-
-
-
-    public DebugMethods GetDebugMethods()
-    {
-        GameObject gameManagerObj = GameObject.Find("GameManagerObj");
-        debugScript = gameManagerObj.GetComponent<DebugMethods>();
-
-        return debugScript;
-    }
-
-
-
 
 
     // public void AssignSheepToGroups_REFACTOR(GameObject node)

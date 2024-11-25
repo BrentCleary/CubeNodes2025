@@ -17,7 +17,8 @@ public class GameManagerScript : MonoBehaviour
     int crntShpVal;
 
     public List<int> prevBoardState;
-    int prevShpVal;
+    public int prevShpVal;
+    public bool isKo = false;
 
 
     void Awake()
@@ -40,10 +41,6 @@ public class GameManagerScript : MonoBehaviour
         crntBoardState = brd_Gntr_Script.Create_ShpValMap();
         prevBoardState = crntBoardState.ToList();
 
-        foreach(int val in prevBoardState)
-        {
-            Debug.Log(val);
-        }
     }
 
     // Update is called once per frame
@@ -53,6 +50,7 @@ public class GameManagerScript : MonoBehaviour
         {
             gNodeList = brd_Gntr_Script.gNodeList;
         }
+
 
 
     }
@@ -68,9 +66,20 @@ public class GameManagerScript : MonoBehaviour
         int shpVal = crntNDScript.sheepValList[1];                                                            // Set blackSheepVal
     
         bool isPlaceAble = ND_Grp_Mngr_Scrp.Check_IsPlaceAble(ND_ID, shpVal);
-        bool isKo = brd_Gntr_Script.Check_Map_For_Ko(prevBoardState, ND_ID, shpVal);
 
-        Debug.Log("isKo: " + isKo);
+
+        Debug.Log("ND_Grp_Mngr_Scrp.perform_Ko_Check is " +  ND_Grp_Mngr_Scrp.perform_Ko_Check);
+        if(ND_Grp_Mngr_Scrp.perform_Ko_Check == true)
+        {
+            isKo = brd_Gntr_Script.Check_Map_For_Ko(prevBoardState, ND_ID, shpVal);
+            Debug.Log("isKo is " + isKo);
+        }
+        else
+        {
+            isKo = false;
+        }
+
+        // Debug.Log("isKo: " + isKo);
 
         if(isPlaceAble && isKo == false)
         {
@@ -91,14 +100,19 @@ public class GameManagerScript : MonoBehaviour
             
             //KO CHECK METHODS
             prevBoardState = crntBoardState.ToList();
+            LogListValues<int>(prevBoardState, "prevBoardState GM");
+
             crntBoardState = brd_Gntr_Script.Create_ShpValMap();
+            LogListValues<int>(crntBoardState, "crntBoardState GM");
         }
+
+
 
         prevShpVal = prevBoardState[ND_ID];
         crntShpVal = crntBoardState[ND_ID];
 
-        Debug.Log("prevShpVal: " + prevShpVal);
-        Debug.Log("crntShpVal: " + crntShpVal);
+        // Debug.Log("prevShpVal: " + prevShpVal);
+        // Debug.Log("crntShpVal: " + crntShpVal);
 
     }
 
@@ -113,9 +127,18 @@ public class GameManagerScript : MonoBehaviour
         int shpVal = crntNDScript.sheepValList[2];                                                             // Set whiteSheepVal
     
         bool isPlaceAble = ND_Grp_Mngr_Scrp.Check_IsPlaceAble(ND_ID, shpVal);
-        bool isKo = brd_Gntr_Script.Check_Map_For_Ko(prevBoardState, ND_ID, shpVal);
+        // bool isKo = brd_Gntr_Script.Check_Map_For_Ko(prevBoardState, ND_ID, shpVal);
 
-        Debug.Log("isKo: " + isKo);
+        Debug.Log("ND_Grp_Mngr_Scrp.perform_Ko_Check is " +  ND_Grp_Mngr_Scrp.perform_Ko_Check);
+        if(ND_Grp_Mngr_Scrp.perform_Ko_Check == true)
+        {
+            isKo = brd_Gntr_Script.Check_Map_For_Ko(prevBoardState, ND_ID, shpVal);
+            Debug.Log("isKo is " + isKo);
+        }
+        else
+        {
+            isKo = false;
+        }
 
         if(isPlaceAble && !isKo)
         {
@@ -137,15 +160,23 @@ public class GameManagerScript : MonoBehaviour
             //KO CHECK METHODS
             prevBoardState = crntBoardState.ToList();
             crntBoardState = brd_Gntr_Script.Create_ShpValMap();
+            
+            prevShpVal = prevBoardState[ND_ID];
+            crntShpVal = crntBoardState[ND_ID];
         }
 
-        prevShpVal = prevBoardState[ND_ID];
-        crntShpVal = crntBoardState[ND_ID];
 
-        Debug.Log("prevShpVal: " + prevShpVal);
-        Debug.Log("crntShpVal: " + crntShpVal);
+        // Debug.Log("prevShpVal: " + prevShpVal);
+        // Debug.Log("crntShpVal: " + crntShpVal);
 
     }
 
+
+
+    void LogListValues<T>(List<T> list, string listName)
+    {
+        string values = string.Join(", ", list);
+        Debug.Log($"{listName} values: [{values}]");
+    }
 
 }
