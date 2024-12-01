@@ -40,6 +40,7 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.3.6f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\PlayerScript.cs" />
      <Compile Include="Assets\Scripts\GameManagerScript.cs" />
      <Compile Include="Assets\Scripts\TargetNode.cs" />
      <Compile Include="Assets\Scripts\NodeScript.cs" />
@@ -47,6 +48,15 @@
      <Compile Include="Assets\Scripts\MouseRayCast.cs" />
      <Compile Include="Assets\Scripts\DebugMethods.cs" />
      <Compile Include="Assets\Scripts\BoardGenerator.cs" />
+     <None Include="Assets\Toon Fantasy Nature\Shaders\TFF_ToonWater.shader" />
+     <None Include="Assets\Toon Fantasy Nature\Shaders\TFF_ToonFire.shader" />
+     <None Include="Assets\Toon Fantasy Nature\Shaders\TFF_CustomToonOutline.shader" />
+     <None Include="Assets\Toon Fantasy Nature\Shaders\TFF_Board_Cutout.shader" />
+     <None Include="Assets\Toon Fantasy Nature\Documentation\Usage Guidelines.txt" />
+     <None Include="Assets\Toon Fantasy Nature\Shaders\TFF_CustomToonVegetation.shader" />
+     <None Include="Assets\Toon Fantasy Nature\Shaders\TFF_CustomToon.shader" />
+     <None Include="Assets\Materials\Toon Fantasy Nature\_ReadFirst.txt" />
+     <None Include="Assets\Toon Fantasy Nature\Shaders\TFF_CustomGrass.shader" />
     <Reference Include="UnityEngine">
         <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.6f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
     </Reference>

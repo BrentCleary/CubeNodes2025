@@ -19,8 +19,8 @@ public class BoardGenerator : MonoBehaviour
     public Transform gNodeArrayTransform;
     
     // ! Array Size Controls
-    private int arrayColumnLength = 5;                                              // Array Dimensions - Column
-    private int arrayRowLength = 5;                                                 // Array Dimensions - Row
+    private int arrayColumnLength = 9;                                              // Array Dimensions - Column
+    private int arrayRowLength = 9;                                                 // Array Dimensions - Row
     private int arrayTotalNodes => arrayColumnLength * arrayRowLength;              // arrayColumnLength * arrayRowLength
     private float nodeSpacingValue = 2;                                             // Space Between Nodes
  
@@ -268,6 +268,8 @@ public class BoardGenerator : MonoBehaviour
 
         return ShpValMap;
     }
+
+    
     public bool Check_Map_For_Ko(List<int> prevShpValMap, int ND_ID, int ShpVal)        // Map of board state before last move, ND_ID and Value
     {
         bool isKo = false;                                                              // Ko is initially set false

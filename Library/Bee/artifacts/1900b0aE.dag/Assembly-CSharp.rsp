@@ -358,6 +358,7 @@
 "Assets/Scripts/GroupManagerScript.cs"
 "Assets/Scripts/MouseRayCast.cs"
 "Assets/Scripts/NodeScript.cs"
+"Assets/Scripts/PlayerScript.cs"
 "Assets/Scripts/TargetNode.cs"
 -langversion:9.0
 
