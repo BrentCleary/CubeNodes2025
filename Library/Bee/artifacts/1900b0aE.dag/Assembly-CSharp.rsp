@@ -355,6 +355,7 @@
 "Assets/Scripts/BoardGenerator.cs"
 "Assets/Scripts/DebugMethods.cs"
 "Assets/Scripts/GameManagerScript.cs"
+"Assets/Scripts/GameRecorderScript.cs"
 "Assets/Scripts/GroupManagerScript.cs"
 "Assets/Scripts/MouseRayCast.cs"
 "Assets/Scripts/NodeScript.cs"

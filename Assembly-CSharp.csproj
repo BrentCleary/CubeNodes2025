@@ -42,6 +42,7 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\PlayerScript.cs" />
      <Compile Include="Assets\Scripts\GameManagerScript.cs" />
+     <Compile Include="Assets\Scripts\GameRecorderScript.cs" />
      <Compile Include="Assets\Scripts\TargetNode.cs" />
      <Compile Include="Assets\Scripts\NodeScript.cs" />
      <Compile Include="Assets\Scripts\GroupManagerScript.cs" />

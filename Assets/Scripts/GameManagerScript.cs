@@ -10,9 +10,11 @@ public class GameManagerScript : MonoBehaviour
     public GroupManagerScript ND_Grp_Mngr_Scrp;
     public TargetNode Trgt_ND_Script;
     public PlayerScript Plyr_Scrp;
+    public GameRecorderScript Game_Recorder_Scrp;
 
     //* ---------------------------------------- OBJECT REFERENCES ----------------------------------------
     public GameObject NDArray;
+    public GameObject GameRecorderObj;
     public List<GameObject> gNodeList;
     public List<int> crntBoardState;
     public int crntShpVal;
@@ -22,14 +24,17 @@ public class GameManagerScript : MonoBehaviour
     public bool isKo = false;
 
 
-    public List<List<int>> BRD_State_Record;
+    public List<List<int>> Brd_State_Record;
 
     void Awake()
     {
         NDArray = GameObject.Find("gNodeArray");
+        GameRecorderObj = GameObject.Find("GameRecorderObj");
+
         brd_Gntr_Script = NDArray.GetComponent<BoardGenerator>();
         ND_Grp_Mngr_Scrp = NDArray.GetComponent<GroupManagerScript>();
         Plyr_Scrp = gameObject.GetComponent<PlayerScript>();
+        Game_Recorder_Scrp = GameRecorderObj.GetComponent<GameRecorderScript>();
 
     }
 
@@ -91,6 +96,8 @@ public class GameManagerScript : MonoBehaviour
             
             prevShpVal = prevBoardState[ND_ID];
             crntShpVal = crntBoardState[ND_ID];
+
+            Game_Recorder_Scrp.RecordGameBoardState(crntBoardState);
         }
     }
 
@@ -126,6 +133,9 @@ public class GameManagerScript : MonoBehaviour
             
             prevShpVal = prevBoardState[ND_ID];
             crntShpVal = crntBoardState[ND_ID];
+
+            Game_Recorder_Scrp.RecordGameBoardState(crntBoardState);
+
         }
     }
 
@@ -151,25 +161,6 @@ public class GameManagerScript : MonoBehaviour
         string values = string.Join(", ", list);
         Debug.Log($"{listName} values: [{values}]");
     }
-
-
-    // Method to Track the Game State after each move.
-    // For game reviews, record keeping, and undo's midgame
-    // Will need to record
-    /*
-        BoardSheepValues
-        GroupListState
-        PlayerStates
-            Timer
-            Captures
-            CurrentPlayerTurn
-        
-    */
-    public void RecordGameBoardState()
-    {
-
-    }
-
 
 
 }
