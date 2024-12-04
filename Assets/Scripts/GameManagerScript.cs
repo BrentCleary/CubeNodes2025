@@ -26,6 +26,7 @@ public class GameManagerScript : MonoBehaviour
 
     public List<List<int>> Brd_State_Record;
 
+
     void Awake()
     {
         NDArray = GameObject.Find("gNodeArray");

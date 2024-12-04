@@ -9,6 +9,7 @@ using System.Linq;
 using System.Globalization;
 using System;
 using UnityEditor.Build;
+using UnityEngine.XR;
 
 public class GroupManagerScript : MonoBehaviour
 {
@@ -47,6 +48,7 @@ public class GroupManagerScript : MonoBehaviour
 
     public GameObject debugNodeCheck;
     public List<GameObject> All_ND_List;
+    public List<int> All_ND_GrpID_List;
 
     public DebugMethods debugScript;
 
@@ -457,6 +459,23 @@ public class GroupManagerScript : MonoBehaviour
 
 
 
+    public List<int> GetAll_ND_GrpID()
+    {
+        List<int> ND_GrpID_List = new List<int>();
+
+        foreach(GameObject ND in All_ND_List)
+        {
+            NodeScript ND_Scrp = ND.GetComponent<NodeScript>();
+            if (ND_Scrp != null)
+            {
+                ND_GrpID_List.Add(ND_Scrp.NDgrpID);
+            }
+        }
+
+        All_ND_GrpID_List = ND_GrpID_List;
+
+        return ND_GrpID_List;
+    }
 
 
 

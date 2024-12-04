@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 public class GameRecorderScript : MonoBehaviour
@@ -17,11 +18,22 @@ public class GameRecorderScript : MonoBehaviour
 
     public List<int> prevBoardState;
     public int prevShpVal;
+    public List<int> ND_GrpID_List;
+    public static int globalMoveCount = 0;
+
 
     [System.Serializable]
     public class BoardState
     {
+        public string turnNumber;
         public List<int> boardValues;
+        public List<int> ND_GrpID_List;
+
+        public BoardState()
+        {
+            globalMoveCount++;
+            turnNumber =  "Turn " + globalMoveCount;
+        }
     }
     public List<BoardState> Brd_State_Record;
 
@@ -43,6 +55,14 @@ public class GameRecorderScript : MonoBehaviour
         
     }
 
+    void OnValidate()
+    {
+        for (int i = 0; i < ND_GrpID_List.Count; i++)
+        {
+            Brd_State_Record[i].turnNumber = $"Element {i + 1}";
+        }
+    }
+
 
     /* Method to Track the Game State after each move.
         For game reviews, record keeping, and undo's midgame
@@ -58,7 +78,9 @@ public class GameRecorderScript : MonoBehaviour
     public void RecordGameBoardState(List<int> crntBoardState)
     {
         BoardState newBrdState = new BoardState();
-        newBrdState.boardValues = crntBoardState;
+    
+        newBrdState.boardValues = crntBoardState;                                           // Assign current List of ND ShpVals
+        newBrdState.ND_GrpID_List = ND_Grp_Mngr_Scrp.GetAll_ND_GrpID();                     // Update List of GrpID for all NDs
 
         Brd_State_Record.Add(newBrdState);
     }
