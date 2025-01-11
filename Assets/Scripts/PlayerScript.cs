@@ -4,22 +4,24 @@ using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
 {
-    public int PlayerSheepValue = 1;
+    static int numberOfPlayers = 1;
+
 
     [System.Serializable]
     public class Player
     {
+        public int playerID;
         public string Name { get; set; }
-        public int SheepValue { get; set; } // "Black" or "White"
-        public int playerNumber = 0;
+        public int PlayerShpVal { get; set; } // "Black" or "White"
+        public int playerNumber;
         public int CapturedStones { get; private set; }
         public bool isTurn;
 
         // Constructor
         public Player()
         {
-            SheepValue = 
-            playerNumber++;
+            playerNumber = numberOfPlayers;
+            numberOfPlayers++;
             CapturedStones = 0;
             isTurn = false;
         }
@@ -32,12 +34,12 @@ public class PlayerScript : MonoBehaviour
     }
 
         // Serialized list to track players
-    public List<Player> Players = new List<Player>();
+    public List<Player> playerList = new List<Player>();
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        CreateTwoPlayers();
     }
 
     // Update is called once per frame
@@ -46,22 +48,25 @@ public class PlayerScript : MonoBehaviour
         
     }
 
+    public void CreateTwoPlayers(){
+        CreatePlayer();
+        CreatePlayer();
+    }
+
     public void CreatePlayer()
     {
         Player newPlayer = new Player();
 
         newPlayer.Name = "Player " + newPlayer.playerNumber;
 
-        if(PlayerSheepValue % 2 == 0)
-        {
-            newPlayer.SheepValue = 2;
+        if(newPlayer.playerNumber % 2 == 0) {
+            newPlayer.PlayerShpVal = 2;                           // playerNumber odd = shpVal 1, sheep Value is White (2)
         }
-        else
-        {
-            newPlayer.SheepValue = 1;
+        else {
+            newPlayer.PlayerShpVal = 1;
         }
 
-        Players.Add(newPlayer);
+        playerList.Add(newPlayer);
     }
 
 }
