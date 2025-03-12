@@ -39,18 +39,13 @@ public class PlayerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        CreateTwoPlayers();
+
     }
 
     // Update is called once per frame
     void Update()
     {
         
-    }
-
-    public void CreateTwoPlayers(){
-        CreatePlayer();
-        CreatePlayer();
     }
 
     public void CreatePlayer()

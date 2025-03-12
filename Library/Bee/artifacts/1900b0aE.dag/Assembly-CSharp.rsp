@@ -354,6 +354,7 @@
 -analyzer:"C:/Program Files/Unity/Hub/Editor/2022.3.6f1-x86_64/Editor/Data/Tools/Unity.SourceGenerators/Unity.SourceGenerators.dll"
 "Assets/MainMenu.cs"
 "Assets/Scripts/BoardGenerator.cs"
+"Assets/Scripts/CameraControllerScript.cs"
 "Assets/Scripts/DebugMethods.cs"
 "Assets/Scripts/GameManagerScript.cs"
 "Assets/Scripts/GameRecorderScript.cs"

@@ -20,7 +20,7 @@ public class GameRecorderScript : MonoBehaviour
     public int prevShpVal;
     public List<int> ND_GrpID_List;
     public static int globalMoveCount = 0;
-
+    public int currentPlayer;
 
     [System.Serializable]
     public class BoardState
@@ -28,6 +28,7 @@ public class GameRecorderScript : MonoBehaviour
         public string turnNumber;
         public List<int> boardValues;
         public List<int> ND_GrpID_List;
+
 
         public BoardState()
         {

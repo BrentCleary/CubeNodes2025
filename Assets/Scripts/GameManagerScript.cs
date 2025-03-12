@@ -51,8 +51,10 @@ public class GameManagerScript : MonoBehaviour
         crntBoardState = brd_Gntr_Script.Create_ShpValMap();
         prevBoardState = crntBoardState.ToList();
 
+        // Create Players
         Plyr_Scrp.CreatePlayer();
         Plyr_Scrp.CreatePlayer();
+
 
     }
 
