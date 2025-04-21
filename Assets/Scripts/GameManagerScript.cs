@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using Unity.VisualScripting;
 
 public class GameManagerScript : MonoBehaviour
 {
@@ -14,7 +15,7 @@ public class GameManagerScript : MonoBehaviour
 
     //* ---------------------------------------- OBJECT REFERENCES ----------------------------------------
     public GameObject NDArray;
-    public GameObject GameRecorderObj;
+    public GameObject gameRecorderObj;
     public List<GameObject> gNodeList;
     public List<int> crntBoardState;
     public int crntShpVal;
@@ -23,6 +24,7 @@ public class GameManagerScript : MonoBehaviour
     public int prevShpVal;
     public bool isKo = false;
 
+    public GameObject pauseMenu;
 
     public List<List<int>> Brd_State_Record;
 
@@ -30,13 +32,14 @@ public class GameManagerScript : MonoBehaviour
     void Awake()
     {
         NDArray = GameObject.Find("gNodeArray");
-        GameRecorderObj = GameObject.Find("GameRecorderObj");
+        gameRecorderObj = GameObject.Find("GameRecorderObj");
 
         brd_Gntr_Script = NDArray.GetComponent<BoardGenerator>();
         ND_Grp_Mngr_Scrp = NDArray.GetComponent<GroupManagerScript>();
         Plyr_Scrp = gameObject.GetComponent<PlayerScript>();
-        Game_Recorder_Scrp = GameRecorderObj.GetComponent<GameRecorderScript>();
+        Game_Recorder_Scrp = gameRecorderObj.GetComponent<GameRecorderScript>();
 
+        pauseMenu = GameObject.Find("PauseMenu");
     }
 
     // Start is called before the first frame update
@@ -55,7 +58,7 @@ public class GameManagerScript : MonoBehaviour
         Plyr_Scrp.CreatePlayer();
         Plyr_Scrp.CreatePlayer();
 
-
+        pauseMenu.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -156,7 +159,6 @@ public class GameManagerScript : MonoBehaviour
             isKo = false;
         }
     }
-
 
 
     void LogListValues<T>(List<T> list, string listName)

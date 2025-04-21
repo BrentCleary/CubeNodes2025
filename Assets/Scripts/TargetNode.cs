@@ -86,24 +86,6 @@ public class TargetNode : MonoBehaviour
     
 
 
-    //* Color Settings (Moved into NodeScript 10/07/24)
-    // private void SetNodeColor_Selected()
-    // {
-    //     foreach(Renderer renderer in tileRendererList) {
-    //         renderer.material = selectionMaterial;
-    //     }
-    // }
-
-    // private void SetNodeColor_Not_Selected()
-    // {
-    //     int colorCounter = 0;
-    //     foreach(Renderer renderer in tileRendererList) {
-    //         renderer.material = tileMaterialList[colorCounter];
-    //         colorCounter++;
-    //     }
-    // }
-
-
 
 
     //* ---------------------------------------- PLACE SHEEP METHODS ----------------------------------------
@@ -134,31 +116,7 @@ public class TargetNode : MonoBehaviour
         }
     }
 
-    public void PlaceBlackSheep_OnClick()
-    {
-        // Check if the left mouse button was clicked
-        if (nodeSelected && parentNDScript.placeAble == true && Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            parentNDScript.PlaceBlackSheepMethod();
-            nodeSelected = false;
-            // Debug.Log("PlaceBlackSheep_OnClick");
-
-        }
-    }
-
-    // 09/05/2024 - Method Commented out to user Mouse1 for testing
-    public void PlaceWhiteSheep_OnClick()
-    {
-        // Check if the right mouse button was clicked
-        if (nodeSelected && parentNDScript.placeAble == true && Input.GetKeyDown(KeyCode.Mouse1))
-        {
-            parentNDScript.PlaceWhiteSheepMethod();
-            nodeSelected = false;
-            Debug.Log("PlaceWhiteSheep_OnClick");
-
-        }
-    }
-
+    // Debug method for removing stones
     public void PlaceEmptySheep_OnClick()
     {
         // Check if the middle mouse button was clicked
@@ -312,6 +270,31 @@ public class TargetNode : MonoBehaviour
 
     //             Debug.Log("New Node added to GroupID: " + NDScript.groupID);
     //         }
+    //     }
+    // }
+
+        // public void PlaceBlackSheep_OnClick()
+    // {
+    //     // Check if the left mouse button was clicked
+    //     if (nodeSelected && parentNDScript.placeAble == true && Input.GetKeyDown(KeyCode.Mouse0))
+    //     {
+    //         parentNDScript.PlaceBlackSheepMethod();
+    //         nodeSelected = false;
+    //         // Debug.Log("PlaceBlackSheep_OnClick");
+
+    //     }
+    // }
+
+    // 09/05/2024 - Method Commented out to user Mouse1 for testing
+    // public void PlaceWhiteSheep_OnClick()
+    // {
+    //     // Check if the right mouse button was clicked
+    //     if (nodeSelected && parentNDScript.placeAble == true && Input.GetKeyDown(KeyCode.Mouse1))
+    //     {
+    //         parentNDScript.PlaceWhiteSheepMethod();
+    //         nodeSelected = false;
+    //         Debug.Log("PlaceWhiteSheep_OnClick");
+
     //     }
     // }
     */

@@ -48,14 +48,14 @@ public class CameraControllerScript : MonoBehaviour
         Vector3 moveDirection = Vector3.zero;
 
         // Move relative to camera orientation
-        if (Input.GetKey(KeyCode.W)) moveDirection += transform.forward;  // Forward
-        if (Input.GetKey(KeyCode.S)) moveDirection -= transform.forward;  // Backward
-        if (Input.GetKey(KeyCode.A)) moveDirection -= transform.right;    // Left
-        if (Input.GetKey(KeyCode.D)) moveDirection += transform.right;    // Right
+        if (Input.GetKey(KeyCode.W)) moveDirection += transform.up;         // Up
+        if (Input.GetKey(KeyCode.S)) moveDirection -= transform.up;         // Down
+        if (Input.GetKey(KeyCode.A)) moveDirection -= transform.right;      // Left
+        if (Input.GetKey(KeyCode.D)) moveDirection += transform.right;      // Right
 
         float mouseWheel = Input.GetAxis("Mouse ScrollWheel");
-        if (mouseWheel > 0) moveDirection -= transform.up;
-        if (mouseWheel < 0) moveDirection += transform.up;
+        if (mouseWheel > 0) moveDirection += transform.forward;             // Forward
+        if (mouseWheel < 0) moveDirection -= transform.forward;             // Back
 
         // Normalize to prevent faster diagonal movement, then apply speed
         moveDirection = moveDirection.normalized * moveSpeed * time;
