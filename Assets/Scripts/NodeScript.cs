@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using JetBrains.Annotations;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -12,63 +11,60 @@ public class NodeScript : MonoBehaviour
 {
 
     //* ---------------------------------------- (this) PROPERTIES ----------------------------------------
-    public int nodeID;   // Set on Initialization in BoardGenerator
-
-    public int NDValue;
-    public List<int> NDValueList = new List<int> { 0, 1, 2, 3, 4 };                    // Node Values when not occupied
-    public List<GameObject> GrassTileList = new List<GameObject> {};
-    
-    public int sheepVal;
-    public List<int> sheepValList = new List<int> {0, 1, 2};                           // { emptySpace, sheepBlack, sheepWhite }
-    public List<GameObject> sheepTileList = new List<GameObject> {};                   // { emptySpace, sheepBlack, sheepWhite }
-
-    public int libertyVal;
-    public List<int> libertyValList = new List<int> { 0, 1 };                          //  LibertyValue{ 1 , 0 }
-    
-    public bool placeAble;
-    public List<bool> placeAbleList = new List<bool> { false, true };                  // is node placeable for current player
-
+    public int  NDID;   // Set on Initialization in BoardGenerator
+    public int  NDVal;
+    public int  shpVal;
+    public int  libVal;
+    public bool hasGrp;
+    public int  NDGrpID = -1;
+    public bool canPlace;
     public bool lastPlaced;                                                            //? the most recently placed Node 
+    
+    public List<int> NDValList  = new List<int> { 0, 1, 2, 3, 4 };                    // Node Values when not occupied
+    public List<int> shpValList = new List<int> {0, 1, 2};                           // { emptySpace, shpBlack, shpWhite }
+    public List<int> libValList = new List<int> { 0, 1 };                          //  LibertyValue{ 1 , 0 }
+    public List<bool> canPlaceList = new List<bool> { false, true };                  // is node canPlace for current player
+    public List<GameObject> shpTileList = new List<GameObject> {};                   // { emptySpace, shpBlack, shpWhite }
+    public List<GameObject> GrassTileList = new List<GameObject> {};
+
 
     //* ---------------------------------------- NODE ARRAY PROPERTIES ----------------------------------------
     public GameObject NDArray;
-    public int[] arrayPosition = new int[2];
+    public int[] arrPos = new int[2];
 
 
     //* ---------------------------------------- SHEEP GROUP PARAMETERS ----------------------------------------
     // Adjacent Nodes
-    public GameObject leftND;                                                           //? left
-    public GameObject rightND;                                                          //? right
-    public GameObject topND;                                                            //? top
-    public GameObject bottomND;                                                         //? bottom
-    public NodeScript leftNDScript;
-    public NodeScript rightNDScript;
-    public NodeScript topNDScript;
-    public NodeScript bottomNDScript;
+    public GameObject LND;                                                           //? left
+    public GameObject RND;                                                          //? right
+    public GameObject TND;                                                            //? top
+    public GameObject BND;                                                         //? bottom
+    public NodeScript LNDScr;
+    public NodeScript RNDScr;
+    public NodeScript TNDScr;
+    public NodeScript BNDScr;
+    
     // Adjacent Node Scripts
-    public List<NodeScript> adjNDScriptList;
-    public List<GameObject> adjNDList;
+    public List<NodeScript> adjNDScrList;
+	public List<GameObject> adjNDList;
 
-    public int leftNDLibertyVal;
-    public int rightNDLibertyVal;
-    public int bottomNDLibertyVal;
-    public int topNDLibertyVal;
-    public int NDgrpID = -1;
-    public bool isInGrp;
+	public int LNDLibVal;
+    public int RNDLibVal;
+    public int BNDLibVal;
+    public int TNDLibVal;
 
 
     //* ---------------------------------------- SCRIPT REFERENCES ----------------------------------------
-    public BoardGenerator Brd_Gntr_Script;
+    public BoardGenerator BrdGntScr;
     public GroupManagerScript ND_Grp_Mngr_Scrp;
     public TargetNode Trgt_ND_Script;
 
 
-
     //* ---------------------------------------- NODE COLOR VARIABLES ----------------------------------------
-    // Node Color Variables
+    [Header("Node Color Variables")]
     public GameObject grassContainer;
     public Material selectionMaterial;
-    private List<Renderer> tileRendererList;
+    public List<Renderer> tileRendererList;
     public List<Material> tileMaterialList;
 
 
@@ -77,16 +73,16 @@ public class NodeScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        NDValue = NDValueList[4];  // sets value to 4 - { 0, 1, 2, 3, 4 }
-        libertyVal = 1;
-        placeAble = true;
-        sheepVal = sheepValList[0];
-        adjNDScriptList = new List<NodeScript>() {leftNDScript, rightNDScript, bottomNDScript, topNDScript};
-        adjNDList = new List<GameObject>() {leftND, rightND, bottomND, topND };
+        NDVal = NDValList[4];  // sets value to 4 - { 0, 1, 2, 3, 4 }
+        libVal = 1;
+        canPlace = true;
+        shpVal = shpValList[0];
+        adjNDList    = new List<GameObject>() {LND, RND, BND, TND };
+        adjNDScrList = new List<NodeScript>() {LNDScr, RNDScr, BNDScr, TNDScr};
 
         // Get reference to Node Array and scripts
         NDArray = transform.parent.gameObject;
-        Brd_Gntr_Script = NDArray.GetComponent<BoardGenerator>();
+        BrdGntScr = NDArray.GetComponent<BoardGenerator>();
         ND_Grp_Mngr_Scrp = NDArray.GetComponent<GroupManagerScript>();
 
         // NodeColor Variables
@@ -113,25 +109,25 @@ public class NodeScript : MonoBehaviour
 
     public void SetSheepDisplay()
     {
-        bool sheepActive = true;
+        bool shpActive = true;
         
         // Sets all SheepTiles to inactive
-        for (int i = sheepTileList.Count-1; i >= 0; i--)    
+        for (int i = shpTileList.Count-1; i >= 0; i--)    
         {
-            sheepTileList[i].SetActive(!sheepActive);                               // Sets all SheepTiles to inactive
+            shpTileList[i].SetActive(!shpActive);                               // Sets all SheepTiles to inactive
         }
-        sheepTileList[sheepVal].SetActive(sheepActive);                             // Set Current SheepTile active
+        shpTileList[shpVal].SetActive(shpActive);                             // Set Current SheepTile active
     }
 
     public void SetTileDisplay()
     {
         bool tileActive = true;                                                     // Sets initialize bool
-        for (int i = NDValue; i >= 0; i--)                                          // Sets all tiles from NDValue and lower true
+        for (int i = NDVal; i >= 0; i--)                                          // Sets all tiles from ND_Val and lower true
         {
             GrassTileList[i].GetComponent<MeshRenderer>().enabled = tileActive;
             GrassTileList[i].SetActive(tileActive);
         }
-        for (int i = NDValueList.Count - 1; i > NDValue; i--)                       // Sets all tiles above NDValue false
+        for (int i = NDValList.Count - 1; i > NDVal; i--)                       // Sets all tiles above ND_Val false
         {
             GrassTileList[i].GetComponent<MeshRenderer>().enabled = !tileActive;
             GrassTileList[i].SetActive(!tileActive);
@@ -179,37 +175,37 @@ public class NodeScript : MonoBehaviour
 
     public void BlackSheepSetter()                                          // Sets node to Black Sheep Object
     {
-        sheepVal = sheepValList[1];                                         // Set sheep value to blackSheep index
-        libertyVal = libertyValList[0];                                     // Set libertyVal to 0
-        NDValue = NDValueList[0];                                           // NDValue is 0
-        placeAble = false;
+        shpVal = shpValList[1];                                         // Set shp value to blackSheep index
+        libVal = libValList[0];                                     // Set libVal to 0
+        NDVal  = NDValList [0];                                           // ND_Val is 0
+        canPlace = false;
         lastPlaced = true;
-        isInGrp = true;
+        hasGrp = true;
 
     }
 
 
     public void WhiteSheepSetter()                                          // Sets node to Black Sheep Object
     {
-        sheepVal = sheepValList[2];                                         // Set sheep value to whiteSheep index
-        libertyVal = libertyValList[0];                                     // Set libertyVal to 0
-        NDValue = NDValueList[0];                                           // NDValue is 0
-        placeAble = false;
+        shpVal = shpValList[2];                                         // Set shp value to whiteSheep index
+        libVal = libValList[0];                                     // Set libVal to 0
+        NDVal  = NDValList [0];                                           // ND_Val is 0
+        canPlace = false; 
         lastPlaced = true;
-        isInGrp = true;
+        hasGrp = true;
 
     }
 
 
     public void EmptySheepSetter()                                          // Sets node to Empty Sheep Object
     {
-        sheepVal = sheepValList[0];                                         // Set sheep value to emptySheep index
-        libertyVal = libertyValList[1];                                     // Set libertyVal to 1
-        NDValue = NDValueList[4];                                           // NDValue is reset to 4
-        placeAble = true;
-        NDgrpID = -1;
+        shpVal = shpValList[0];                                         // Set shp value to emptySheep index
+        libVal = libValList[1];                                     // Set libVal to 1
+        NDVal  = NDValList [4];                                           // ND_Val is reset to 4
+        canPlace = true;
+        NDGrpID = -1;
         lastPlaced = false;
-        isInGrp = false;
+        hasGrp = false;
 
     }
 
@@ -223,9 +219,9 @@ public class NodeScript : MonoBehaviour
     public void PlaceBlackSheepMethod()
     {
         // Check if the left mouse button was clicked
-        BlackSheepSetter();                                                                  // Set Node to BlacksheepVal
-        Brd_Gntr_Script.UpdateBoardNodeValues();
-        Brd_Gntr_Script.UpdateBoardDisplay();
+        BlackSheepSetter();                                                                  // Set Node to BlackshpVal
+        BrdGntScr.UpdateBoardNodeValues();
+        BrdGntScr.UpdateBoardDisplay();
 
         // ND_Grp_Mngr_Scrp.UpdateGroupsMethod(gameObject);
 
@@ -235,9 +231,9 @@ public class NodeScript : MonoBehaviour
     // 09/05/2024 - Method Commented out to user Mouse1 for testing
     public void PlaceWhiteSheepMethod()
     {
-        WhiteSheepSetter();                                                                  // Set Node to BlacksheepVal
-        Brd_Gntr_Script.UpdateBoardNodeValues();
-        Brd_Gntr_Script.UpdateBoardDisplay();
+        WhiteSheepSetter();                                                                  // Set Node to BlackshpVal
+        BrdGntScr.UpdateBoardNodeValues();
+        BrdGntScr.UpdateBoardDisplay();
         
         // ND_Grp_Mngr_Scrp.UpdateGroupsMethod(gameObject);
 

@@ -98,16 +98,16 @@ public class GroupManagerScript : MonoBehaviour
         //~ Group Attributes
         Group newGrp = new Group();
         int newGrpID = newGrp.GrpID;
-        newGrp.Grp_ShpVal = crntND.GetComponent<NodeScript>().sheepVal;
+        newGrp.Grp_ShpVal = crntND.GetComponent<NodeScript>().shpVal;
         
         //~ Associate Group, Node, List
-        ND_Scr.NDgrpID = newGrpID;
-        newGrp.ND_ID_List.Add(ND_Scr.nodeID);
+        ND_Scr.NDGrpID = newGrpID;
+        newGrp.ND_ID_List.Add(ND_Scr.NDID);
 
         //~ Update Global Properties
         All_Grp_List.Add(newGrp);        
         lastND_ID = crntND_ID;                                              // ! Sets last placed ND_ID for Script Reference
-        lastND_ShpVal = ND_Scr.sheepVal;
+        lastND_ShpVal = ND_Scr.shpVal;
         
         debugNodeCheck = crntND;
         lastGrpID = newGrpID;           // TODO Check on change 
@@ -122,56 +122,56 @@ public class GroupManagerScript : MonoBehaviour
         GameObject targetND = GetNodeWithID(All_ND_List, targetND_ID);
         NodeScript ND_Scr = targetND.GetComponent<NodeScript>();
 
-        if(ND_Scr.sheepVal != ND_Scr.sheepValList[0])
+        if(ND_Scr.shpVal != ND_Scr.shpValList[0])
         {
             // Create new NodeGroup, assign grpID
-            if(ND_Scr.NDgrpID == -1)
+            if(ND_Scr.NDGrpID == -1)
             {
-                ND_Scr.NDgrpID = CreateNewGroup(ND_Scr.nodeID);
+                ND_Scr.NDGrpID = CreateNewGroup(ND_Scr.NDID);
             }
-            int targetNDGrpID = ND_Scr.NDgrpID;
+            int targetNDGrpID = ND_Scr.NDGrpID;
             
             // Adjacent Node Scripts
-            NodeScript leftND_Scr = ND_Scr.leftNDScript;
-            NodeScript rightND_Scr = ND_Scr.rightNDScript;
-            NodeScript bottomND_Scr = ND_Scr.bottomNDScript;
-            NodeScript topND_Scr = ND_Scr.topNDScript;
+            NodeScript LND_Scr = ND_Scr.LNDScr;
+            NodeScript RND_Scr = ND_Scr.RNDScr;
+            NodeScript BND_Scr = ND_Scr.BNDScr;
+            NodeScript TND_Scr = ND_Scr.TNDScr;
 
             //* FIRST CHECK OCCURS ON LEFT NODE
             // Left Node Found
-            if(leftND_Scr != null && leftND_Scr.sheepVal == ND_Scr.sheepVal){                   // ! Checks if adjNode is the same sheepVal as current player                  
-                int leftNDGrpID = leftND_Scr.NDgrpID;
+            if(LND_Scr != null && LND_Scr.shpVal == ND_Scr.shpVal){                   // ! Checks if adjNode is the same sheepVal as current player                  
+                int LNDGrpID = LND_Scr.NDGrpID;
 
-                if(leftNDGrpID != targetNDGrpID && leftNDGrpID != -1){
-                    JoinGroups(targetNDGrpID, leftNDGrpID);
+                if(LNDGrpID != targetNDGrpID && LNDGrpID != -1){
+                    JoinGroups(targetNDGrpID, LNDGrpID);
                 }
             }
             // Right Node Found
-            if(rightND_Scr != null && rightND_Scr.sheepVal == ND_Scr.sheepVal){                   // ! Checks if adjNode is the same sheepVal as current player                  
-                int rightNDGrpID = rightND_Scr.NDgrpID;
+            if(RND_Scr != null && RND_Scr.shpVal == ND_Scr.shpVal){                   // ! Checks if adjNode is the same sheepVal as current player                  
+                int RNDGrpID = RND_Scr.NDGrpID;
 
-                if(rightNDGrpID != targetNDGrpID && rightNDGrpID != -1){
-                    JoinGroups(targetNDGrpID, rightNDGrpID);
+                if(RNDGrpID != targetNDGrpID && RNDGrpID != -1){
+                    JoinGroups(targetNDGrpID, RNDGrpID);
                 }
             }
             // Bottom Node Found
-            if(bottomND_Scr != null && bottomND_Scr.sheepVal == ND_Scr.sheepVal){                   // ! Checks if adjNode is the same sheepVal as current player                  
-                int bottomNDGrpID = bottomND_Scr.NDgrpID;
-                if(bottomNDGrpID != targetNDGrpID && bottomNDGrpID != -1){
-                    JoinGroups(targetNDGrpID, bottomNDGrpID);
+            if(BND_Scr != null && BND_Scr.shpVal == ND_Scr.shpVal){                   // ! Checks if adjNode is the same sheepVal as current player                  
+                int BNDGrpID = BND_Scr.NDGrpID;
+                if(BNDGrpID != targetNDGrpID && BNDGrpID != -1){
+                    JoinGroups(targetNDGrpID, BNDGrpID);
                 }
             }
             // Top Node Found
-            if(topND_Scr != null && topND_Scr.sheepVal == ND_Scr.sheepVal){                   // ! Checks if adjNode is the same sheepVal as current player                  
-                int topNDGrpID = topND_Scr.NDgrpID;
+            if(TND_Scr != null && TND_Scr.shpVal == ND_Scr.shpVal){                   // ! Checks if adjNode is the same sheepVal as current player                  
+                int TNDGrpID = TND_Scr.NDGrpID;
 
-                if(topNDGrpID != targetNDGrpID && topNDGrpID != -1){
-                    JoinGroups(targetNDGrpID, topNDGrpID);
+                if(TNDGrpID != targetNDGrpID && TNDGrpID != -1){
+                    JoinGroups(targetNDGrpID, TNDGrpID);
                 }
             }
 
             ND_Scr.lastPlaced = true;
-            lastND_ID = ND_Scr.nodeID;
+            lastND_ID = ND_Scr.NDID;
         }
     }
 
@@ -184,7 +184,7 @@ public class GroupManagerScript : MonoBehaviour
         foreach (GameObject obj in gameObjectList)
         {
             NodeScript nodeScript = obj.GetComponent<NodeScript>();
-            if (nodeScript != null && nodeScript.nodeID == targetID)
+            if (nodeScript != null && nodeScript.NDID == targetID)
             {
                 return obj; // Found the GameObject with the target ID
             }
@@ -210,7 +210,7 @@ public class GroupManagerScript : MonoBehaviour
             {
                 newGrp.ND_ID_List.Add(ID);                                          // Add ID to newGrp 
                 GameObject node = GetNodeWithID(All_ND_List, ID);                   // Get Node with ID 
-                node.GetComponent<NodeScript>().NDgrpID = newGrp.GrpID;             // Update GrpID on NodeScript 
+                node.GetComponent<NodeScript>().NDGrpID = newGrp.GrpID;             // Update GrpID on NodeScript 
             }
 
             DeleteGroup(prevGrpID);                                                 // Delete prevGrp from All_Grp_List 
@@ -255,34 +255,34 @@ public class GroupManagerScript : MonoBehaviour
             
             foreach(GameObject crntND in GrpNDList)                                   // Adds value of node to total liberties
             {
-                NodeScript NDScript = crntND.GetComponent<NodeScript>();              // Node script reference to get all information
+                NodeScript NDScr = crntND.GetComponent<NodeScript>();              // Node script reference to get all information
 
-                if(NDScript.leftND != null){                                          // If the adj node is not empty
-                    if(countedNDs.Contains(NDScript.leftND) == false)                 // If the node is not already in the script (has been counted)
+                if(NDScr.LND != null){                                          // If the adj node is not empty
+                    if(countedNDs.Contains(NDScr.LND) == false)                 // If the node is not already in the script (has been counted)
                     {
-                        countedNDs.Add(NDScript.leftND);                              // Add it to the liberty node list
-                        totalGrpLibs += NDScript.leftNDScript.libertyVal;             // Add it's liberty value to the group ( 1 or 0 )
+                        countedNDs.Add(NDScr.LND);                              // Add it to the liberty node list
+                        totalGrpLibs += NDScr.LNDScr.libVal;             // Add it's liberty value to the group ( 1 or 0 )
                     }
                 }
-                if(NDScript.rightND != null){
-                    if(countedNDs.Contains(NDScript.rightND) == false)
+                if(NDScr.RND != null){
+                    if(countedNDs.Contains(NDScr.RND) == false)
                     {
-                        countedNDs.Add(NDScript.rightND);
-                        totalGrpLibs += NDScript.rightNDScript.libertyVal;
+                        countedNDs.Add(NDScr.RND);
+                        totalGrpLibs += NDScr.RNDScr.libVal;
                     }
                 }
-                if(NDScript.bottomND != null){
-                    if(countedNDs.Contains(NDScript.bottomND) == false)
+                if(NDScr.BND != null){
+                    if(countedNDs.Contains(NDScr.BND) == false)
                     {
-                        countedNDs.Add(NDScript.bottomND);
-                        totalGrpLibs += NDScript.bottomNDScript.libertyVal;
+                        countedNDs.Add(NDScr.BND);
+                        totalGrpLibs += NDScr.BNDScr.libVal;
                     }
                 }
-                if(NDScript.topND != null){
-                    if(countedNDs.Contains(NDScript.topND) == false)
+                if(NDScr.TND != null){
+                    if(countedNDs.Contains(NDScr.TND) == false)
                     {
-                        countedNDs.Add(NDScript.topND);
-                        totalGrpLibs += NDScript.topNDScript.libertyVal;
+                        countedNDs.Add(NDScr.TND);
+                        totalGrpLibs += NDScr.TNDScr.libVal;
                     }
                 }
             }
@@ -303,7 +303,7 @@ public class GroupManagerScript : MonoBehaviour
 
         GameObject crntND = GetNodeWithID(All_ND_List, ND_ID);                        // Get TargetNode
         NodeScript crntNDScript = crntND.GetComponent<NodeScript>();                  // Get TargetNode Script
-        List<NodeScript> adjNDScriptList = crntNDScript.adjNDScriptList;              // Get adjNDScriptList to iterate over Group Capture
+        List<NodeScript> adjNDScriptList = crntNDScript.adjNDScrList;              // Get adjNDScriptList to iterate over Group Capture
         
         List<int> adjND_GrpIDList = new List<int>();
         List<Group> adjGrpList = new List<Group>();                                   // Get ajd Group and add to list
@@ -311,9 +311,9 @@ public class GroupManagerScript : MonoBehaviour
         //? --------------------------------------------------------------------------// Get AdjGrpID and AdjGrp Lists
         foreach(NodeScript ND_SCR in adjNDScriptList)                                 // Get ajdND Group ID and add to list
         {
-            if(ND_SCR != null && adjND_GrpIDList.Contains(ND_SCR.NDgrpID) == false)   // If ND_SCR not null and not already in List
+            if(ND_SCR != null && adjND_GrpIDList.Contains(ND_SCR.NDGrpID) == false)   // If ND_SCR not null and not already in List
             {
-                adjND_GrpIDList.Add(ND_SCR.NDgrpID);                                  // Add to list
+                adjND_GrpIDList.Add(ND_SCR.NDGrpID);                                  // Add to list
             }
         }
         if(adjND_GrpIDList.Count > 0)                                                 // adjND are not all empty
@@ -467,7 +467,7 @@ public class GroupManagerScript : MonoBehaviour
             NodeScript ND_Scrp = ND.GetComponent<NodeScript>();
             if (ND_Scrp != null)
             {
-                ND_GrpID_List.Add(ND_Scrp.NDgrpID);
+                ND_GrpID_List.Add(ND_Scrp.NDGrpID);
             }
         }
 
@@ -475,11 +475,6 @@ public class GroupManagerScript : MonoBehaviour
 
         return ND_GrpID_List;
     }
-
-
-
-
-
 
 
 
@@ -493,18 +488,6 @@ public class GroupManagerScript : MonoBehaviour
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
     //* ---------------------------------------- AssignSheepToGroups ----------------------------------------
     public void AssignSheepToGroups_REFACTOR(int newND_ID)
     {
@@ -512,38 +495,38 @@ public class GroupManagerScript : MonoBehaviour
         NodeScript NDScript = newND.GetComponent<NodeScript>();
 
         // Create new NodeGroup, assign grpID
-        if(NDScript.NDgrpID == -1)
+        if(NDScript.NDGrpID == -1)
         {
-            NDScript.NDgrpID = CreateNewGroup(NDScript.nodeID);
+            NDScript.NDGrpID = CreateNewGroup(NDScript.NDID);
         }
-        int newNDGrpID = NDScript.NDgrpID;
+        int newNDGrpID = NDScript.NDGrpID;
         
         // Adjacent Node Scripts
-        List<NodeScript> adjNDScriptList = NDScript.adjNDScriptList;
+        List<NodeScript> adjNDScriptList = NDScript.adjNDScrList;
 
         foreach(NodeScript adjNDScript in adjNDScriptList)
         {
-            if(adjNDScript != null && adjNDScript.sheepVal == NDScript.sheepVal)                   // ! Checks if zeroGroup is the same sheepVal as current player                  
+            if(adjNDScript != null && adjNDScript.shpVal == NDScript.shpVal)                   // ! Checks if zeroGroup is the same sheepVal as current player                  
             {
-                int adjNDGrpID = adjNDScript.NDgrpID;
+                int adjNDGrpID = adjNDScript.NDGrpID;
 
                 if(adjNDGrpID != newNDGrpID && adjNDGrpID != -1){
                     JoinGroups(newNDGrpID, adjNDGrpID);
                 }
 
             }
-            Debug.Log("adjNode " + adjNDScript.GetComponentInParent<Transform>().name + " added to Grp " + adjNDScript.NDgrpID);
+            Debug.Log("adjNode " + adjNDScript.GetComponentInParent<Transform>().name + " added to Grp " + adjNDScript.NDGrpID);
         }
 
         NDScript.lastPlaced = true;
-        lastND_ID = NDScript.nodeID;
+        lastND_ID = NDScript.NDID;
     }
 
 
     // public void AssignSheepToGroups_REFACTOR(GameObject node)
     // {
     //     NodeScript newScript = node.GetComponent<NodeScript>();                                  // Get NodeScript from newNode
-    //     newScript.NDgrpID = CreateNewGroup(node);                                                // Create new NodeGroup, assign NDgrpID
+    //     newScript.NDGrpID = CreateNewGroup(node);                                                // Create new NodeGroup, assign NDGrpID
 
     //     List<NodeScript> adjScriptList = newScript.adjNDScriptList;                              // Get List of AdjacentScripts
 
@@ -551,15 +534,15 @@ public class GroupManagerScript : MonoBehaviour
     //     {        
     //         if(adjScript != null && adjScript.sheepVal == newScript.sheepVal)                    // If script is not null, and matches sheepVal (Same color)
     //         {        
-    //             int adjGrpID = adjScript.NDgrpID;                                                // Save GrpID reference to Delete at end of Method
+    //             int adjGrpID = adjScript.NDGrpID;                                                // Save GrpID reference to Delete at end of Method
 
-    //             if(adjScript.NDgrpID != newScript.NDgrpID)                                       // If they are not in the same group
+    //             if(adjScript.NDGrpID != newScript.NDGrpID)                                       // If they are not in the same group
     //             {
-    //                 List<GameObject> newGrp = JoinGroups(newScript.NDgrpID, adjScript.NDgrpID);  // Join (Add) all nodes in adjGroup to newGrp
+    //                 List<GameObject> newGrp = JoinGroups(newScript.NDGrpID, adjScript.NDGrpID);  // Join (Add) all nodes in adjGroup to newGrp
 
     //                 foreach(GameObject groupNode in newGrp)
     //                 {
-    //                     groupNode.GetComponent<NodeScript>().NDgrpID = newScript.NDgrpID;        // Set all newGrp nodes to new ID
+    //                     groupNode.GetComponent<NodeScript>().NDGrpID = newScript.NDGrpID;        // Set all newGrp nodes to new ID
     //                 }
     //             }
     //             DeleteGroup(adjGrpID);                                                 // Delete adjGroup by GrpID

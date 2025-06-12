@@ -98,7 +98,7 @@ public class GameManagerScript : MonoBehaviour
     {        
         GameObject node = ND_Grp_Scr.GetNodeWithID(ND_List, ND_ID);
         NodeScript crnt_ND_Scr = node.GetComponent<NodeScript>();
-        int shpVal = crnt_ND_Scr.sheepValList[1];                                                            // Set blackSheepVal
+        int shpVal = crnt_ND_Scr.shpValList[1];                                                            // Set blackSheepVal
     
         bool isPlaceAble = ND_Grp_Scr.Check_IsPlaceAble(ND_ID, shpVal);
         Update_Ko_Status(ND_ID, shpVal);
@@ -134,7 +134,7 @@ public class GameManagerScript : MonoBehaviour
     {        
         GameObject node = ND_Grp_Scr.GetNodeWithID(ND_List, ND_ID);
         NodeScript crnt_ND_Scr = node.GetComponent<NodeScript>();
-        int shpVal = crnt_ND_Scr.sheepValList[2];                                                             // Set whiteSheepVal
+        int shpVal = crnt_ND_Scr.shpValList[2];                                                             // Set whiteSheepVal
     
         bool isPlaceAble = ND_Grp_Scr.Check_IsPlaceAble(ND_ID, shpVal);
         Update_Ko_Status(ND_ID, shpVal);

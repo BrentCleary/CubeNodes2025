@@ -4,7 +4,8 @@ MonoImporter:
   externalObjects: {}
   serializedVersion: 2
   defaultReferences:
-  - nodePrefab: {fileID: 2404018319395889093, guid: 2171c39f9063e3e488721af2d1f06815, type: 3}
+  - ND_ArrTransform: {instanceID: 0}
+  - ND_Prefab: {fileID: 2404018319395889093, guid: 2171c39f9063e3e488721af2d1f06815, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
