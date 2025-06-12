@@ -38,12 +38,12 @@ public class NodeScript : MonoBehaviour
     //* ---------------------------------------- SHEEP GROUP PARAMETERS ----------------------------------------
     // Adjacent Nodes
     public GameObject leftND;                                                           //? left
-    public NodeScript leftNDScript;
     public GameObject rightND;                                                          //? right
-    public NodeScript rightNDScript;
     public GameObject topND;                                                            //? top
-    public NodeScript topNDScript;
     public GameObject bottomND;                                                         //? bottom
+    public NodeScript leftNDScript;
+    public NodeScript rightNDScript;
+    public NodeScript topNDScript;
     public NodeScript bottomNDScript;
     // Adjacent Node Scripts
     public List<NodeScript> adjNDScriptList;

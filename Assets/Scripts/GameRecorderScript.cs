@@ -13,25 +13,24 @@ public class GameRecorderScript : MonoBehaviour
 
     //* ---------------------------------------- OBJECT REFERENCES ----------------------------------------
     public GameObject NDArray;
+    [Header("Current State Vals")]
     public List<int> crntBoardState;
     public int crntShpVal;
+    public int currentPlayer;
 
+    [Header("Previous State Vals")]
     public List<int> prevBoardState;
     public int prevShpVal;
     public List<int> ND_GrpID_List;
     public static int globalMoveCount = 0;
-    public int currentPlayer;
 
     [System.Serializable]
-    public class BoardState
-    {
+    public class BoardState {
         public string turnNumber;
         public List<int> boardValues;
         public List<int> ND_GrpID_List;
 
-
-        public BoardState()
-        {
+        public BoardState() {
             globalMoveCount++;
             turnNumber =  "Turn " + globalMoveCount;
         }
@@ -40,20 +39,13 @@ public class GameRecorderScript : MonoBehaviour
 
 
     // Start is called before the first frame update
-    void Start()
+    void Start() 
     {
         NDArray = GameObject.Find("gNodeArray");
         brd_Gntr_Script = NDArray.GetComponent<BoardGenerator>();
         ND_Grp_Mngr_Scrp = NDArray.GetComponent<GroupManagerScript>();
         Plyr_Scrp = gameObject.GetComponent<PlayerScript>();
-
         Brd_State_Record = new List<BoardState>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     void OnValidate()

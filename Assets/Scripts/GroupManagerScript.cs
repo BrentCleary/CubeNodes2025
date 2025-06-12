@@ -40,11 +40,10 @@ public class GroupManagerScript : MonoBehaviour
     public int testVariable;
 
 
-    public BoardGenerator brd_Gntr_Script;
+    public BoardGenerator Brd_Gnt_Scr;
     public NodeScript lastND_Script;
 
     public TargetNode targetNDScript;
-    public int brdScrptDebugTestVar;
 
     public GameObject debugNodeCheck;
     public List<GameObject> All_ND_List;
@@ -58,7 +57,7 @@ public class GroupManagerScript : MonoBehaviour
 
     public void Start()
     {
-        brd_Gntr_Script = GetComponent<BoardGenerator>();
+        Brd_Gnt_Scr = GetComponent<BoardGenerator>();
         All_Grp_List = new List<Group>();
 
         testVariable = 123;
@@ -68,9 +67,9 @@ public class GroupManagerScript : MonoBehaviour
 
     private void Update()
     {
-        if (All_ND_List.Count < 1 && brd_Gntr_Script.gNodeList != null)
+        if (All_ND_List.Count < 1 && Brd_Gnt_Scr.ND_List != null)
         {
-            All_ND_List = brd_Gntr_Script.gNodeList;
+            All_ND_List = Brd_Gnt_Scr.ND_List;
         }
     }
 
@@ -94,7 +93,7 @@ public class GroupManagerScript : MonoBehaviour
     public int CreateNewGroup(int crntND_ID)   //? Called GameManagerScript    // Creates New Group - Called in TargetNode - Returns GrpID
     {
         GameObject crntND = GetNodeWithID(All_ND_List, crntND_ID);
-        NodeScript NDScript = crntND.GetComponent<NodeScript>();
+        NodeScript ND_Scr = crntND.GetComponent<NodeScript>();
         
         //~ Group Attributes
         Group newGrp = new Group();
@@ -102,13 +101,13 @@ public class GroupManagerScript : MonoBehaviour
         newGrp.Grp_ShpVal = crntND.GetComponent<NodeScript>().sheepVal;
         
         //~ Associate Group, Node, List
-        NDScript.NDgrpID = newGrpID;
-        newGrp.ND_ID_List.Add(NDScript.nodeID);
+        ND_Scr.NDgrpID = newGrpID;
+        newGrp.ND_ID_List.Add(ND_Scr.nodeID);
 
         //~ Update Global Properties
         All_Grp_List.Add(newGrp);        
         lastND_ID = crntND_ID;                                              // ! Sets last placed ND_ID for Script Reference
-        lastND_ShpVal = NDScript.sheepVal;
+        lastND_ShpVal = ND_Scr.sheepVal;
         
         debugNodeCheck = crntND;
         lastGrpID = newGrpID;           // TODO Check on change 
@@ -121,58 +120,58 @@ public class GroupManagerScript : MonoBehaviour
     public void AssignSheepToGroups(int targetND_ID)
     {
         GameObject targetND = GetNodeWithID(All_ND_List, targetND_ID);
-        NodeScript NDScript = targetND.GetComponent<NodeScript>();
+        NodeScript ND_Scr = targetND.GetComponent<NodeScript>();
 
-        if(NDScript.sheepVal != NDScript.sheepValList[0])
+        if(ND_Scr.sheepVal != ND_Scr.sheepValList[0])
         {
             // Create new NodeGroup, assign grpID
-            if(NDScript.NDgrpID == -1)
+            if(ND_Scr.NDgrpID == -1)
             {
-                NDScript.NDgrpID = CreateNewGroup(NDScript.nodeID);
+                ND_Scr.NDgrpID = CreateNewGroup(ND_Scr.nodeID);
             }
-            int targetNDGrpID = NDScript.NDgrpID;
+            int targetNDGrpID = ND_Scr.NDgrpID;
             
             // Adjacent Node Scripts
-            NodeScript leftNDScript = NDScript.leftNDScript;
-            NodeScript rightNDScript = NDScript.rightNDScript;
-            NodeScript bottomNDScript = NDScript.bottomNDScript;
-            NodeScript topNDScript = NDScript.topNDScript;
+            NodeScript leftND_Scr = ND_Scr.leftNDScript;
+            NodeScript rightND_Scr = ND_Scr.rightNDScript;
+            NodeScript bottomND_Scr = ND_Scr.bottomNDScript;
+            NodeScript topND_Scr = ND_Scr.topNDScript;
 
             //* FIRST CHECK OCCURS ON LEFT NODE
             // Left Node Found
-            if(leftNDScript != null && leftNDScript.sheepVal == NDScript.sheepVal){                   // ! Checks if adjNode is the same sheepVal as current player                  
-                int leftNDGrpID = leftNDScript.NDgrpID;
+            if(leftND_Scr != null && leftND_Scr.sheepVal == ND_Scr.sheepVal){                   // ! Checks if adjNode is the same sheepVal as current player                  
+                int leftNDGrpID = leftND_Scr.NDgrpID;
 
                 if(leftNDGrpID != targetNDGrpID && leftNDGrpID != -1){
                     JoinGroups(targetNDGrpID, leftNDGrpID);
                 }
             }
             // Right Node Found
-            if(rightNDScript != null && rightNDScript.sheepVal == NDScript.sheepVal){                   // ! Checks if adjNode is the same sheepVal as current player                  
-                int rightNDGrpID = rightNDScript.NDgrpID;
+            if(rightND_Scr != null && rightND_Scr.sheepVal == ND_Scr.sheepVal){                   // ! Checks if adjNode is the same sheepVal as current player                  
+                int rightNDGrpID = rightND_Scr.NDgrpID;
 
                 if(rightNDGrpID != targetNDGrpID && rightNDGrpID != -1){
                     JoinGroups(targetNDGrpID, rightNDGrpID);
                 }
             }
             // Bottom Node Found
-            if(bottomNDScript != null && bottomNDScript.sheepVal == NDScript.sheepVal){                   // ! Checks if adjNode is the same sheepVal as current player                  
-                int bottomNDGrpID = bottomNDScript.NDgrpID;
+            if(bottomND_Scr != null && bottomND_Scr.sheepVal == ND_Scr.sheepVal){                   // ! Checks if adjNode is the same sheepVal as current player                  
+                int bottomNDGrpID = bottomND_Scr.NDgrpID;
                 if(bottomNDGrpID != targetNDGrpID && bottomNDGrpID != -1){
                     JoinGroups(targetNDGrpID, bottomNDGrpID);
                 }
             }
             // Top Node Found
-            if(topNDScript != null && topNDScript.sheepVal == NDScript.sheepVal){                   // ! Checks if adjNode is the same sheepVal as current player                  
-                int topNDGrpID = topNDScript.NDgrpID;
+            if(topND_Scr != null && topND_Scr.sheepVal == ND_Scr.sheepVal){                   // ! Checks if adjNode is the same sheepVal as current player                  
+                int topNDGrpID = topND_Scr.NDgrpID;
 
                 if(topNDGrpID != targetNDGrpID && topNDGrpID != -1){
                     JoinGroups(targetNDGrpID, topNDGrpID);
                 }
             }
 
-            NDScript.lastPlaced = true;
-            lastND_ID = NDScript.nodeID;
+            ND_Scr.lastPlaced = true;
+            lastND_ID = ND_Scr.nodeID;
         }
     }
 

@@ -50,39 +50,49 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nodeID: 0
-  nodeValue: 0
-  nodeValueList: 0000000001000000020000000300000004000000
+  NDValue: 0
+  NDValueList: 0000000001000000020000000300000004000000
   GrassTileList:
   - {fileID: 6810115756045366859}
   - {fileID: 1712340816621965457}
   - {fileID: 7623690394024410605}
   - {fileID: 2157240889988850010}
   - {fileID: 1335092287229106487}
-  sheepValue: 0
-  sheepValueList: 000000000100000002000000
+  sheepVal: 0
+  sheepValList: 000000000100000002000000
   sheepTileList:
   - {fileID: 1145259540107285496}
   - {fileID: 5220549801508980871}
   - {fileID: 1223147854921044891}
-  libertyValue: 0
-  libertyValueList: 0000000001000000
-  placeAbleBool: 0
-  placeAbleValueList: 0001
+  libertyVal: 0
+  libertyValList: 0000000001000000
+  placeAble: 0
+  placeAbleList: 0001
+  lastPlaced: 0
+  NDArray: {fileID: 0}
   arrayPosition: 0000000000000000
-  leftNode: {fileID: 0}
-  leftNodeScript: {fileID: 0}
-  rightNode: {fileID: 0}
-  rightNodeScript: {fileID: 0}
-  topNode: {fileID: 0}
-  topNodeScript: {fileID: 0}
-  bottomNode: {fileID: 0}
-  bottomNodeScript: {fileID: 0}
-  adjNodeScriptList: []
-  leftNodeLibertyVal: 0
-  rightNodeLibertyVal: 0
-  bottomNodeLibertyVal: 0
-  topNodeLibertyVal: 0
-  groupID: -1
+  leftND: {fileID: 0}
+  leftNDScript: {fileID: 0}
+  rightND: {fileID: 0}
+  rightNDScript: {fileID: 0}
+  topND: {fileID: 0}
+  topNDScript: {fileID: 0}
+  bottomND: {fileID: 0}
+  bottomNDScript: {fileID: 0}
+  adjNDScriptList: []
+  adjNDList: []
+  leftNDLibertyVal: 0
+  rightNDLibertyVal: 0
+  bottomNDLibertyVal: 0
+  topNDLibertyVal: 0
+  NDgrpID: -1
+  isInGrp: 0
+  Brd_Gntr_Script: {fileID: 0}
+  ND_Grp_Mngr_Scrp: {fileID: 0}
+  Trgt_ND_Script: {fileID: 0}
+  grassContainer: {fileID: 0}
+  selectionMaterial: {fileID: 0}
+  tileMaterialList: []
 --- !u!65 &-5659864391004206637
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -112,13 +122,37 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8988802235557534299}
     m_Modifications:
+    - target: {fileID: 1816478379558668908, guid: 519b49229779432458f316f18c394a37, type: 3}
+      propertyPath: m_Intensity
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2718317031189295122, guid: 519b49229779432458f316f18c394a37, type: 3}
       propertyPath: m_LocalScale.y
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 2718317031189295122, guid: 519b49229779432458f316f18c394a37, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3184590060104785864, guid: 519b49229779432458f316f18c394a37, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 3184590060104785864, guid: 519b49229779432458f316f18c394a37, type: 3}
+      propertyPath: m_LocalPosition.y
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3339159357018591726, guid: 519b49229779432458f316f18c394a37, type: 3}
       propertyPath: m_Name
       value: GrassContainer
+      objectReference: {fileID: 0}
+    - target: {fileID: 5072213970345010821, guid: 519b49229779432458f316f18c394a37, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 5072213970345010821, guid: 519b49229779432458f316f18c394a37, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 5484695054018320863, guid: 519b49229779432458f316f18c394a37, type: 3}
       propertyPath: m_LocalPosition.x
@@ -159,6 +193,22 @@ PrefabInstance:
     - target: {fileID: 5484695054018320863, guid: 519b49229779432458f316f18c394a37, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6983605381274835203, guid: 519b49229779432458f316f18c394a37, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 6983605381274835203, guid: 519b49229779432458f316f18c394a37, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 7154926628577752278, guid: 519b49229779432458f316f18c394a37, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 7154926628577752278, guid: 519b49229779432458f316f18c394a37, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -280,7 +330,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2298765289753223022, guid: 3ea15fc2f10edb14e803b0467dfc5b2e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 2298765289753223022, guid: 3ea15fc2f10edb14e803b0467dfc5b2e, type: 3}
       propertyPath: m_LocalPosition.z
@@ -320,7 +370,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3397406179871344672, guid: 3ea15fc2f10edb14e803b0467dfc5b2e, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

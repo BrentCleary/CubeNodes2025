@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: fc784489aed61b94ab6adf870dbd85dd, type: 2}
+  - {fileID: 2100000, guid: 2f4f17c51d0df0b4f8b1c94b6cc9a7c8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -119,8 +119,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   grassContainer: {fileID: 0}
-  parentNode: {fileID: 0}
-  nodeArray: {fileID: 0}
+  parentND: {fileID: 0}
+  ND_Array: {fileID: 0}
+  mainCamera: {fileID: 0}
   selectionMaterial: {fileID: 2100000, guid: 83f935cf247a987418b4bd63a09b1c13, type: 2}
   tileMaterialList: []
   nodeSelected: 0

@@ -48,8 +48,8 @@ public class CameraControllerScript : MonoBehaviour
         Vector3 moveDirection = Vector3.zero;
 
         // Move relative to camera orientation
-        if (Input.GetKey(KeyCode.W)) moveDirection += transform.up;         // Up
-        if (Input.GetKey(KeyCode.S)) moveDirection -= transform.up;         // Down
+        if (Input.GetKey(KeyCode.W)) moveDirection += Vector3.up;         // Up
+        if (Input.GetKey(KeyCode.S)) moveDirection -= Vector3.up;         // Down
         if (Input.GetKey(KeyCode.A)) moveDirection -= transform.right;      // Left
         if (Input.GetKey(KeyCode.D)) moveDirection += transform.right;      // Right
 

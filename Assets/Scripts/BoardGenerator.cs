@@ -13,77 +13,78 @@ public class BoardGenerator : MonoBehaviour
 {
     //* ---------------------------------------- PROPERTIES ----------------------------------------
 
-    [SerializeField] public List<GameObject> gNodeList;
-    [SerializeField] public GameObject[,] gNodeArray;
-    public Transform gNodeArrayTransform;
+    [SerializeField] public List<GameObject> ND_List;
+    [SerializeField] public GameObject[,] ND_Arr;
+    public Transform ND_ArrTransform;
     
-    // ! Array Size Controls
-    private int arrayColumnLength = 9;                                              // Array Dimensions - Column
-    private int arrayRowLength = 9;                                                 // Array Dimensions - Row
-    private int arrayTotalNodes => arrayColumnLength * arrayRowLength;              // arrayColumnLength * arrayRowLength
-    private float nodeSpacingValue = 2;                                             // Space Between Nodes
- 
-    public GameObject nodePrefab;
-    public List<int> startNodeValueMap;
-    public List<int> currentNDValueMap;
+    [Header("Board Array Settings")] // ! Array Size Controls
+    public int arrColLen = 9;                                              // Array Dimensions - Column
+    public int arrRowLen = 9;                                                 // Array Dimensions - Row
+    public int arrNDCount => arrColLen * arrRowLen;                         // arrColLen * arrRowLen
+    public float ND_Spacing = 1.8f;                                             // Space Between Nodes
 
-    public List<Node> sheepGroupList;
+
+    public GameObject ND_Prefab;
+    public List<int> startNDValMap;
+    public List<int> crntNDValMap;
+
+    public List<Node> Shp_Grp_List;
 
     public void CreateBoard()  //? Called in GameManagerScript                      // Instantiates Variables, Calls Methods Below
     {
-        gNodeArray = new GameObject[arrayColumnLength, arrayRowLength];
-        gNodeArrayTransform = gameObject.transform;
+        ND_Arr = new GameObject[arrColLen, arrRowLen];
+        ND_ArrTransform = gameObject.transform;
 
-        gNodeList = new List<GameObject>();
+        ND_List = new List<GameObject>();
 
         InstantiateNodes();
         SetNodeTransformPosition();
         
         BuildNodeArray();
-        AdjacentSheepNodeMapper(gNodeList);
+        AdjacentSheepNodeMapper(ND_List);
     }
     // *---------------------------------------- CreateBoard Methods ----------------------------------------
-    public void InstantiateNodes()                                                  // Instantiates Nodes, Assigns names and values, Adds them to gNodeList
+    public void InstantiateNodes()                                                  // Instantiates Nodes, Assigns names and values, Adds them to ND_List
     {
-        for(int i = 0; i < arrayTotalNodes; i++) {
-            GameObject gNode = Instantiate(nodePrefab, gNodeArrayTransform);
-            gNode.name = "Node (" + i + ")";
+        for(int i = 0; i < arrNDCount; i++) {
+            GameObject gNode = Instantiate(ND_Prefab, ND_ArrTransform);
+            gNode.name = $"Node ({i})";
             gNode.GetComponent<NodeScript>().nodeID = i;                            //! Sets NodeID in NodeScript
-            gNodeList.Add(gNode);
+            ND_List.Add(gNode);
         }
     }
     public void SetNodeTransformPosition()                                          // Sets Node transform.position ( uses NodeSpacingValue, array vals  )
     {
-        int nodeCounter = 0;                                // Increments Node reference in gNodeList 
-        for(int i = 0; i < arrayColumnLength; i ++){         // Assigns positions to each gNode in gNodeArray
-            for(int j = 0; j < arrayRowLength; j ++){
-                gNodeList[nodeCounter].transform.position = new Vector3(i * nodeSpacingValue, 0, j * nodeSpacingValue); // Example positioning
+        int nodeCounter = 0;                                // Increments Node reference in ND_List 
+        for(int i = 0; i < arrColLen; i ++){         // Assigns positions to each gNode in ND_Arr
+            for(int j = 0; j < arrRowLen; j ++){
+                ND_List[nodeCounter].transform.position = new Vector3(i * ND_Spacing, 0, j * ND_Spacing); // Example positioning
                 nodeCounter++;
             }
         }
     }
-    public void BuildNodeArray()                                                    // Generate Array using Length x Row using nodes in gNodeList
+    public void BuildNodeArray()                                                    // Generate Array using Length x Row using nodes in ND_List
     {               
-        int nodeCounter = 0;                                                        // Increments Node reference in gNodeList 
-        for(int i = 0; i < arrayColumnLength; i ++){                                // Assigns positions to each gNode in gNodeArray
-            for(int j = 0; j < arrayRowLength; j ++){
-                gNodeArray[i,j] = gNodeList[nodeCounter];                           // Set curent gNodeList object to current array position
+        int nodeCounter = 0;                                                        // Increments Node reference in ND_List 
+        for(int i = 0; i < arrColLen; i ++){                                // Assigns positions to each gNode in ND_Arr
+            for(int j = 0; j < arrRowLen; j ++){
+                ND_Arr[i,j] = ND_List[nodeCounter];                           // Set curent ND_List object to current array position
                 
                 // Maps Board Array position for reference
-                NodeScript NDScript = gNodeList[nodeCounter].GetComponent<NodeScript>();
+                NodeScript NDScript = ND_List[nodeCounter].GetComponent<NodeScript>();
                 NDScript.arrayPosition[0] = i;
                 NDScript.arrayPosition[1] = j;
                 
                 // Add Array Position to Node Name
-                gNodeArray[i,j].name = gNodeArray[i,j].name + " [" + i + "," + j+ "]";
+                ND_Arr[i,j].name = ND_Arr[i,j].name + " [" + i + "," + j+ "]";
 
-                nodeCounter++;                              // Increment gNodeList index
+                nodeCounter++;                              // Increment ND_List index
             }
         }
     }
-    public void AdjacentSheepNodeMapper(List<GameObject> gNodeList)                 // Loops over gNodeList and assigns adjacent Nodes
+    public void AdjacentSheepNodeMapper(List<GameObject> ND_List)                 // Loops over ND_List and assigns adjacent Nodes
     {
-        foreach(GameObject crntND in gNodeList)
+        foreach(GameObject crntND in ND_List)
         {
             NodeScript NDScript = crntND.GetComponent<NodeScript>();
             int[] arrayPos = NDScript.arrayPosition;   
@@ -93,17 +94,17 @@ public class BoardGenerator : MonoBehaviour
                 NDScript.leftND = null;
             }
             if(arrayPos[0] != 0){      // left index is a node
-                NDScript.leftND = gNodeArray[arrayPos[0] - 1, arrayPos[1]].gameObject;
-                NDScript.leftNDScript = gNodeArray[arrayPos[0] - 1, arrayPos[1]].GetComponent<NodeScript>();
+                NDScript.leftND = ND_Arr[arrayPos[0] - 1, arrayPos[1]].gameObject;
+                NDScript.leftNDScript = ND_Arr[arrayPos[0] - 1, arrayPos[1]].GetComponent<NodeScript>();
             }
 
             // Right index
-            if(arrayPos[0] == arrayColumnLength - 1){      // right index is out of range 
+            if(arrayPos[0] == arrColLen - 1){      // right index is out of range 
                 NDScript.rightND = null;
             }
-            else if(arrayPos[0] != arrayColumnLength - 1){      // right index is a node
-                NDScript.rightND = gNodeArray[arrayPos[0] + 1, arrayPos[1]].gameObject;
-                NDScript.rightNDScript = gNodeArray[arrayPos[0] + 1, arrayPos[1]].GetComponent<NodeScript>();
+            else if(arrayPos[0] != arrColLen - 1){      // right index is a node
+                NDScript.rightND = ND_Arr[arrayPos[0] + 1, arrayPos[1]].gameObject;
+                NDScript.rightNDScript = ND_Arr[arrayPos[0] + 1, arrayPos[1]].GetComponent<NodeScript>();
             }
 
             // Bottom index
@@ -111,17 +112,17 @@ public class BoardGenerator : MonoBehaviour
                 NDScript.bottomND = null;
             }
             if(arrayPos[1] != 0){      // bottom index is a node
-                NDScript.bottomND = gNodeArray[arrayPos[0], arrayPos[1] - 1].gameObject;
-                NDScript.bottomNDScript = gNodeArray[arrayPos[0], arrayPos[1] - 1].GetComponent<NodeScript>();
+                NDScript.bottomND = ND_Arr[arrayPos[0], arrayPos[1] - 1].gameObject;
+                NDScript.bottomNDScript = ND_Arr[arrayPos[0], arrayPos[1] - 1].GetComponent<NodeScript>();
             }
 
             // Top index
-            if(arrayPos[1] == arrayRowLength - 1){      // top index is out of range 
+            if(arrayPos[1] == arrRowLen - 1){      // top index is out of range 
                 NDScript.topND = null;
             }
-            else if(arrayPos[1] != arrayRowLength - 1){      // top index is a node
-                NDScript.topND = gNodeArray[arrayPos[0], arrayPos[1] + 1].gameObject;
-                NDScript.topNDScript = gNodeArray[arrayPos[0], arrayPos[1] + 1].GetComponent<NodeScript>();
+            else if(arrayPos[1] != arrRowLen - 1){      // top index is a node
+                NDScript.topND = ND_Arr[arrayPos[0], arrayPos[1] + 1].gameObject;
+                NDScript.topNDScript = ND_Arr[arrayPos[0], arrayPos[1] + 1].GetComponent<NodeScript>();
             }
 
         }
@@ -140,7 +141,7 @@ public class BoardGenerator : MonoBehaviour
         
         List<int> NDValueMap = new List<int>();                                         // List to hold update values for arrayNodes
         
-        foreach(GameObject crntND in gNodeList)                                         // Loops over all nodes in gNodeList    
+        foreach(GameObject crntND in ND_List)                                         // Loops over all nodes in ND_List    
         {    
             NodeScript NDScript = crntND.GetComponent<NodeScript>();                    // Set liberty value based on masterNode
 
@@ -165,24 +166,24 @@ public class BoardGenerator : MonoBehaviour
         int crntNDval = 0;     
 
         // Map node values to NDValueMap based on current board state
-        for(int i = 0; i < arrayColumnLength; i++){         // Assigns positions to each gNode in gNodeArray
-            for(int j = 0; j < arrayRowLength; j++){                
+        for(int i = 0; i < arrColLen; i++){         // Assigns positions to each gNode in ND_Arr
+            for(int j = 0; j < arrRowLen; j++){                
                 // Left Index Check
                 if(j == 0){      // Check left index is not out of range 
                     newValueMap[crntNDval] -= 1;
                 }
                 if(j != 0){      // Check left position
-                    if(gNodeArray[i, j-1].GetComponent<NodeScript>().libertyVal == 0){     // Check left crntNDval is not null
+                    if(ND_Arr[i, j-1].GetComponent<NodeScript>().libertyVal == 0){     // Check left crntNDval is not null
                         newValueMap[crntNDval] -= 1;
                     }
                 }
 
                 // Right Index Check
-                if(j == arrayRowLength-1){      // Check right crntNDval is not out of range 
+                if(j == arrRowLen-1){      // Check right crntNDval is not out of range 
                     newValueMap[crntNDval] -= 1;
                 }
-                if(j != arrayRowLength-1){       // Check right position
-                    if(gNodeArray[i, j+1].GetComponent<NodeScript>().libertyVal == 0){     // Check right crntNDval is not null
+                if(j != arrRowLen-1){       // Check right position
+                    if(ND_Arr[i, j+1].GetComponent<NodeScript>().libertyVal == 0){     // Check right crntNDval is not null
                         newValueMap[crntNDval] -= 1;
                     }
                 }
@@ -192,17 +193,17 @@ public class BoardGenerator : MonoBehaviour
                     newValueMap[crntNDval] -= 1;
                 }
                 if(i != 0){      //  Check top position
-                    if(gNodeArray[i-1, j].GetComponent<NodeScript>().libertyVal == 0){
+                    if(ND_Arr[i-1, j].GetComponent<NodeScript>().libertyVal == 0){
                         newValueMap[crntNDval] -= 1;
                     }
                 }
 
                 // Bottom Index Check
-                if(i == arrayColumnLength-1){      // Check bottom crntNDval is not out of range 
+                if(i == arrColLen-1){      // Check bottom crntNDval is not out of range 
                     newValueMap[crntNDval] -= 1;
                 }
-                if(i != arrayColumnLength-1){      // Check bottom position 
-                    if(gNodeArray[i+1, j].GetComponent<NodeScript>().libertyVal == 0){
+                if(i != arrColLen-1){      // Check bottom position 
+                    if(ND_Arr[i+1, j].GetComponent<NodeScript>().libertyVal == 0){
                         newValueMap[crntNDval] -= 1;
                     }
                 }
@@ -218,21 +219,19 @@ public class BoardGenerator : MonoBehaviour
         int arrayIndex = 0;
 
         // Map NDValueMap values to NDArray
-        for(int i = 0; i < arrayColumnLength; i++)         // Assigns positions to each gNode in gNodeArray
+        for(int i = 0; i < arrColLen; i++)         // Assigns positions to each gNode in ND_Arr
         {    
-            for(int j = 0; j < arrayRowLength; j++)
+            for(int j = 0; j < arrRowLen; j++)
             {
-                GameObject crntND = gNodeArray[i,j];
+                GameObject crntND = ND_Arr[i,j];
                 NodeScript crntNDScript = crntND.GetComponent<NodeScript>();
                 
                 // Debug.Log("NDmapValue" + arrayIndex + " is " + NDValueMap[arrayIndex]);
 
-                if(NDValueMap[arrayIndex] < 0) 
-                {
+                if(NDValueMap[arrayIndex] < 0) {
                     crntNDScript.NDValue = 0;
                 }
-                else 
-                {
+                else {
                     crntNDScript.NDValue = NDValueMap[arrayIndex];
                 }
 
@@ -246,7 +245,7 @@ public class BoardGenerator : MonoBehaviour
     // *---------------------------------------- Node Display Update Method ---------------------------------
     public void UpdateBoardDisplay()  //? Called in GameManagerScript               // Updated Display of Nodes
     {
-        foreach(GameObject crntNode in gNodeList)
+        foreach(GameObject crntNode in ND_List)
         {
             NodeScript crntNDScrpt = crntNode.GetComponent<NodeScript>();
             crntNDScrpt.UpdateNodeDisplay();
@@ -259,7 +258,7 @@ public class BoardGenerator : MonoBehaviour
     {
         List<int> ShpValMap = new List<int>();                                         // List to hold update values for arrayNodes
         
-        foreach(GameObject crntND in gNodeList)                                         // Loops over all nodes in gNodeList    
+        foreach(GameObject crntND in ND_List)                                         // Loops over all nodes in ND_List    
         {    
             NodeScript NDScript = crntND.GetComponent<NodeScript>();                    // Set liberty value based on masterNode
             ShpValMap.Add(NDScript.sheepVal);
@@ -340,7 +339,7 @@ public class BoardGenerator : MonoBehaviour
     //     int index = 0;     
 
     //     // Map node values to NDValueMap based on current board state
-    //     foreach(GameObject node in gNodeList)
+    //     foreach(GameObject node in ND_List)
     //     {
     //         NodeScript nScript = node.GetComponent<NodeScript>();
     //         List<NodeScript> adjList = nScript.adjNDScriptList;
@@ -370,7 +369,7 @@ public class BoardGenerator : MonoBehaviour
     //     int arrayIndex = 0;
 
     //     // Map NDValueMap values to NDArray
-    //     foreach(GameObject node in gNodeList)
+    //     foreach(GameObject node in ND_List)
     //     {         
 
     //         NodeScript crntNDScript = node.GetComponent<NodeScript>();
@@ -389,7 +388,7 @@ public class BoardGenerator : MonoBehaviour
             
     //     }
 
-    //     // Debug.Log("gNodeArray Update Complete");
+    //     // Debug.Log("ND_Arr Update Complete");
     // }
 
     */
