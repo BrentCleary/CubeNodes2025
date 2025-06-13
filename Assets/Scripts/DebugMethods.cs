@@ -6,57 +6,57 @@ using UnityEngine;
 
 public class DebugMethods : MonoBehaviour
 {
-    void Start()
-    {
-        // LogCurrentLine();
-    }
+	void Start()
+	{
+		// LogCurrentLine();
+	}
 
-    public void LogCurrentLine()
-    {
-        Diag.StackTrace stackTrace = new Diag.StackTrace(true);
-        Diag.StackFrame frame = stackTrace.GetFrame(1); // Current method frame - reference for access to method info()
+	public void LogCurrentLine()
+	{
+		Diag.StackTrace stackTrace = new Diag.StackTrace(true);
+		Diag.StackFrame frame = stackTrace.GetFrame(1); // Current method frame - reference for access to method info()
 
-        string fileName = frame.GetFileName(); // Gets file name
-        int lineNumber = frame.GetFileLineNumber(); // Gets line number
-        MethodBase method = frame.GetMethod();
+		string fileName = frame.GetFileName(); // Gets file name
+		int lineNumber = frame.GetFileLineNumber(); // Gets line number
+		MethodBase method = frame.GetMethod();
 
-        Debug.Log($"Current line: {lineNumber}, {method.Name}, {fileName}");
-    }
+		Debug.Log($"Current line: {lineNumber}, {method.Name}, {fileName}");
+	}
 
 
-    public void LogCurrentMethod()
-    {
-        Diag.StackTrace stackTrace = new Diag.StackTrace(true);
-        Diag.StackFrame frame = stackTrace.GetFrame(1); // Current method frame - reference for access to method info()
+	public void LogCurrentMethod()
+	{
+		Diag.StackTrace stackTrace = new Diag.StackTrace(true);
+		Diag.StackFrame frame = stackTrace.GetFrame(1); // Current method frame - reference for access to method info()
 
-        string fileName = frame.GetFileName(); // Gets file name
-        int lineNumber = frame.GetFileLineNumber(); // Gets line number
-        MethodBase method = frame.GetMethod();
+		string fileName = frame.GetFileName(); // Gets file name
+		int lineNumber = frame.GetFileLineNumber(); // Gets line number
+		MethodBase method = frame.GetMethod();
 
-        Debug.Log($"Current line: {lineNumber}, {method.Name}, {fileName}");
-    }
+		Debug.Log($"Current line: {lineNumber}, {method.Name}, {fileName}");
+	}
 
-    public void LogCallerMethod()
-    {
-        Diag.StackTrace stackTrace = new Diag.StackTrace(true);
-        Diag.StackFrame frame = stackTrace.GetFrame(2); // Current method frame - reference for access to method info()
+	public void LogCallerMethod()
+	{
+		Diag.StackTrace stackTrace = new Diag.StackTrace(true);
+		Diag.StackFrame frame = stackTrace.GetFrame(2); // Current method frame - reference for access to method info()
 
-        string fileName = frame.GetFileName(); // Gets file name
-        int lineNumber = frame.GetFileLineNumber(); // Gets line number
-        MethodBase method = frame.GetMethod();
+		string fileName = frame.GetFileName(); // Gets file name
+		int lineNumber = frame.GetFileLineNumber(); // Gets line number
+		MethodBase method = frame.GetMethod();
 
-        Debug.Log($"Current line: {lineNumber}, {method.Name}, {fileName}");
-    }
-    
-    
-    public void GetMethodName()
-    {
-        Debug.Log($"Method called: {MethodBase.GetCurrentMethod().Name}");
-    }
+		Debug.Log($"Current line: {lineNumber}, {method.Name}, {fileName}");
+	}
 
-    /* ChatGPT Conversation for reference: 11/01/24 - https://chatgpt.com/c/672592ee-f754-8008-839c-90212ae0b9f3
 
-    Is there a function to set a perpetual reference to a methods line in a document even if it is not throwing an error.
+	public void GetMethodName()
+	{
+		Debug.Log($"Method called: {MethodBase.GetCurrentMethod().Name}");
+	}
+
+	/* ChatGPT Conversation for reference: 11/01/24 - https://chatgpt.com/c/672592ee-f754-8008-839c-90212ae0b9f3
+
+	Is there a function to set a perpetual reference to a methods line in a document even if it is not throwing an error.
 
 Error codes display line numbers. Can I get a debugMessage to display the current line number of a working method dynamically
 
@@ -73,21 +73,21 @@ using UnityEngine;
 
 public class Example : MonoBehaviour
 {
-    void Start()
-    {
-        LogCurrentLine();
-    }
+	void Start()
+	{
+			LogCurrentLine();
+	}
 
-    void LogCurrentLine()
-    {
-        StackTrace stackTrace = new StackTrace(true);
-        StackFrame frame = stackTrace.GetFrame(0); // Current method frame
+	void LogCurrentLine()
+	{
+			StackTrace stackTrace = new StackTrace(true);
+			StackFrame frame = stackTrace.GetFrame(0); // Current method frame
 
-        string fileName = frame.GetFileName(); // Gets file name
-        int lineNumber = frame.GetFileLineNumber(); // Gets line number
+			string fileName = frame.GetFileName(); // Gets file name
+			int lineNumber = frame.GetFileLineNumber(); // Gets line number
 
-        Debug.Log($"Current line: {lineNumber} in file: {fileName}");
-    }
+			Debug.Log($"Current line: {lineNumber} in file: {fileName}");
+	}
 }
 Explanation
 StackTrace captures information about the call stack, with each StackFrame representing a specific call (method invocation).
@@ -116,21 +116,21 @@ using System.Diagnostics;
 
 public class Example : MonoBehaviour
 {
-    void Start()
-    {
-        LogCurrentLine();
-    }
+	void Start()
+	{
+			LogCurrentLine();
+	}
 
-    void LogCurrentLine()
-    {
-        System.Diagnostics.StackTrace stackTrace = new System.Diagnostics.StackTrace(true);
-        System.Diagnostics.StackFrame frame = stackTrace.GetFrame(0); // Current method frame
+	void LogCurrentLine()
+	{
+			System.Diagnostics.StackTrace stackTrace = new System.Diagnostics.StackTrace(true);
+			System.Diagnostics.StackFrame frame = stackTrace.GetFrame(0); // Current method frame
 
-        string fileName = frame.GetFileName(); // Gets file name
-        int lineNumber = frame.GetFileLineNumber(); // Gets line number
+			string fileName = frame.GetFileName(); // Gets file name
+			int lineNumber = frame.GetFileLineNumber(); // Gets line number
 
-        UnityEngine.Debug.Log($"Current line: {lineNumber} in file: {fileName}");
-    }
+			UnityEngine.Debug.Log($"Current line: {lineNumber} in file: {fileName}");
+	}
 }
 Example with Namespace Aliasing
 Alternatively, you can set an alias for System.Diagnostics to make it easier to call members within it:
@@ -142,21 +142,21 @@ using Diag = System.Diagnostics;
 
 public class Example : MonoBehaviour
 {
-    void Start()
-    {
-        LogCurrentLine();
-    }
+	void Start()
+	{
+			LogCurrentLine();
+	}
 
-    void LogCurrentLine()
-    {
-        Diag.StackTrace stackTrace = new Diag.StackTrace(true);
-        Diag.StackFrame frame = stackTrace.GetFrame(0); // Current method frame
+	void LogCurrentLine()
+	{
+			Diag.StackTrace stackTrace = new Diag.StackTrace(true);
+			Diag.StackFrame frame = stackTrace.GetFrame(0); // Current method frame
 
-        string fileName = frame.GetFileName(); // Gets file name
-        int lineNumber = frame.GetFileLineNumber(); // Gets line number
+			string fileName = frame.GetFileName(); // Gets file name
+			int lineNumber = frame.GetFileLineNumber(); // Gets line number
 
-        Debug.Log($"Current line: {lineNumber} in file: {fileName}");
-    }
+			Debug.Log($"Current line: {lineNumber} in file: {fileName}");
+	}
 }
 With either approach, the ambiguity is resolved while retaining access to both UnityEngine.Debug and System.Diagnostics.
 
@@ -174,27 +174,27 @@ using System.Diagnostics;
 
 public class Example : MonoBehaviour
 {
-    void Start()
-    {
-        TestMethod();
-    }
+	void Start()
+	{
+			TestMethod();
+	}
 
-    void TestMethod()
-    {
-        LogCurrentLine(); // Call within this method to log its line and method name
-    }
+	void TestMethod()
+	{
+			LogCurrentLine(); // Call within this method to log its line and method name
+	}
 
-    void LogCurrentLine()
-    {
-        StackTrace stackTrace = new StackTrace(true);
-        StackFrame frame = stackTrace.GetFrame(1); // Get the frame of the calling method
+	void LogCurrentLine()
+	{
+			StackTrace stackTrace = new StackTrace(true);
+			StackFrame frame = stackTrace.GetFrame(1); // Get the frame of the calling method
 
-        string methodName = frame.GetMethod().Name; // Gets the calling method name
-        string fileName = frame.GetFileName();      // Gets file name
-        int lineNumber = frame.GetFileLineNumber(); // Gets line number
+			string methodName = frame.GetMethod().Name; // Gets the calling method name
+			string fileName = frame.GetFileName();      // Gets file name
+			int lineNumber = frame.GetFileLineNumber(); // Gets line number
 
-        UnityEngine.Debug.Log($"Method: {methodName}, Line: {lineNumber} in file: {fileName}");
-    }
+			UnityEngine.Debug.Log($"Method: {methodName}, Line: {lineNumber} in file: {fileName}");
+	}
 }
 Explanation
 GetFrame(1): This captures the calling method’s frame, so LogCurrentLine() will output the line number and name of the method that called it (in this case, TestMethod).
@@ -218,6 +218,6 @@ ChatGPT said:
 ChatGPT
 You're very welcome! I'm glad it helped! 😊 Debugging with line numbers and method names can be a huge time-saver. If you have any more questions on debugging or anything else in Unity, feel free to ask. Happy coding! 🎮✨
 
-    */
+	*/
 
 }

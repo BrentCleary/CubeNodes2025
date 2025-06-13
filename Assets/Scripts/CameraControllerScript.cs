@@ -5,64 +5,64 @@ using UnityEngine.Rendering;
 
 public class CameraControllerScript : MonoBehaviour
 {
-    public float moveSpeed = 50f;       // Movement speed
-    public float rotationSpeed = 20f;   // Rotation speed
+	public float moveSpeed = 50f;       // Movement speed
+	public float rotationSpeed = 20f;   // Rotation speed
 
-    private float pitch = 0f;          // Vertical rotation (X-axis)
-    private float yaw = 0f;            // Horizontal rotation (Y-axis)
+	private float pitch = 0f;          // Vertical rotation (X-axis)
+	private float yaw = 0f;            // Horizontal rotation (Y-axis)
 
-    void Start()
-    {
-        // Initialize rotation from current transform
-        Vector3 angles = transform.eulerAngles;
-        yaw = angles.y;
-        pitch = angles.x;
-    }
+	void Start()
+	{
+		// Initialize rotation from current transform
+		Vector3 angles = transform.eulerAngles;
+		yaw = angles.y;
+		pitch = angles.x;
+	}
 
-    void Update()
-    {
-        HandleRotation();
-        HandleMovement();
-    }
+	void Update()
+	{
+		HandleRotation();
+		HandleMovement();
+	}
 
-    void HandleRotation()
-    {
-        // Rotate when middle mouse button is held
-        if (Input.GetMouseButton(2))
-        {
-            float mouseX = Input.GetAxis("Mouse X") * rotationSpeed;
-            float mouseY = Input.GetAxis("Mouse Y") * rotationSpeed;
+	void HandleRotation()
+	{
+		// Rotate when middle mouse button is held
+		if (Input.GetMouseButton(2))
+		{
+			float mouseX = Input.GetAxis("Mouse X") * rotationSpeed;
+			float mouseY = Input.GetAxis("Mouse Y") * rotationSpeed;
 
-            yaw += mouseX;
-            pitch -= mouseY;
-            pitch = Mathf.Clamp(pitch, -89f, 89f); // Prevent flipping
+			yaw += mouseX;
+			pitch -= mouseY;
+			pitch = Mathf.Clamp(pitch, -89f, 89f); // Prevent flipping
 
-            // Apply rotation
-            transform.rotation = Quaternion.Euler(pitch, yaw, 0f);
-        }
-    }
+			// Apply rotation
+			transform.rotation = Quaternion.Euler(pitch, yaw, 0f);
+		}
+	}
 
-    void HandleMovement()
-    {
-        float time = Time.deltaTime;
-        Vector3 moveDirection = Vector3.zero;
+	void HandleMovement()
+	{
+		float time = Time.deltaTime;
+		Vector3 moveDirection = Vector3.zero;
 
-        // Move relative to camera orientation
-        if (Input.GetKey(KeyCode.W)) moveDirection += Vector3.up;         // Up
-        if (Input.GetKey(KeyCode.S)) moveDirection -= Vector3.up;         // Down
-        if (Input.GetKey(KeyCode.A)) moveDirection -= transform.right;      // Left
-        if (Input.GetKey(KeyCode.D)) moveDirection += transform.right;      // Right
+		// Move relative to camera orientation
+		if (Input.GetKey(KeyCode.W)) moveDirection += Vector3.up;         // Up
+		if (Input.GetKey(KeyCode.S)) moveDirection -= Vector3.up;         // Down
+		if (Input.GetKey(KeyCode.A)) moveDirection -= transform.right;      // Left
+		if (Input.GetKey(KeyCode.D)) moveDirection += transform.right;      // Right
 
-        float mouseWheel = Input.GetAxis("Mouse ScrollWheel");
-        if (mouseWheel > 0) moveDirection += transform.forward;             // Forward
-        if (mouseWheel < 0) moveDirection -= transform.forward;             // Back
+		float mouseWheel = Input.GetAxis("Mouse ScrollWheel");
+		if (mouseWheel > 0) moveDirection += transform.forward;             // Forward
+		if (mouseWheel < 0) moveDirection -= transform.forward;             // Back
 
-        // Normalize to prevent faster diagonal movement, then apply speed
-        moveDirection = moveDirection.normalized * moveSpeed * time;
+		// Normalize to prevent faster diagonal movement, then apply speed
+		moveDirection = moveDirection.normalized * moveSpeed * time;
 
-        // Apply movement
-        transform.position += moveDirection;
-    }
+		// Apply movement
+		transform.position += moveDirection;
+	}
 }
 
 
@@ -97,7 +97,7 @@ public class CameraControllerScript : MonoBehaviour
 //     {
 //         CameraTransform();
 //         CameraRotation();
-        
+
 //     }
 
 //     void CameraTransform()
@@ -171,9 +171,9 @@ public class CameraControllerScript : MonoBehaviour
 //     public int multipier;
 
 //     /*  Generate Input
-    
+
 //     int speed variable - initally +5 * Time.deltaTime : Random choice, tweak by results
-    
+
 //     a - left horizontal - x negative - Keycode.A
 //     d - right horizontal - x positive - Keycode.D
 //     w - up vertical - y positive - Keycode.W

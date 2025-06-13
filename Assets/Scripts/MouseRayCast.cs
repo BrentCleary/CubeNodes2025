@@ -5,72 +5,74 @@ using UnityEngine;
 public class MouseRayCast : MonoBehaviour
 {
 
-    public Camera mainCamera;
-    public LayerMask layerMask;
-    public bool rayCastMouseSelect;
+	public Camera mainCamera;
+	public LayerMask layerMask;
+	public bool rayCastMouseSelect;
 
-    private GameObject _hitObject;
-    public GameObject hitObject 
-    { 
-        get { return _hitObject; }
-        set { 
-            if( _hitObject != hitObject) {
-                _hitObject = hitObject;
-                OnValueChanged();
-            }
-        }
-    }
+	private GameObject _hitObject;
+	public GameObject hitObject
+	{
+		get { return _hitObject; }
+		set
+		{
+			if (_hitObject != hitObject)
+			{
+				_hitObject = hitObject;
+				OnValueChanged();
+			}
+		}
+	}
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        mainCamera = Camera.main;
-    }
+	// Start is called before the first frame update
+	void Start()
+	{
+		mainCamera = Camera.main;
+	}
 
-    // Update is called once per frame
-    void Update()
-    {
-        DrawRay();
-    
-        _hitObject = GetRaycastHitObject();
+	// Update is called once per frame
+	void Update()
+	{
+		DrawRay();
 
-    }
+		_hitObject = GetRaycastHitObject();
 
-    // DrawRay
-    public void DrawRay()
-    {
-        Vector3 mousePos = Input.mousePosition;
-        mousePos.z = 10f;
-        mousePos = mainCamera.ScreenToWorldPoint(mousePos);
-        Debug.DrawRay(transform.position, mousePos-transform.position, Color.blue);
-    }
+	}
 
-    public void OnValueChanged()
-    {
-        Debug.Log("Raycast hit: " + hitObject.name);
-    }
+	// DrawRay
+	public void DrawRay()
+	{
+		Vector3 mousePos = Input.mousePosition;
+		mousePos.z = 10f;
+		mousePos = mainCamera.ScreenToWorldPoint(mousePos);
+		Debug.DrawRay(transform.position, mousePos - transform.position, Color.blue);
+	}
 
-    public GameObject GetRaycastHitObject()
-    {
-        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
+	public void OnValueChanged()
+	{
+		Debug.Log("Raycast hit: " + hitObject.name);
+	}
 
-        if (Physics.Raycast(ray, out hit, 100, layerMask))
-        {
-            return hit.transform.gameObject; // Return the GameObject that the ray hits
-        }
+	public GameObject GetRaycastHitObject()
+	{
+		Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+		RaycastHit hit;
 
-        return null; // Return null if no object is hit
-    }
+		if (Physics.Raycast(ray, out hit, 100, layerMask))
+		{
+			return hit.transform.gameObject; // Return the GameObject that the ray hits
+		}
+
+		return null; // Return null if no object is hit
+	}
 
 
-    //* Returns True if an object is hit
-    // bool IsRayPointingAtObject()
-    // {
-    //     Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-    //     RaycastHit hit;
+	//* Returns True if an object is hit
+	// bool IsRayPointingAtObject()
+	// {
+	//     Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+	//     RaycastHit hit;
 
-    //     // Perform the raycast and return true if an object is hit, otherwise return false
-    //     return Physics.Raycast(ray, out hit, 100, layerMask);
-    // }
+	//     // Perform the raycast and return true if an object is hit, otherwise return false
+	//     return Physics.Raycast(ray, out hit, 100, layerMask);
+	// }
 }
