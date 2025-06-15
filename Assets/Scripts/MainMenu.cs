@@ -5,16 +5,15 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-	GameManagerScript GM_MNG_SCR;
+	GameManager GM_MNG_SCR;
 
 	void Awake()
 	{
-		GM_MNG_SCR = GetComponent<GameManagerScript>();
+		GM_MNG_SCR = GetComponent<GameManager>();
 	}
 
 	public void PlayGame()
 	{
-		GM_MNG_SCR.SetGameState(GameState.MainMenu);
 
 		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
 	}

@@ -15,7 +15,7 @@ public class NodeScript : MonoBehaviour
 	public int NDVal;
 	public int shpVal;
 	public int libVal;
-	public int GrpID = -1;
+	public int grpID = -1;
 	public bool hasGrp;
 	public bool canPlace;
 	public bool lastPlaced;                                                            //? the most recently placed Node 
@@ -43,9 +43,9 @@ public class NodeScript : MonoBehaviour
 
 
 	//* ---------------------------------------- SCRIPT REFERENCES ----------------------------------------
-	public BoardGenerator BrdGntScr;
+	public BoardScript BrdScr;
 	public GroupScript GrpMngScr;
-	public TargetNode Trgt_ND_Script;
+	public TargetNode  Trgt_ND_Script;
 
 
 	//* ---------------------------------------- NODE COLOR VARIABLES ----------------------------------------
@@ -69,7 +69,7 @@ public class NodeScript : MonoBehaviour
 
 		// Get reference to Node Array and scripts
 		NDArray   = transform.parent.gameObject;
-		BrdGntScr = NDArray.GetComponent<BoardGenerator>();
+		BrdScr    = NDArray.GetComponent<BoardScript>();
 		GrpMngScr = NDArray.GetComponent<GroupScript>();
 
 		// NodeColor Variables
@@ -105,12 +105,12 @@ public class NodeScript : MonoBehaviour
 	{
 		bool tileActive = true;                                                     // Sets initialize bool
 		for (int i = NDVal; i >= 0; i--) {                                         // Sets all tiles from ND_Val and lower true
-			TileList[i].GetComponent<MeshRenderer>().enabled = tileActive;
-			TileList[i].SetActive(tileActive);
+			shpTileList[i].GetComponent<MeshRenderer>().enabled = tileActive;
+			shpTileList[i].SetActive(tileActive);
 		}
 		for (int i = NDValList.Count - 1; i > NDVal; i--) {                      // Sets all tiles above ND_Val false
-			TileList[i].GetComponent<MeshRenderer>().enabled = !tileActive;
-			TileList[i].SetActive(!tileActive);
+			shpTileList[i].GetComponent<MeshRenderer>().enabled = !tileActive;
+			shpTileList[i].SetActive(!tileActive);
 		}
 
 	}
@@ -176,7 +176,7 @@ public class NodeScript : MonoBehaviour
 		shpVal = shpValList[0];                                         // Set shp value to emptySheep index
 		libVal = libValList[1];                                     // Set libVal to 1
 		NDVal  = NDValList [4];                                           // ND_Val is reset to 4
-		GrpID    = -1;
+		grpID    = -1;
 		hasGrp     = false;
 		canPlace   = true;
 		lastPlaced = false;
@@ -193,8 +193,8 @@ public class NodeScript : MonoBehaviour
 	{
 		// Check if the left mouse button was clicked
 		BlackSheepSetter();                                                                  // Set Node to BlackshpVal
-		BrdGntScr.UpdateBoardNodeValues();
-		BrdGntScr.UpdateBoardDisplay();
+		BrdScr.UpdateBoardNodeValues();
+		BrdScr.UpdateBoardDisplay();
 
 		// GrpMngScr.UpdateGroupsMethod(gameObject);
 
@@ -205,8 +205,8 @@ public class NodeScript : MonoBehaviour
 	public void PlaceWhiteSheepMethod()
 	{
 		WhiteSheepSetter();                                                                  // Set Node to BlackshpVal
-		BrdGntScr.UpdateBoardNodeValues();
-		BrdGntScr.UpdateBoardDisplay();
+		BrdScr.UpdateBoardNodeValues();
+		BrdScr.UpdateBoardDisplay();
 
 		// GrpMngScr.UpdateGroupsMethod(gameObject);
 

@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 2b3da2c822893c04daa44367fd6009da
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - ND_ArrTransform: {instanceID: 0}
+  - ND_Prefab: {fileID: 2404018319395889093, guid: 2171c39f9063e3e488721af2d1f06815, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
