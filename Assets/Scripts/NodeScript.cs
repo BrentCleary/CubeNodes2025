@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -25,7 +26,7 @@ public class NodeScript : MonoBehaviour
 	public List<int> libValList = new List<int> { 0, 1 };                             //  LibertyValue{ 1 , 0 }
 	public List<bool> canPlaceList = new List<bool> { false, true };                  // is node canPlace for current player
 	public List<GameObject> shpTileList = new List<GameObject> { };                   // { emptySpace, shpBlack, shpWhite }
-	public List<GameObject> TileList = new List<GameObject> { };
+	public List<GameObject> tileList = new List<GameObject> { };
 
 
 	//* ---------------------------------------- NODE ARRAY PROPERTIES ----------------------------------------
@@ -33,7 +34,7 @@ public class NodeScript : MonoBehaviour
 	public int[] arrPos = new int[2];
 
 
-	//* ---------------------------------------- SHEEP GROUP PARAMETERS ----------------------------------------
+	//* ---------------------------------------- GROUP PARAMETERS ----------------------------------------
 	// Adjacent NodeScripts
 	public NodeScript LNDScr;                                                         // left
 	public NodeScript RNDScr;                                                         // right
@@ -43,9 +44,12 @@ public class NodeScript : MonoBehaviour
 
 
 	//* ---------------------------------------- SCRIPT REFERENCES ----------------------------------------
-	public BoardScript BrdScr;
-	public GroupScript GrpMngScr;
-	public TargetNode  Trgt_ND_Script;
+	[SerializeField] GameManager GM;
+
+
+	//* ---------------------------------------- SHEEP OBJ REFERENCES ----------------------------------------
+	private GameObject whtShp;
+	private GameObject blkShp;
 
 
 	//* ---------------------------------------- NODE COLOR VARIABLES ----------------------------------------
@@ -68,50 +72,54 @@ public class NodeScript : MonoBehaviour
 		adjNDScrList = new List<NodeScript>() { LNDScr, RNDScr, BNDScr, TNDScr };
 
 		// Get reference to Node Array and scripts
-		NDArray   = transform.parent.gameObject;
-		BrdScr    = NDArray.GetComponent<BoardScript>();
-		GrpMngScr = NDArray.GetComponent<GroupScript>();
+		NDArray = GameObject.Find("nodeArray");
+		GM = GameObject.Find("GameManagerObj").GetComponent<GameManager>();
+
+		blkShp = transform.Find("BlackSheep").gameObject;
+		whtShp = transform.Find("WhiteSheep").gameObject;
+
 
 		// NodeColor Variables
-		grassContainer = gameObject.transform.Find("GrassContainer").gameObject;
+		grassContainer = gameObject.transform.Find("TileContainer").gameObject;
 		BuildTileRendererList();
 	}
 
 	// Update is called once per frame
-	void Update(){}
+	void Update(){
+
+    // PlaceBlackSheep_OnClick_GM();
+		// PlaceWhiteSheep_OnClick_GM();
+
+  }
+
 
 
 
 	//* ---------------------------------------- NODE DISPLAY METHODS ----------------------------------------
 
-	public void UpdateNodeDisplay()                                                 // Updates Node Display 
-	{
+	public void UpdateNodeDisplay() {                                                // Updates Node Display 
 		SetSheepDisplay();
 		SetTileDisplay();
 	}
 
-	public void SetSheepDisplay()
-	{
+	public void SetSheepDisplay()	{
 		bool shpActive = true;
 
-		// Sets all SheepTiles to inactive
 		for (int i = shpTileList.Count - 1; i >= 0; i--) {
 			shpTileList[i].SetActive(!shpActive);                               // Sets all SheepTiles to inactive
 		}
 		shpTileList[shpVal].SetActive(shpActive);                             // Set Current SheepTile active
 	}
 
-	public void SetTileDisplay()
-	{
+
+	public void SetTileDisplay() {
 		bool tileActive = true;                                                     // Sets initialize bool
-		for (int i = NDVal; i >= 0; i--) {                                         // Sets all tiles from ND_Val and lower true
-			shpTileList[i].GetComponent<MeshRenderer>().enabled = tileActive;
-			shpTileList[i].SetActive(tileActive);
+		
+    for (int i = 0; i < tileList.Count; i++) {                                         // Sets all tiles from ND_Val and lower true
+			tileList[i].SetActive(!tileActive);
 		}
-		for (int i = NDValList.Count - 1; i > NDVal; i--) {                      // Sets all tiles above ND_Val false
-			shpTileList[i].GetComponent<MeshRenderer>().enabled = !tileActive;
-			shpTileList[i].SetActive(!tileActive);
-		}
+    
+    tileList[NDVal].SetActive(tileActive);
 
 	}
 
@@ -121,15 +129,13 @@ public class NodeScript : MonoBehaviour
 	//* ---------------------------------------- NODE COLOR SELECT METHODS ----------------------------------------
 	// Highlights/Resets selected Nodes Color by changing GrassTiles materials 
 
-	public void SetNodeColor_Selected()
-	{
+	public void SetNodeColor_Selected() {
 		foreach (Renderer renderer in tileRendererList) {
 			renderer.material = selectionMaterial;
 		}
 	}
 
-	public void SetNodeColor_Not_Selected()
-	{
+	public void SetNodeColor_Not_Selected()	{
 		int colorCounter = 0;
 		foreach (Renderer renderer in tileRendererList) {
 			renderer.material = tileMatList[colorCounter];
@@ -137,10 +143,8 @@ public class NodeScript : MonoBehaviour
 		}
 	}
 
-	public void BuildTileRendererList()
-	{
+	public void BuildTileRendererList()	{
 		tileRendererList = grassContainer.GetComponentsInChildren<Renderer>().ToList();
-
 		foreach (Renderer renderer in tileRendererList) {
 			tileMatList.Add(renderer.material);
 		}
@@ -156,6 +160,8 @@ public class NodeScript : MonoBehaviour
 		shpVal = shpValList[1];                                         // Set shp value to blackSheep index
 		libVal = libValList[0];                                     // Set libVal to 0
 		NDVal  = NDValList [0];                                           // ND_Val is 0
+		blkShp.SetActive(true);
+		whtShp.SetActive(false);
 		hasGrp     = true;
 		canPlace   = false;
 		lastPlaced = true;
@@ -166,6 +172,8 @@ public class NodeScript : MonoBehaviour
 		shpVal = shpValList[2];                                         // Set shp value to whiteSheep index
 		libVal = libValList[0];                                     // Set libVal to 0
 		NDVal  = NDValList [0];                                           // ND_Val is 0
+		blkShp.SetActive(false);
+		whtShp.SetActive(true);
 		hasGrp     = true;
 		canPlace   = false;
 		lastPlaced = true;
@@ -176,7 +184,9 @@ public class NodeScript : MonoBehaviour
 		shpVal = shpValList[0];                                         // Set shp value to emptySheep index
 		libVal = libValList[1];                                     // Set libVal to 1
 		NDVal  = NDValList [4];                                           // ND_Val is reset to 4
-		grpID    = -1;
+		blkShp.SetActive(false);
+		whtShp.SetActive(false);
+		grpID  = -1;
 		hasGrp     = false;
 		canPlace   = true;
 		lastPlaced = false;
@@ -193,20 +203,19 @@ public class NodeScript : MonoBehaviour
 	{
 		// Check if the left mouse button was clicked
 		BlackSheepSetter();                                                                  // Set Node to BlackshpVal
-		BrdScr.UpdateBoardNodeValues();
-		BrdScr.UpdateBoardDisplay();
+		GM.UpdateBoardNodeValues();
+		GM.UpdateBoardDisplay();
 
 		// GrpMngScr.UpdateGroupsMethod(gameObject);
 
 	}
 
-
 	// 09/05/2024 - Method Commented out to user Mouse1 for testing
 	public void PlaceWhiteSheepMethod()
 	{
 		WhiteSheepSetter();                                                                  // Set Node to BlackshpVal
-		BrdScr.UpdateBoardNodeValues();
-		BrdScr.UpdateBoardDisplay();
+		GM.UpdateBoardNodeValues();
+		GM.UpdateBoardDisplay();
 
 		// GrpMngScr.UpdateGroupsMethod(gameObject);
 
@@ -217,6 +226,65 @@ public class NodeScript : MonoBehaviour
 	{
 		EmptySheepSetter();
 	}
+
+
+	//* ---------------------------------------- PROPERTIES ----------------------------------------
+
+	public List<Material> tileMaterialList;
+	public bool nodeSelected = false;
+
+
+	// ---------------------------------------- ON MOUSE ENTER/EXIT METHODS ----------------------------------------
+	// Highlights/Resets selected Nodes Color by changing GrassTiles materials 
+
+
+	private void OnMouseEnter()
+	{
+		nodeSelected = true;
+		SetNodeColor_Selected();
+	}
+
+	private void OnMouseExit()
+	{
+		nodeSelected = false;
+		SetNodeColor_Not_Selected();
+	}
+
+
+	// //* ---------------------------------------- PLACE SHEEP METHODS ----------------------------------------
+	// //* Sets Sheep on selected Node and calls BoardGeneratorScript to reset display
+
+	// public void PlaceBlackSheep_OnClick_GM()
+	// {
+	// 	if (nodeSelected && canPlace == true && Input.GetKeyDown(KeyCode.Mouse0)) {
+	// 		GM.PlaceBlackSheepMethod(NDID);
+	// 		nodeSelected = false;
+	// 		// Debug.Log("PlaceBlackSheep_OnClick");
+	// 	}
+	// }
+
+	// // 09/05/2024 - Method Commented out to user Mouse1 for testing
+	// public void PlaceWhiteSheep_OnClick_GM() {
+	// 	// Check if the left mouse button was clicked
+	// 	if (nodeSelected && canPlace == true && Input.GetKeyDown(KeyCode.Mouse1)) {
+	// 		GM.PlaceWhiteSheepMethod_GM(NDID);
+	// 		nodeSelected = false;
+	// 		// Debug.Log("PlaceBlackSheep_OnClick");
+	// 	}
+	// }
+
+	// // Debug method for removing stones
+	// public void PlaceEmptySheep_OnClick() {
+	// 	// Check if the middle mouse button was clicked
+	// 	if (nodeSelected && Input.GetKeyDown(KeyCode.Mouse2))
+	// 	{
+	// 		PlaceEmptySheepMethod();
+	// 	}
+	// }
+
+
+
+
 
 
 

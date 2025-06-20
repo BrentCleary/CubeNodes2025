@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5484695054018320863}
   m_Layer: 0
-  m_Name: GrassContainer
+  m_Name: TileContainer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

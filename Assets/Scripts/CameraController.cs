@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-public class CameraControllerScript : MonoBehaviour
+public class CameraController : MonoBehaviour
 {
 	public float moveSpeed = 50f;       // Movement speed
 	public float rotationSpeed = 20f;   // Rotation speed

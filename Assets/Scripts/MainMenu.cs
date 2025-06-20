@@ -5,13 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-	GameManager GM_MNG_SCR;
-
-	void Awake()
-	{
-		GM_MNG_SCR = GetComponent<GameManager>();
-	}
-
 	public void PlayGame()
 	{
 
@@ -23,5 +16,47 @@ public class MainMenu : MonoBehaviour
 		Debug.Log("Quit Button Clicked");
 		Application.Quit();
 	}
+
+	public static bool GameIsPaused = false;
+	public GameObject pauseMenuUI;
+
+
+	// Update is called once per frame
+	void Update()
+	{
+		if (Input.GetKeyDown(KeyCode.Escape))
+		{
+			if (GameIsPaused)
+			{
+				Resume();
+			}
+			else
+			{
+				Pause();
+			}
+		}
+	}
+
+	public void Resume()
+	{
+		pauseMenuUI.SetActive(false);
+		Time.timeScale = 1f;
+		GameIsPaused = false;
+	}
+
+	public void Pause()
+	{
+		pauseMenuUI.SetActive(true);
+		Time.timeScale = 0;
+		GameIsPaused = true;
+	}
+
+	public void LoadMenu()
+	{
+		Debug.Log("Load Game Triggered");
+		SceneManager.LoadScene("StartMenu");
+		Time.timeScale = 1f;
+	}
+
 
 }
