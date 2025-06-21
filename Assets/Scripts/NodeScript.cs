@@ -153,48 +153,5 @@ public class NodeScript : MonoBehaviour
 
 
 
-	//* ---------------------------------------- PROPERTIES ----------------------------------------
-
-	public List<Material> tileMaterialList;
-	public bool nodeSelected = false;
-
-
-	// //* ---------------------------------------- PLACE SHEEP METHODS ----------------------------------------
-	// //* Sets Sheep on selected Node and calls BoardGeneratorScript to reset display
-
-	// public void PlaceBlackSheep_OnClick_GM()
-	// {
-	// 	if (nodeSelected && canPlace == true && Input.GetKeyDown(KeyCode.Mouse0)) {
-	// 		GM.PlaceBlackSheepMethod(NDID);
-	// 		nodeSelected = false;
-	// 		// Debug.Log("PlaceBlackSheep_OnClick");
-	// 	}
-	// }
-
-	// // 09/05/2024 - Method Commented out to user Mouse1 for testing
-	// public void PlaceWhiteSheep_OnClick_GM() {
-	// 	// Check if the left mouse button was clicked
-	// 	if (nodeSelected && canPlace == true && Input.GetKeyDown(KeyCode.Mouse1)) {
-	// 		GM.PlaceWhiteSheepMethod_GM(NDID);
-	// 		nodeSelected = false;
-	// 		// Debug.Log("PlaceBlackSheep_OnClick");
-	// 	}
-	// }
-
-	// // Debug method for removing stones
-	// public void PlaceEmptySheep_OnClick() {
-	// 	// Check if the middle mouse button was clicked
-	// 	if (nodeSelected && Input.GetKeyDown(KeyCode.Mouse2))
-	// 	{
-	// 		PlaceEmptySheepMethod();
-	// 	}
-	// }
-
-
-
-
-
-
-
 
 }
