@@ -54,7 +54,6 @@ public class NodeScript : MonoBehaviour
 
 	//* ---------------------------------------- NODE COLOR VARIABLES ----------------------------------------
 	[Header("Node Color Variables")]
-	public GameObject grassContainer;
 	public Material   selectionMaterial;
 	public List<Renderer> tileRendererList;
 	public List<Material> tileMatList;
@@ -78,17 +77,10 @@ public class NodeScript : MonoBehaviour
 		blkShp = transform.Find("BlackSheep").gameObject;
 		whtShp = transform.Find("WhiteSheep").gameObject;
 
-
-		// NodeColor Variables
-		grassContainer = gameObject.transform.Find("TileContainer").gameObject;
-		BuildTileRendererList();
 	}
 
 	// Update is called once per frame
 	void Update(){
-
-    // PlaceBlackSheep_OnClick_GM();
-		// PlaceWhiteSheep_OnClick_GM();
 
   }
 
@@ -103,51 +95,18 @@ public class NodeScript : MonoBehaviour
 	}
 
 	public void SetSheepDisplay()	{
-		bool shpActive = true;
-
 		for (int i = shpTileList.Count - 1; i >= 0; i--) {
-			shpTileList[i].SetActive(!shpActive);                               // Sets all SheepTiles to inactive
+			shpTileList[i].SetActive(false);                               // Sets all SheepTiles to inactive
 		}
-		shpTileList[shpVal].SetActive(shpActive);                             // Set Current SheepTile active
+		shpTileList[shpVal].SetActive(true);                             // Set Current SheepTile active
 	}
 
 
 	public void SetTileDisplay() {
-		bool tileActive = true;                                                     // Sets initialize bool
-		
-    for (int i = 0; i < tileList.Count; i++) {                                         // Sets all tiles from ND_Val and lower true
-			tileList[i].SetActive(!tileActive);
-		}
-    
-    tileList[NDVal].SetActive(tileActive);
-
-	}
-
-
-
-
-	//* ---------------------------------------- NODE COLOR SELECT METHODS ----------------------------------------
-	// Highlights/Resets selected Nodes Color by changing GrassTiles materials 
-
-	public void SetNodeColor_Selected() {
-		foreach (Renderer renderer in tileRendererList) {
-			renderer.material = selectionMaterial;
-		}
-	}
-
-	public void SetNodeColor_Not_Selected()	{
-		int colorCounter = 0;
-		foreach (Renderer renderer in tileRendererList) {
-			renderer.material = tileMatList[colorCounter];
-			colorCounter++;
-		}
-	}
-
-	public void BuildTileRendererList()	{
-		tileRendererList = grassContainer.GetComponentsInChildren<Renderer>().ToList();
-		foreach (Renderer renderer in tileRendererList) {
-			tileMatList.Add(renderer.material);
-		}
+    for (int i = 0; i < tileList.Count; i++) { 
+			tileList[i].SetActive(false);	
+		}                                                                                  // Sets all tiles inactive
+    tileList[NDVal].SetActive(true);                                                   // Set current NDVal tile active
 	}
 
 
@@ -194,61 +153,10 @@ public class NodeScript : MonoBehaviour
 
 
 
-
-	//* ---------------------------------------- PLACE SHEEP METHODS ----------------------------------------
-	// Sets Sheep on selected Node and calls BoardGeneratorScript to reset display
-	// Calls BoardGeneratorScript and NodeScript 
-
-	public void PlaceBlackSheepMethod()
-	{
-		// Check if the left mouse button was clicked
-		BlackSheepSetter();                                                                  // Set Node to BlackshpVal
-		GM.UpdateBoardNodeValues();
-		GM.UpdateBoardDisplay();
-
-		// GrpMngScr.UpdateGroupsMethod(gameObject);
-
-	}
-
-	// 09/05/2024 - Method Commented out to user Mouse1 for testing
-	public void PlaceWhiteSheepMethod()
-	{
-		WhiteSheepSetter();                                                                  // Set Node to BlackshpVal
-		GM.UpdateBoardNodeValues();
-		GM.UpdateBoardDisplay();
-
-		// GrpMngScr.UpdateGroupsMethod(gameObject);
-
-	}
-
-
-	public void PlaceEmptySheepMethod()
-	{
-		EmptySheepSetter();
-	}
-
-
 	//* ---------------------------------------- PROPERTIES ----------------------------------------
 
 	public List<Material> tileMaterialList;
 	public bool nodeSelected = false;
-
-
-	// ---------------------------------------- ON MOUSE ENTER/EXIT METHODS ----------------------------------------
-	// Highlights/Resets selected Nodes Color by changing GrassTiles materials 
-
-
-	private void OnMouseEnter()
-	{
-		nodeSelected = true;
-		SetNodeColor_Selected();
-	}
-
-	private void OnMouseExit()
-	{
-		nodeSelected = false;
-		SetNodeColor_Not_Selected();
-	}
 
 
 	// //* ---------------------------------------- PLACE SHEEP METHODS ----------------------------------------
