@@ -76,9 +76,6 @@ public class GameManager : MonoBehaviour
 
 
 
-
-
-
   //* ----------------------------------------  MANAGER METHODS ----------------------------------------
 
 	void Awake() 
@@ -86,7 +83,6 @@ public class GameManager : MonoBehaviour
 		NDArr 		 = GameObject.Find("nodeArray");
 		pauseMenu  = GameObject.Find("PauseMenu");
 		mainCamera = Camera.main;
-
 	}
 
 	void Start() 
@@ -99,15 +95,12 @@ public class GameManager : MonoBehaviour
 		nowBrdState = CreateShpValMap();
 		prvBrdState = nowBrdState.ToList();
 		allGrpList = new List<Group>();
-
 	}
 
 	void Update() 
 	{
-
 		DrawRay();
 		PlaceSheep_OnClick();
-
 	}
 
 
@@ -120,11 +113,10 @@ public class GameManager : MonoBehaviour
 
 		Debug.Log("shpVal = " + shpVal);
 
-		// bool isPlaceAble = CheckPlaceble(ND_ID, shpVal);
-		// Update_Ko_Status(ND_ID, shpVal);
+		bool isPlaceAble = CheckPlaceble(ND_ID, shpVal);
+		Update_Ko_Status(ND_ID, shpVal);
 
-		// if (isPlaceAble && isKo == false)                                                                      // Update Played Node and Board Value State
-		if(1 == 1)
+		if (isPlaceAble && isKo == false)                                                                      // Update Played Node and Board Value State
 		{
 			if (shpVal == 0) { crntNDScr.EmptySheepSetter(); }
 			if (shpVal == 1) { crntNDScr.BlackSheepSetter(); }
@@ -407,6 +399,7 @@ public class GameManager : MonoBehaviour
 
 	public void UpdateGroups_Method()                      //? Called in GameManager //  
 	{
+		Debug.Log("Update Group Methods Called");
 		CalculateGrpLiberties();                                                   // Update All Group Liberties
 		DeleteZeroLibertyGroup_Methods();                                          // MethodGroup to Delete Grps with 0 Liberties, Set Empty ND
 		CalculateGrpLiberties();                                                   // Update All Group Liberties (Post ZeroLibGrp Deletion)
@@ -517,16 +510,22 @@ public class GameManager : MonoBehaviour
 	{
 		int totalGrpLibs = 0;
 
-		foreach (Group Grp in allGrpList) {    // Loops over List of All Groups, Looks at adjacent nodes for each node in group
+		foreach (Group grp in allGrpList) {    // Loops over List of All Groups, Looks at adjacent nodes for each node in group
+			
+			List<NodeScript> grpScrList = new List<NodeScript>();
+			Debug.Log("grp ID: " + grp.grpID);
 
-			foreach (int NDID in Grp.NDIDList){
-				NodeScript crntNDScr = GetNodeScriptByID(NDScrList, NDID);
-				NDScrList.Add(crntNDScr);
+			foreach (int NDID in grp.NDIDList) {
+				NodeScript crntNDScr = GetNodeScriptByID(NDScrList, NDID);  								// Check NDID In grp.NDIDList against NDScrList (all scripts)
+
+				Debug.Log("crntNDScr: " + crntNDScr.NDID +  "crntNDScr Libs: " + crntNDScr.libVal);
+
+				grpScrList.Add(crntNDScr);
 			}
 
 			List<NodeScript> countedNDs = new List<NodeScript>();                     //! holds adjNDScr to prevent double references for libVals 
 
-			foreach (NodeScript scr in NDScrList){                                   // Adds value of node to total liberties
+			foreach (NodeScript scr in grpScrList){                                   // Adds value of node to total liberties
 				
 				if (scr.LNDScr != null){																				// If the adj node is not empty 
 					if (countedNDs.Contains(scr.LNDScr) == false) {                 // If the node is not already in the script (has been counted)
@@ -555,7 +554,7 @@ public class GameManager : MonoBehaviour
 				}
 			}
 
-			Grp.GrpLibs = totalGrpLibs;
+			grp.GrpLibs = totalGrpLibs;
 
 			totalGrpLibs = 0;
 			countedNDs.Clear();
@@ -735,7 +734,7 @@ public class GameManager : MonoBehaviour
 	// 				JoinGroups(newNDGID, adjNDGID);
 	// 			}
 	// 		}
-	// 		Debug.Log("adjNode " + adjNDScr.GetComponentInParent<Transform>().name + " added to Grp " + adjNDScr.grpID);
+	// 		Debug.Log("adjNode " + adjNDScr.GetComponentInParent<Transform>().name + " added to grp " + adjNDScr.grpID);
 	// 	}
 
 	// 	NDScr.lastPlaced = true;
