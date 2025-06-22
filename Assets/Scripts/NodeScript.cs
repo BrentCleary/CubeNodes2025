@@ -49,12 +49,6 @@ public class NodeScript : MonoBehaviour
 	private GameObject whtShp;
 	private GameObject blkShp;
 
-	//* ---------------------------------------- NODE COLOR VARIABLES ----------------------------------------
-	[Header("Node Color Variables")]
-	public Material   selectionMaterial;
-	public List<Renderer> tileRendererList;
-	public List<Material> tileMatList;
-
 	//* ---------------------------------------- START AND UPDATE METHODS ----------------------------------------
 	//* Sets Initial Node Values to Default on Creation 
 	// Start is called before the first frame update
