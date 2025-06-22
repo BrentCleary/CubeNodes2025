@@ -42,22 +42,18 @@ public class NodeScript : MonoBehaviour
 	public NodeScript BNDScr;                                                         // bottom
 	public List<NodeScript> adjNDScrList;
 
-
 	//* ---------------------------------------- SCRIPT REFERENCES ----------------------------------------
 	[SerializeField] GameManager GM;
-
 
 	//* ---------------------------------------- SHEEP OBJ REFERENCES ----------------------------------------
 	private GameObject whtShp;
 	private GameObject blkShp;
-
 
 	//* ---------------------------------------- NODE COLOR VARIABLES ----------------------------------------
 	[Header("Node Color Variables")]
 	public Material   selectionMaterial;
 	public List<Renderer> tileRendererList;
 	public List<Material> tileMatList;
-
 
 	//* ---------------------------------------- START AND UPDATE METHODS ----------------------------------------
 	//* Sets Initial Node Values to Default on Creation 
@@ -80,11 +76,7 @@ public class NodeScript : MonoBehaviour
 	}
 
 	// Update is called once per frame
-	void Update(){
-
-  }
-
-
+	void Update(){ }
 
 
 	//* ---------------------------------------- NODE DISPLAY METHODS ----------------------------------------
@@ -100,7 +92,6 @@ public class NodeScript : MonoBehaviour
 		}
 		shpTileList[shpVal].SetActive(true);                             // Set Current SheepTile active
 	}
-
 
 	public void SetTileDisplay() {
     for (int i = 0; i < tileList.Count; i++) { 
