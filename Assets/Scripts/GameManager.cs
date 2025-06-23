@@ -154,23 +154,16 @@ public class GameManager : MonoBehaviour
   public void PlaceSheep_OnClick()
   {
     int shpVal;
-    
     if (Input.GetKeyDown(KeyCode.Mouse0)){ 
       shpVal = 1;
       NodeScript node = GetNDScr_OnClick();	
-      if(node != null) { 
-        PlaceSheepMethod(node.NDID, shpVal);
-      }
+      if(node != null) { PlaceSheepMethod(node.NDID, shpVal); }
     }
-
     if (Input.GetKeyDown(KeyCode.Mouse1)){ 
       shpVal = 2;
       NodeScript node = GetNDScr_OnClick();
-      if(node != null) { 
-        PlaceSheepMethod(node.NDID, shpVal);
-      }
+      if(node != null) { PlaceSheepMethod(node.NDID, shpVal); }
     }
-  
   }
 
 
@@ -180,7 +173,7 @@ public class GameManager : MonoBehaviour
       NodeScript node = hitObject.GetComponentInParent<NodeScript>();
       return node;
     }
-    return null;
+    else{ return null; }
   }
 
 
