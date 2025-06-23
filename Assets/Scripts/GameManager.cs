@@ -104,16 +104,16 @@ public class GameManager : MonoBehaviour
 
 
 
+  //* ---------------------------------------- PLACE SHEEP METHODS ----------------------------------------
+  #region PLACE SHEEP METHODS
 
-  //* ----------------------------------------  PLACE SHEEP METHODS ----------------------------------------
-
-  public void PlaceSheepMethod(int ND_ID, int shpVal) {
-    NodeScript crntNDScr = GetNodeScriptByID(NDScrList, ND_ID);                                                            // Set blackSheepVal
+  public void PlaceSheepMethod(int NDID, int shpVal) {
+    NodeScript crntNDScr = GetNodeScriptByID(NDScrList, NDID);                                                            // Set blackSheepVal
 
     Debug.Log("shpVal = " + shpVal);
 
-    bool isPlaceAble = CheckPlaceble(ND_ID, shpVal);
-    Update_Ko_Status(ND_ID, shpVal);
+    bool isPlaceAble = CheckPlaceble(NDID, shpVal);
+    Update_Ko_Status(NDID, shpVal);
 
     if (isPlaceAble && isKo == false)                                                                      // Update Played Node and Board Value State
     {
@@ -122,7 +122,7 @@ public class GameManager : MonoBehaviour
       if (shpVal == 2) { crntNDScr.WhiteSheepSetter(); }                                                               // Set Node to BlacksheepVal
 
       NodeValueUpdate();                                                          // Update Value of All BoardNodes
-        CreateGroup_Method(ND_ID);                                                       // Create New Group for Placed Sheep
+        CreateGroup_Method(NDID);                                                       // Create New Group for Placed Sheep
         UpdateGroups_Method();                                                           // Update All Groups and Delete Zero Val Groups 
       NodeValueUpdate();                                                          // Update All NodeValues after Group Deletions
         UpdateGroups_Method();                                                           // Update Groups after Node Value Updates
@@ -135,19 +135,10 @@ public class GameManager : MonoBehaviour
       nowBrdState = CreateShpValMap();
       //LogListValues<int>(nowBrdState, "nowBrdState GM");
 
-      prvShpVal = prvBrdState[ND_ID];
-      nowShpVal = nowBrdState[ND_ID];
+      prvShpVal = prvBrdState[NDID];
+      nowShpVal = nowBrdState[NDID];
 
     }
-  }
-
-
-  public void Update_Ko_Status(int ND_ID, int shpVal)
-  {
-    if (checkForKo == true) {
-      isKo = CheckMapForKo(prvBrdState, ND_ID, shpVal);
-    }
-    else { isKo = false; }
   }
 
 
@@ -156,26 +147,39 @@ public class GameManager : MonoBehaviour
     int shpVal;
     if (Input.GetKeyDown(KeyCode.Mouse0)){ 
       shpVal = 1;
-      NodeScript node = GetNDScr_OnClick();	
-      if(node != null) { PlaceSheepMethod(node.NDID, shpVal); }
+      NodeScript scr = GetNDScr_OnClick();	
+      if(scr != null) { PlaceSheepMethod(scr.NDID, shpVal); }
     }
     if (Input.GetKeyDown(KeyCode.Mouse1)){ 
       shpVal = 2;
-      NodeScript node = GetNDScr_OnClick();
-      if(node != null) { PlaceSheepMethod(node.NDID, shpVal); }
+      NodeScript scr = GetNDScr_OnClick();
+      if(scr != null) { PlaceSheepMethod(scr.NDID, shpVal); }
     }
   }
 
+  #endregion
 
-  public NodeScript GetNDScr_OnClick() {
+
+  //* ---------------------------------------- GET NODESCRIPT METHODS ----------------------------------------
+  #region GET NODESCRIPT METHODS
+  //* ---------------------------------------- GET NODESCRIPT METHODS ----------------------------------------
+  public NodeScript GetNDScr_OnClick() {                                          //? get NDScr by mouse click in game
     hitObject = GetRaycastHitObject();
     if(hitObject.layer == 8) {
-      NodeScript node = hitObject.GetComponentInParent<NodeScript>();
-      return node;
+      NodeScript NDscr = hitObject.GetComponentInParent<NodeScript>();
+      return NDscr;
     }
     else{ return null; }
   }
 
+  public NodeScript GetNodeScriptByID(List<NodeScript> NDScrList, int targetID) { //? get node by NDID in NDScrList
+    foreach (NodeScript NDScr in NDScrList) {
+			if (NDScr.NDID == targetID) { return NDScr; }                               // Found NodeScript with the targetID
+    }
+    return null;                                                                  // Return null NodeScript not found
+  }
+
+  #endregion
 
 
   //* ---------------------------------------- RAYCAST METHODS ----------------------------------------
@@ -208,8 +212,8 @@ public class GameManager : MonoBehaviour
   #endregion
 
 
-  //* ---------------------------------------- START BOARD METHODS ----------------------------------------
-  #region BOARD METHODS
+  //* ---------------------------------------- BOARD CREATE METHODS ----------------------------------------
+  #region BOARD CREATE METHODS
 
   public void CreateBoard() {                                                   // Instantiates Variables, Calls Methods Below
   
@@ -260,7 +264,7 @@ public class GameManager : MonoBehaviour
     }
   }
 
-  public void AdjNodeScrMapper() {                                          // Loop over NDScrList, assign adjNodes
+  public void AdjNodeScrMapper() {                                              // Loop over NDScrList, assign adjNodes
     foreach (NodeScript NDScr in NDScrList){
       int[] arrPos = NDScr.arrPos;
       NDScr.LNDScr = (arrPos[0] == 0) 						? null : ND_Arr[arrPos[0]-1, arrPos[1]	].GetComponent<NodeScript>();
@@ -270,28 +274,38 @@ public class GameManager : MonoBehaviour
     }
   }
 
+
+  #endregion
+
+
+  //* ---------------------------------------- BOARD UPDATE METHODS ----------------------------------------
+  #region BOARD UPDATE METHODS
+
   //* ---------------------------------------- BOARD UPDATE METHODS ----------------------------------
-  public void NodeValueUpdate() {                                      							// Displays Array based on nodeValues
+  public void NodeValueUpdate() {                                               // Displays Array based on nodeValues
     
     List<int> NDValMap = new List<int>();                                           // 
-    
-    // Set all node values to 4 (empty) or 0 (sheep)
-    foreach (NodeScript scr in NDScrList) {
-      if (scr.shpVal == scr.shpValList[0]) {                                     		// If No Sheep
+		List<int> prvNDValList = new List<int>();
+
+
+		// Set all node values to 4 (empty) or 0 (sheep)
+		foreach (NodeScript scr in NDScrList) {
+
+			prvNDValList.Add(scr.NDVal);                                                   // Add NDVal to list for reference in DisplayMethod
+
+			if (scr.shpVal == scr.shpValList[0]) {                                     		// If No Sheep
         NDValMap.Add(scr.NDValList[4]);                                           	// Assigns 4 (max value) at map position
         scr.libVal = scr.libValList[1];
       }
-      else{                                                                         // If Sheep present
+      else {                                                                        // If Sheep present
         NDValMap.Add(scr.NDValList[0]);                                           	// Assigns 0 (min value) at map position
         scr.libVal = scr.libValList[0];
-      }
-    }
+    }}
 
-    // Subtract 1 from all node values where adjNode libVal == 0 (has sheep)
     List<int> newValMap = NDValMap;                                           			// Copy of the NDValMap to update, to preserve  
     int crntNDVal = 0;
     foreach(NodeScript scr in NDScrList) {
-      if(scr.LNDScr == null || scr.LNDScr.libVal == 0 ) { newValMap[crntNDVal] -= 1; }
+      if(scr.LNDScr == null || scr.LNDScr.libVal == 0 ) { newValMap[crntNDVal] -= 1; }  // -1 if adjScr is null or libVal == 0 (occupied)
       if(scr.RNDScr == null || scr.RNDScr.libVal == 0 ) { newValMap[crntNDVal] -= 1; }
       if(scr.BNDScr == null || scr.BNDScr.libVal == 0 ) { newValMap[crntNDVal] -= 1; }
       if(scr.TNDScr == null || scr.TNDScr.libVal == 0 ) { newValMap[crntNDVal] -= 1; }
@@ -307,15 +321,18 @@ public class GameManager : MonoBehaviour
     }
   }
 
-  public void UpdateBoardDisplay() {                                                                         // Updated Display of Nodes
-    foreach (NodeScript scr in NDScrList)	{ 
-      scr.UpdateNodeDisplay(); 
+  public void UpdateBoardDisplay() {                                            // Updated Display of Nodes
+    foreach (NodeScript NDscr in NDScrList)	{ 
+      NDscr.UpdateNodeDisplay(); 
     }
   }
 
 
-  // *---------------------------------------- Ko Check Methods ---------------------------------
-  
+  #endregion
+
+
+  // *---------------------------------------- KO CHECK Methods ---------------------------------
+  #region KO CHECK METHODS
   // Creates List of Board values to compare between turns to check for Ko Status
   public List<int> CreateShpValMap() { 																														// Displays Array based on nodeValues
     List<int> ShpValMap = new List<int>();                                         // List to hold update values for arrayNodes
@@ -327,13 +344,12 @@ public class GameManager : MonoBehaviour
     return ShpValMap;
   }
 
-
-  public bool CheckMapForKo(List<int> prevShpValMap, int ND_ID, int ShpVal)        // Map of board state before last move, ND_ID and Value
+  public bool CheckMapForKo(List<int> prevShpValMap, int NDID, int ShpVal)     // Map of board state before last move, NDID and Value
   {
     bool isKo = false;                                                              // Ko is initially set false
 
     List<int> newShpValMap = prevShpValMap.ToList();                                // Create a new copy of ShpValMap for updating and comparing
-    newShpValMap[ND_ID] = ShpVal;                                                   // Change List val to ShpVal at ND_ID index
+    newShpValMap[NDID] = ShpVal;                                                   // Change List val to ShpVal at NDID index
 
     bool sequenceCheck = newShpValMap.SequenceEqual(prevShpValMap);
     Debug.Log("sequenceCheck: " + sequenceCheck);
@@ -350,23 +366,22 @@ public class GameManager : MonoBehaviour
     return isKo;                                                                    // Return the Ko bool Value
   }
 
-  // DEBUG METHOD FOR KO CHECK METHODS
-  void FindDifferences(List<int> newShpValMap, List<int> prevShpValMap) {
-    List<int> differences = new List<int>();
+  public void Update_Ko_Status(int NDID, int shpVal)
+  {
+    if (checkForKo == true) {
+      isKo = CheckMapForKo(prvBrdState, NDID, shpVal);
+    }
+    else { isKo = false; }
+  }
 
+  void FindDifferences(List<int> newShpValMap, List<int> prevShpValMap) {       // Used in CheckMapForKo
+    List<int> difList = new List<int>();
     for (int i = 0; i < newShpValMap.Count; i++) {
-      if (newShpValMap[i] != prevShpValMap[i]) {
-        differences.Add(i); // Record the index where they differ
-      }
-    }
-
-    if (differences.Count > 0) {
-      Debug.Log("Sequences differ at indices: " + string.Join(", ", differences));
-    }
-    else {
-      Debug.Log("Sequences are identical.");
-    }
-
+			if (newShpValMap[i] != prevShpValMap[i]) { 
+        difList.Add(i); // Record the index where they differ
+    }}
+    if (difList.Count > 0) { Debug.Log("Shp dif: " + string.Join(", ", difList)); }
+    else { Debug.Log("Sequences are identical."); }
   }
 
 
@@ -388,7 +403,7 @@ public class GameManager : MonoBehaviour
   }
 
 
-  //* ---------------------------------------- CreateNewGroup  ----------------------------------------
+  // ---------------------------------------- CreateNewGroup  ----------------------------------------
   public int CreateNewGroup(int crntNDID)                                       //? creates new Group, returns grpID
   {
     Group newGrp = Group.Create();
@@ -413,7 +428,7 @@ public class GameManager : MonoBehaviour
 
   }
 
-  //* ---------------------------------------- AssignSheepToGroups ----------------------------------------
+  // ---------------------------------------- AssignSheepToGroups ----------------------------------------
   public void AssignSheepToGroups(int targetNDID) {
 
     NodeScript NDScr = GetNodeScriptByID(NDScrList, targetNDID);
@@ -425,18 +440,15 @@ public class GameManager : MonoBehaviour
 				if (adjGID != targetGID && adjGID != -1) { 
           JoinGroups(targetGID, adjGID); 
     }}}
-
   }
 
-
-  //* ---------------------------------------- GetGroup ----------------------------------------
+  // ---------------------------------------- GetGroup ----------------------------------------
   public Group GetGroup(int grpID) {                                          //? Returns Group from AllGrpList by grpID
     Group  group = allGrpList.FirstOrDefault(g => g.grpID == grpID);
     return group;
   }
-  
 
-  //* ---------------------------------------- JoinGroups ----------------------------------------
+  // ---------------------------------------- JoinGroups ----------------------------------------
   public void JoinGroups(int newGID, int prevGID)                             //? Adds prevGIDs to newGrp.NDID_List
   {
     if (prevGID != -1 && prevGID != newGID){                                  // if prevGID is not null and doesn't match the newGrp 
@@ -451,11 +463,9 @@ public class GameManager : MonoBehaviour
 
       DeleteGroup(prevGID);                                                   // Delete prevGrp from allGrpList 
     }
-
   }
 
-
-  //* ---------------------------------------- DeleteGroup -----------------------------------------
+  // ---------------------------------------- DeleteGroup -----------------------------------------
   public void DeleteGroup(int delGID)                                           // Clears prevGrp Nodelist - Removes prevGrp from AllGrpList 
   {
     if (delGID != -1 && delGID != lastGrpID) {
@@ -466,8 +476,7 @@ public class GameManager : MonoBehaviour
     else { Debug.Log("grpID was -1");	}
   }
 
-
-  //* ---------------------------------------- CalculateGrpLiberties ----------------------------------------
+  // ---------------------------------------- CalculateGrpLiberties ----------------------------------------
   public void CalculateGrpLiberties() {                                          //? Updates Liberties of all Groups in AllGrpList
     
     int totalGrpLibs = 0;
@@ -493,9 +502,7 @@ public class GameManager : MonoBehaviour
     }
   }
 
-
-  //* ---------------------------------------- CheckPlaceable ----------------------------------------
-
+  // ---------------------------------------- CheckPlaceable ----------------------------------------
   public bool CheckPlaceble(int NDID, int crntShpVal) {                         //? Calculate Group Capture
     
     NodeScript NDScr = GetNodeScriptByID(NDScrList, NDID);                      // Get TargetNode
@@ -521,12 +528,9 @@ public class GameManager : MonoBehaviour
     }
 
     return false;                                                               // Return false by Default
-
   }
 
-
-  //* ---------------------------------------- ZeroLibertyGroup Methods ----------------------------------------
-
+  // ---------------------------------------- ZeroLibertyGroup Methods ----------------------------------------
   public void DeleteZeroLibGrp()                                     	          // Returns list from AllGrpList with GrpLiberties = 0
   {
     List<int> zeroGIDList = new List<int>();
@@ -552,46 +556,23 @@ public class GameManager : MonoBehaviour
             NodeScript zeroScr = zeroND.GetComponent<NodeScript>();
             zeroScr.EmptySheepSetter();
         }}
-        
+
         DeleteGroup(zeroGrp.grpID);
       }
     }
 
   }
 
-
-  //* ---------------------------------------- GetAll_ND_GID ----------------------------------------
-
+  // ---------------------------------------- GetAll_ND_GID ----------------------------------------
   public List<int> GetAll_ND_GID() {
-    
     List<int> grpIDList = new List<int>();
-    foreach (NodeScript NDScr in NDScrList) {
+    foreach (NodeScript NDScr in NDScrList) { 
       if (NDScr != null) { grpIDList.Add(NDScr.grpID); }
     }
     return grpIDList;
   }
 
-
   #endregion
-
-
-
-
-
-  //* ---------------------------------------- GetNodeScriptByID ----------------------------------------
-  // ------ Get NODE from nodeID in gNodeArray -------
-  public NodeScript GetNodeScriptByID(List<NodeScript> NDScrList, int targetID) {
-
-    foreach (NodeScript NDScr in NDScrList) {
-      if (NDScr.NDID == targetID) {
-        return NDScr; 																														// Found NodeScript with the targetID
-      }
-    }
-    return null; 																																	// Return null NodeScript not found
-  }
-
-
-
 
 
   //* ---------------------------------------- DEBUG METHODS  ----------------------------------------
