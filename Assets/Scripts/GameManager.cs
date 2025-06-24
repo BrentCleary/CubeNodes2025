@@ -67,11 +67,11 @@ public class GameManager : MonoBehaviour
   public int arrColLen = 3;                                              // ! Array Column Size
   public int arrRowLen = 3;                                              // ! Array Row Size
   public int arrSize => arrColLen * arrRowLen;                           // arrColLen * arrRowLen
-  public float ND_Spacing = 1f;                                          // Space Between Nodes
+  public float ND_Spacing = 1f;                                            // Space Between Nodes
 
   public GameObject ND_Prefab;
-  public List<int> startNDValMap;
-  public List<int> crntNDValMap;
+  public List<int>  startNDValMap;
+  public List<int>  crntNDValMap;
 
 
 
@@ -108,7 +108,7 @@ public class GameManager : MonoBehaviour
   #region PLACE SHEEP METHODS
 
   public void PlaceSheepMethod(int NDID, int shpVal) {
-    NodeScript crntNDScr = GetNodeScriptByID(NDScrList, NDID);                                                            // Set blackSheepVal
+    NodeScript crntNDScr = GetNDScript(NDScrList, NDID);                                                            // Set blackSheepVal
 
     Debug.Log("shpVal = " + shpVal);
 
@@ -172,7 +172,7 @@ public class GameManager : MonoBehaviour
     else{ return null; }
   }
 
-  public NodeScript GetNodeScriptByID(List<NodeScript> NDScrList, int targetID) { //? get node by NDID in NDScrList
+  public NodeScript GetNDScript(List<NodeScript> NDScrList, int targetID) { //? get node by NDID in NDScrList
     foreach (NodeScript NDScr in NDScrList) {
 			if (NDScr.NDID == targetID) { return NDScr; }                               // Found NodeScript with the targetID
     }
@@ -285,13 +285,13 @@ public class GameManager : MonoBehaviour
   public void NodeValueUpdate() {                                               // Displays Array based on nodeValues
     
     List<int> NDValMap = new List<int>();                                           // 
-		List<int> prvNDValList = new List<int>();
+		List<int> startNDValList = new List<int>();
 
 
 		// Set all node values to 4 (empty) or 0 (sheep)
 		foreach (NodeScript scr in NDScrList) {
 
-			prvNDValList.Add(scr.NDVal);                                                   // Add NDVal to list for reference in DisplayMethod
+			scr.prvNDVal = scr.NDVal;                                                     // Add prvNDVal to list for reference in DisplayMethod
 
 			if (scr.shpVal == scr.shpValList[0]) {                                     		// If No Sheep
         NDValMap.Add(scr.NDValList[4]);                                           	// Assigns 4 (max value) at map position
@@ -407,15 +407,15 @@ public class GameManager : MonoBehaviour
   public int CreateNewGroup(int crntNDID)                                       //? creates new Group, returns grpID
   {
     Group newGrp = Group.Create();
-    NodeScript NDScr = GetNodeScriptByID(NDScrList, crntNDID);
+    NodeScript NDScr = GetNDScript(NDScrList, crntNDID);
 
     // Group Attributes
-    int newGrpID = newGrp.grpID;
-    newGrp.Grp_ShpVal = NDScr.shpVal;
+    int newGrpID      = newGrp.grpID;
+    newGrp.grpShpVal = NDScr.shpVal;
     newGrp.NDIDList.Add(NDScr.NDID);
 
     // Set Node Properties
-    NDScr.grpID = newGrpID;
+    NDScr.grpID      = newGrpID;
     NDScr.lastPlaced = true;
 
     // Update Global Properties
@@ -429,9 +429,9 @@ public class GameManager : MonoBehaviour
   }
 
   // ---------------------------------------- AssignSheepToGroups ----------------------------------------
-  public void AssignSheepToGroups(int targetNDID) {
-
-    NodeScript NDScr = GetNodeScriptByID(NDScrList, targetNDID);
+  public void AssignSheepToGroups(int targetNDID)  
+  {
+    NodeScript NDScr = GetNDScript(NDScrList, targetNDID);
     int targetGID = NDScr.grpID;
 
     foreach(NodeScript adjScr in NDScr.adjNDScrList) {                        // First check occurs on left node
@@ -442,14 +442,8 @@ public class GameManager : MonoBehaviour
     }}}
   }
 
-  // ---------------------------------------- GetGroup ----------------------------------------
-  public Group GetGroup(int grpID) {                                          //? Returns Group from AllGrpList by grpID
-    Group  group = allGrpList.FirstOrDefault(g => g.grpID == grpID);
-    return group;
-  }
-
   // ---------------------------------------- JoinGroups ----------------------------------------
-  public void JoinGroups(int newGID, int prevGID)                             //? Adds prevGIDs to newGrp.NDID_List
+  public void JoinGroups(int newGID, int prevGID)                               //? Adds prevGIDs to newGrp.NDID_List
   {
     if (prevGID != -1 && prevGID != newGID){                                  // if prevGID is not null and doesn't match the newGrp 
       Group newGrp  = GetGroup(newGID);                                       // Get NewGroup 
@@ -457,7 +451,7 @@ public class GameManager : MonoBehaviour
 
       foreach (int NDID in prevGrp.NDIDList){                                 // For each ID in prevGrp 
         newGrp.NDIDList.Add(NDID);                                            // Add ID to newGrp 
-        NodeScript NDScr = GetNodeScriptByID(NDScrList, NDID);                // Get Node with ID 
+        NodeScript NDScr = GetNDScript(NDScrList, NDID);                // Get Node with ID 
         NDScr.grpID = newGrp.grpID;                                           // Update grpID on NodeScript 
       }
 
@@ -465,26 +459,15 @@ public class GameManager : MonoBehaviour
     }
   }
 
-  // ---------------------------------------- DeleteGroup -----------------------------------------
-  public void DeleteGroup(int delGID)                                           // Clears prevGrp Nodelist - Removes prevGrp from AllGrpList 
-  {
-    if (delGID != -1 && delGID != lastGrpID) {
-      Group grpToDelete = allGrpList.FirstOrDefault(g => g.grpID == delGID);
-      allGrpList.Remove(grpToDelete);
-      Debug.Log("Group #" + grpToDelete.grpID + " cleared and deleted.");
-    }
-    else { Debug.Log("grpID was -1");	}
-  }
-
   // ---------------------------------------- CalculateGrpLiberties ----------------------------------------
-  public void CalculateGrpLiberties() {                                          //? Updates Liberties of all Groups in AllGrpList
-    
+  public void CalculateGrpLiberties()                                           //? Updates Liberties of all Groups in AllGrpList
+  {
     int totalGrpLibs = 0;
     foreach (Group grp in allGrpList) {                                         // Loops over List of All Groups
 
       List<NodeScript> grpScrList = new List<NodeScript>();
       foreach (int NDID in grp.NDIDList) {
-        NodeScript scr = GetNodeScriptByID(NDScrList, NDID);              // Check NDID In grp.NDIDList against NDScrList (all scripts)
+        NodeScript scr = GetNDScript(NDScrList, NDID);              // Check NDID In grp.NDIDList against NDScrList (all scripts)
         grpScrList.Add(scr);
       }
       
@@ -496,16 +479,16 @@ public class GameManager : MonoBehaviour
               countedNDs.Add(adjScr);                                           // Add the script to the counted nodeScript list
       }}}
 
-      grp.GrpLibs = totalGrpLibs;                                               // Set current grp libs to totalGrpLibs
+      grp.grpLibs = totalGrpLibs;                                               // Set current grp libs to totalGrpLibs
       totalGrpLibs = 0;                                                         // Reset totalGrpLibs to 0
       countedNDs.Clear();                                                       // Clear list of counted Nodes
     }
   }
 
   // ---------------------------------------- CheckPlaceable ----------------------------------------
-  public bool CheckPlaceble(int NDID, int crntShpVal) {                         //? Calculate Group Capture
-    
-    NodeScript NDScr = GetNodeScriptByID(NDScrList, NDID);                      // Get TargetNode
+  public bool CheckPlaceble(int NDID, int crntShpVal)                           //? Calculate Group Capture
+  {  
+    NodeScript NDScr = GetNDScript(NDScrList, NDID);                      // Get TargetNode
     List<int>        adjGIDList   = new List<int>();                            // List to identify the grpID of adjacent nodes 
     List<Group>      adjGrpList   = new List<Group>();                          // Get ajd Group and add to list
     List<NodeScript> adjNDScrList = NDScr.adjNDScrList;                         // Get adjNDScrList to iterate over Group Capture
@@ -519,24 +502,25 @@ public class GameManager : MonoBehaviour
     if (adjGIDList.Count >  0) {                                                // adjND not all empty
       foreach (int grpID in adjGIDList) {
 				if (grpID == -1) { return true; }                                       // grpID is  -1, no  group, node is empty
-				if (grpID >=  0) { adjGrpList.Add(GetGroup(grpID)); }                   // grpID not -1, has group, node occupied
+				if (grpID >=  0) { 
+          adjGrpList.Add(GetGroup(grpID)); }                   // grpID not -1, has group, node occupied
 		}}
     
     foreach (Group adjGrp in adjGrpList) {
-			if (adjGrp.Grp_ShpVal != crntShpVal && adjGrp.GrpLibs == 1) { return true; }  // adjGrp not ShpVal and grpLibs = 1 (can capture)
-			if (adjGrp.Grp_ShpVal == crntShpVal && adjGrp.GrpLibs >  1) { return true; }  // adjGrp is  ShpVal and grpLibs > 1 (won't reduce to 0)
+			if (adjGrp.grpShpVal != crntShpVal && adjGrp.grpLibs == 1) { return true; }  // adjGrp not ShpVal and grpLibs = 1 (can capture)
+			if (adjGrp.grpShpVal == crntShpVal && adjGrp.grpLibs >  1) { return true; }  // adjGrp is  ShpVal and grpLibs > 1 (won't reduce to 0)
     }
 
     return false;                                                               // Return false by Default
   }
 
-  // ---------------------------------------- ZeroLibertyGroup Methods ----------------------------------------
+  // ---------------------------------------- DeleteZeroLibGroup ----------------------------------------
   public void DeleteZeroLibGrp()                                     	          // Returns list from AllGrpList with GrpLiberties = 0
   {
     List<int> zeroGIDList = new List<int>();
     foreach (Group grp in allGrpList) {
-      if (grp.GrpLibs == 0) {           																				// Returns a list of Groups with Liberties == 0 for deletion in other method
-        if (grp.Grp_ShpVal != lastShpVal) {                                     // ! IMPT - Prevents current player from killing own groups
+      if (grp.grpLibs == 0) {           																				// Returns a list of Groups with Liberties == 0 for deletion in other method
+        if (grp.grpShpVal != lastShpVal) {                                     // ! IMPT - Prevents current player from killing own groups
           zeroGIDList.Add(grp.grpID);
     }}}
     
@@ -550,26 +534,44 @@ public class GameManager : MonoBehaviour
       foreach (Group zeroGrp in zGrpList) {                                     // Loop of new list of Zero liberty Groups
 				checkForKo = false;
 				if (zeroGrp.NDIDList.Count == 1) { checkForKo = true; }                 // If there is a Single Node in the groups to Delete, check for Ko
-				if (zeroGrp.Grp_ShpVal != lastShpVal) {                                 // ! Checks if zeroGroup is the same sheepVal as current player
+				if (zeroGrp.grpShpVal != lastShpVal) {                                 // ! Checks if zeroGroup is the same sheepVal as current player
           foreach (int zeroNDID in zeroGrp.NDIDList) {                          // Get the script of each Node and Set Node to Empty
-            NodeScript zeroND  = GetNodeScriptByID(NDScrList, zeroNDID);
+            NodeScript zeroND  = GetNDScript(NDScrList, zeroNDID);
             NodeScript zeroScr = zeroND.GetComponent<NodeScript>();
             zeroScr.EmptySheepSetter();
         }}
 
         DeleteGroup(zeroGrp.grpID);
-      }
-    }
+    }}
 
   }
 
-  // ---------------------------------------- GetAll_ND_GID ----------------------------------------
-  public List<int> GetAll_ND_GID() {
-    List<int> grpIDList = new List<int>();
-    foreach (NodeScript NDScr in NDScrList) { 
-      if (NDScr != null) { grpIDList.Add(NDScr.grpID); }
+  // ---------------------------------------- DeleteGroup -----------------------------------------
+  public void DeleteGroup(int delGID)                                           // Clears prevGrp Nodelist - Removes prevGrp from AllGrpList 
+  {
+    if (delGID != -1 && delGID != lastGrpID) {
+      Group grpToDelete = allGrpList.FirstOrDefault(g => g.grpID == delGID);
+      allGrpList.Remove(grpToDelete);
+      Debug.Log("Group #" + grpToDelete.grpID + " cleared and deleted.");
     }
-    return grpIDList;
+    else { Debug.Log("grpID was -1");	}
+  }
+
+  // ---------------------------------------- GetGroup ----------------------------------------
+  public Group GetGroup(int grpID)                                            //? Returns Group from AllGrpList by grpID
+  {
+    Group  group = allGrpList.FirstOrDefault(g => g.grpID == grpID);
+    return group;
+  }
+
+  // ---------------------------------------- GetGIDList ----------------------------------------
+  public List<int> GetGIDList()  
+  {
+    List<int> GIDList = new List<int>();
+    foreach (NodeScript NDScr in NDScrList) { 
+      if (NDScr != null) { GIDList.Add(NDScr.grpID); }
+    }
+    return GIDList;
   }
 
   #endregion

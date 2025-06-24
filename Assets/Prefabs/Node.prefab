@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7506629976969806300}
   - component: {fileID: 7066531455869416199}
   m_Layer: 8
-  m_Name: Outline
+  m_Name: Outline (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 5688753677018560692}
   - component: {fileID: 8316908408332757689}
   m_Layer: 8
-  m_Name: Outline
+  m_Name: Outline (0)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -216,6 +216,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   NDID: 0
   NDVal: 0
+  prvNDVal: 0
   shpVal: 0
   libVal: 0
   grpID: -1
@@ -236,6 +237,7 @@ MonoBehaviour:
   - {fileID: 7623690394024410605}
   - {fileID: 2157240889988850010}
   - {fileID: 1335092287229106487}
+  transformPresets: []
   NDArray: {fileID: 0}
   arrPos: 0000000000000000
   LNDScr: {fileID: 0}
@@ -244,12 +246,6 @@ MonoBehaviour:
   BNDScr: {fileID: 0}
   adjNDScrList: []
   GM: {fileID: 0}
-  grassContainer: {fileID: 3842436591245947211}
-  selectionMaterial: {fileID: 0}
-  tileRendererList: []
-  tileMatList: []
-  tileMaterialList: []
-  nodeSelected: 0
 --- !u!1 &4879621927610839515
 GameObject:
   m_ObjectHideFlags: 0
@@ -262,7 +258,7 @@ GameObject:
   - component: {fileID: 814595053524177145}
   - component: {fileID: 6746321055186533474}
   m_Layer: 8
-  m_Name: Outline
+  m_Name: Outline (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -345,7 +341,7 @@ GameObject:
   - component: {fileID: 6505849269469263767}
   - component: {fileID: 6870566916598741635}
   m_Layer: 8
-  m_Name: Outline
+  m_Name: Outline (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -428,7 +424,7 @@ GameObject:
   - component: {fileID: 6976616194002817091}
   - component: {fileID: 3577429900793651476}
   m_Layer: 8
-  m_Name: Outline
+  m_Name: Outline (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -669,7 +665,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7799682082261754983, guid: 519b49229779432458f316f18c394a37, type: 3}
       propertyPath: m_Materials.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7799682082261754983, guid: 519b49229779432458f316f18c394a37, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -700,7 +696,7 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 2718317031189295122, guid: 519b49229779432458f316f18c394a37, type: 3}
-      insertIndex: -1
+      insertIndex: 0
       addedObject: {fileID: 3733097136737649167}
     - targetCorrespondingSourceObject: {fileID: 5072213970345010821, guid: 519b49229779432458f316f18c394a37, type: 3}
       insertIndex: -1
@@ -788,11 +784,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   normalMaterial: {fileID: 2100000, guid: db90f06b5570a0f4e896d1a6a95cdd61, type: 2}
   highlightMaterial: {fileID: 2100000, guid: 50fdcdb34f9f35845bc9ae565055ff48, type: 2}
---- !u!1 &3842436591245947211 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3339159357018591726, guid: 519b49229779432458f316f18c394a37, type: 3}
-  m_PrefabInstance: {fileID: 1946680968570904741}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3978349520628465517 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3184590060104785864, guid: 519b49229779432458f316f18c394a37, type: 3}

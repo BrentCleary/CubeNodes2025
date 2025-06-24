@@ -16,8 +16,8 @@ public class DebugMethods : MonoBehaviour
 		Diag.StackTrace stackTrace = new Diag.StackTrace(true);
 		Diag.StackFrame frame = stackTrace.GetFrame(1); // Current method frame - reference for access to method info()
 
-		string fileName = frame.GetFileName(); // Gets file name
-		int lineNumber = frame.GetFileLineNumber(); // Gets line number
+		string fileName 	= frame.GetFileName(); // Gets file name
+		int lineNumber 		= frame.GetFileLineNumber(); // Gets line number
 		MethodBase method = frame.GetMethod();
 
 		Debug.Log($"Current line: {lineNumber}, {method.Name}, {fileName}");
@@ -27,10 +27,10 @@ public class DebugMethods : MonoBehaviour
 	public void LogCurrentMethod()
 	{
 		Diag.StackTrace stackTrace = new Diag.StackTrace(true);
-		Diag.StackFrame frame = stackTrace.GetFrame(1); // Current method frame - reference for access to method info()
+		Diag.StackFrame frame      = stackTrace.GetFrame(1); // Current method frame - reference for access to method info()
 
-		string fileName = frame.GetFileName(); // Gets file name
-		int lineNumber = frame.GetFileLineNumber(); // Gets line number
+		string fileName   = frame.GetFileName(); // Gets file name
+		int lineNumber    = frame.GetFileLineNumber(); // Gets line number
 		MethodBase method = frame.GetMethod();
 
 		Debug.Log($"Current line: {lineNumber}, {method.Name}, {fileName}");
@@ -41,8 +41,8 @@ public class DebugMethods : MonoBehaviour
 		Diag.StackTrace stackTrace = new Diag.StackTrace(true);
 		Diag.StackFrame frame = stackTrace.GetFrame(2); // Current method frame - reference for access to method info()
 
-		string fileName = frame.GetFileName(); // Gets file name
-		int lineNumber = frame.GetFileLineNumber(); // Gets line number
+		string fileName   = frame.GetFileName(); // Gets file name
+		int lineNumber    = frame.GetFileLineNumber(); // Gets line number
 		MethodBase method = frame.GetMethod();
 
 		Debug.Log($"Current line: {lineNumber}, {method.Name}, {fileName}");

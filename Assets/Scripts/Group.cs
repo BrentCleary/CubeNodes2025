@@ -6,8 +6,8 @@ using UnityEngine;
 public class Group
 {
   public int grpID;
-  public int GrpLibs;
-  public int Grp_ShpVal;
+  public int grpLibs;
+  public int grpShpVal;
   public List<int> NDIDList;
   
   public static int groupCount = -1;
