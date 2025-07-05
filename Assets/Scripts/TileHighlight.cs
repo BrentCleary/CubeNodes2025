@@ -5,16 +5,16 @@ using UnityEngine.UI;
 
 public class TileHighlight : MonoBehaviour
 {
-  public  Material normalMaterial;     // Material 0 (blue)
-  public  Material highlightMaterial;  // Material 1 (light blue)
+  public  Material     normalMaterial;     // Material 0 (blue)
+  public  Material     highlightMaterial;  // Material 1 (light blue)
   private MeshRenderer meshRenderer;
-	private GameObject outline;
+	public  GameObject   outline;
 
 
 	// Start is called before the first frame update
 	void Start()
   {
-		outline = transform.Find("Outline").gameObject;
+		outline      = transform.Find("Outline").gameObject;
 		meshRenderer = GetComponent<MeshRenderer>();
     
     // Ensure the default is set

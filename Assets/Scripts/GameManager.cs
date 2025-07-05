@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour
   public int  lastShpVal;
   public int  lastGrpID;
   public bool checkForKo;
-  public List<Group> allGrpList;
+  public List<Group> allGrpList = new List<Group>();
 
   //* ---------------------------------------- RAYCAST PROPS ----------------------------------------
   [Header("RayCast Props")]
@@ -72,7 +72,7 @@ public class GameManager : MonoBehaviour
   public GameObject ND_Prefab;
   public List<int>  startNDValMap;
   public List<int>  crntNDValMap;
-
+  public bool brdReady = false;
 
 
   //* ----------------------------------------  MANAGER METHODS ----------------------------------------
@@ -84,17 +84,12 @@ public class GameManager : MonoBehaviour
     mainCamera = Camera.main;
   }
 
-  void Start() 
+  void Start()
   {
-    // Board
-    CreateBoard();
-    NodeValueUpdate();
-    UpdateBoardDisplay();
+		// Board
+		GenerateBoardOnStart();
 
-    nowBrdState = CreateShpValMap();
-    prvBrdState = nowBrdState.ToList();
-    allGrpList = new List<Group>();
-  }
+	}
 
   void Update() 
   {
@@ -103,37 +98,54 @@ public class GameManager : MonoBehaviour
   }
 
 
+  public void GenerateBoardOnStart()
+  {
+		CreateBoard();
+    if(brdReady){
+
+      RecordPreviousNodeVal();
+			NodeValueUpdate();
+      nowBrdState = CreateShpValMap();
+      prvBrdState = nowBrdState.ToList();
+			
+      PlaceSheepMethod(0, 0);
+
+    }
+	}
+
 
   //* ---------------------------------------- PLACE SHEEP METHODS ----------------------------------------
   #region PLACE SHEEP METHODS
 
   public void PlaceSheepMethod(int NDID, int shpVal) {
-    NodeScript crntNDScr = GetNDScript(NDScrList, NDID);                                                            // Set blackSheepVal
 
+		RecordPreviousNodeVal();
+
+		NodeScript crntNDScr = GetNDScript(NDScrList, NDID);
     Debug.Log("shpVal = " + shpVal);
 
     bool isPlaceAble = CheckPlaceble(NDID, shpVal);
     Update_Ko_Status(NDID, shpVal);
 
-    if (isPlaceAble && isKo == false)                                                                      // Update Played Node and Board Value State
-    {
-      if (shpVal == 0) { crntNDScr.EmptySheepSetter(); }
+    if (isPlaceAble && isKo == false){
+			Debug.Log("NDID: " + NDID + " - shpVal: " + shpVal);
+			if (shpVal == 0) { crntNDScr.EmptySheepSetter(); }
       if (shpVal == 1) { crntNDScr.BlackSheepSetter(); }
-      if (shpVal == 2) { crntNDScr.WhiteSheepSetter(); }                                                               // Set Node to BlacksheepVal
+      if (shpVal == 2) { crntNDScr.WhiteSheepSetter(); }
 
-      NodeValueUpdate();                                                          // Update Value of All BoardNodes
-        CreateGroup_Method(NDID);                                                       // Create New Group for Placed Sheep
-        UpdateGroups_Method();                                                           // Update All Groups and Delete Zero Val Groups 
-      NodeValueUpdate();                                                          // Update All NodeValues after Group Deletions
-        UpdateGroups_Method();                                                           // Update Groups after Node Value Updates
+      NodeValueUpdate();                                                        // Update Value of All BoardNodes
+        CreateGroup_Method(NDID);                                               // Create New Group for Placed Sheep
+        UpdateGroups_Method();                                                  // Update All Groups and Delete Zero Val Groups 
+      NodeValueUpdate();                                                        // Update All NodeValues after Group Deletions
+        UpdateGroups_Method();                                                  // Update Groups after Node Value Updates
 
-      UpdateBoardDisplay();                                                             // Update Board Display
+      UpdateBoardDisplay();                                                     // Update Board Display
 
       prvBrdState = nowBrdState.ToList();
-      // LogListValues<int>(prvBrdState, "prvBrdState GM");
+      LogListValues<int>(prvBrdState, "prvBrdState GM");
 
       nowBrdState = CreateShpValMap();
-      //LogListValues<int>(nowBrdState, "nowBrdState GM");
+      LogListValues<int>(nowBrdState, "nowBrdState GM");
 
       prvShpVal = prvBrdState[NDID];
       nowShpVal = nowBrdState[NDID];
@@ -162,7 +174,7 @@ public class GameManager : MonoBehaviour
 
   //* ---------------------------------------- GET NODESCRIPT METHODS ----------------------------------------
   #region GET NODESCRIPT METHODS
-  //* ---------------------------------------- GET NODESCRIPT METHODS ----------------------------------------
+
   public NodeScript GetNDScr_OnClick() {                                          //? get NDScr by mouse click in game
     hitObject = GetRaycastHitObject();
     if(hitObject.layer == 8) {
@@ -225,8 +237,10 @@ public class GameManager : MonoBehaviour
     InstantiateNodes();					// Creates a list of Node GameObjects
     SetNodeTransformPosition(); // Sets Transfrom of All Nodes
     BuildNodeArray();						// Creates Array. Places nodes.
-    AdjNodeScrMapper();						// Associates Nodes to Neighbors
-  }
+    AdjNodeScrMapper();           // Associates Nodes to Neighbors
+
+		brdReady = true;
+	}
   
   public void InstantiateNodes(){                                               // Instantiates Nodes, Assigns names and values, Adds them to NDList
     for (int i = 0; i < arrSize; i++) {
@@ -285,13 +299,10 @@ public class GameManager : MonoBehaviour
   public void NodeValueUpdate() {                                               // Displays Array based on nodeValues
     
     List<int> NDValMap = new List<int>();                                           // 
-		List<int> startNDValList = new List<int>();
 
 
 		// Set all node values to 4 (empty) or 0 (sheep)
 		foreach (NodeScript scr in NDScrList) {
-
-			scr.prvNDVal = scr.NDVal;                                                     // Add prvNDVal to list for reference in DisplayMethod
 
 			if (scr.shpVal == scr.shpValList[0]) {                                     		// If No Sheep
         NDValMap.Add(scr.NDValList[4]);                                           	// Assigns 4 (max value) at map position
@@ -327,6 +338,10 @@ public class GameManager : MonoBehaviour
     }
   }
 
+  public void RecordPreviousNodeVal()
+  {
+    foreach (NodeScript scr in NDScrList) { scr.prvNDVal = scr.NDVal; }         // Add prvNDVal to list for reference in DisplayMethod
+  }
 
   #endregion
 

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7506629976969806300}
   - component: {fileID: 7066531455869416199}
   m_Layer: 8
-  m_Name: Outline (4)
+  m_Name: Outline
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 5688753677018560692}
   - component: {fileID: 8316908408332757689}
   m_Layer: 8
-  m_Name: Outline (0)
+  m_Name: Outline
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -238,8 +238,22 @@ MonoBehaviour:
   - {fileID: 2157240889988850010}
   - {fileID: 1335092287229106487}
   transformPresets: []
+  tileNormalMatList:
+  - {fileID: 2100000, guid: 4036d0a005d70b640a026c4bee8b77c5, type: 2}
+  - {fileID: 2100000, guid: 4511e4c1a4a7d97468bed307f95b2188, type: 2}
+  - {fileID: 2100000, guid: fc784489aed61b94ab6adf870dbd85dd, type: 2}
+  - {fileID: 2100000, guid: db90f06b5570a0f4e896d1a6a95cdd61, type: 2}
+  - {fileID: 2100000, guid: edb494736cecaab4eaafef84b6bac88d, type: 2}
+  tileHoverMatList:
+  - {fileID: 2100000, guid: 85c0889fa06a77b4da9e5f3b4943d942, type: 2}
+  - {fileID: 2100000, guid: 5babe94734fe7e543baea576d765b7a8, type: 2}
+  - {fileID: 2100000, guid: 9695f635210f4ff4c9bbab2ab3e289ae, type: 2}
+  - {fileID: 2100000, guid: 50fdcdb34f9f35845bc9ae565055ff48, type: 2}
+  - {fileID: 2100000, guid: df95fd9d1eb3cad4cbe0d155c5787963, type: 2}
+  tileHLScript: {fileID: 0}
   NDArray: {fileID: 0}
   arrPos: 0000000000000000
+  duration: 0.25
   LNDScr: {fileID: 0}
   RNDScr: {fileID: 0}
   TNDScr: {fileID: 0}
@@ -258,7 +272,7 @@ GameObject:
   - component: {fileID: 814595053524177145}
   - component: {fileID: 6746321055186533474}
   m_Layer: 8
-  m_Name: Outline (1)
+  m_Name: Outline
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -341,7 +355,7 @@ GameObject:
   - component: {fileID: 6505849269469263767}
   - component: {fileID: 6870566916598741635}
   m_Layer: 8
-  m_Name: Outline (3)
+  m_Name: Outline
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -424,7 +438,7 @@ GameObject:
   - component: {fileID: 6976616194002817091}
   - component: {fileID: 3577429900793651476}
   m_Layer: 8
-  m_Name: Outline (2)
+  m_Name: Outline
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -513,7 +527,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 501042148923474431, guid: 519b49229779432458f316f18c394a37, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 685448031877282194, guid: 519b49229779432458f316f18c394a37, type: 3}
       propertyPath: m_Name
@@ -525,7 +539,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 685448031877282194, guid: 519b49229779432458f316f18c394a37, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 920833156851511348, guid: 519b49229779432458f316f18c394a37, type: 3}
       propertyPath: m_Name
@@ -685,7 +699,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8271082832379469128, guid: 519b49229779432458f316f18c394a37, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2867074813933421198, guid: 519b49229779432458f316f18c394a37, type: 3}
@@ -746,6 +760,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   normalMaterial: {fileID: 2100000, guid: edb494736cecaab4eaafef84b6bac88d, type: 2}
   highlightMaterial: {fileID: 2100000, guid: df95fd9d1eb3cad4cbe0d155c5787963, type: 2}
+  outline: {fileID: 0}
 --- !u!1 &1712340816621965457 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 920833156851511348, guid: 519b49229779432458f316f18c394a37, type: 3}
@@ -765,6 +780,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   normalMaterial: {fileID: 2100000, guid: 4511e4c1a4a7d97468bed307f95b2188, type: 2}
   highlightMaterial: {fileID: 2100000, guid: 5babe94734fe7e543baea576d765b7a8, type: 2}
+  outline: {fileID: 0}
 --- !u!1 &2157240889988850010 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 501042148923474431, guid: 519b49229779432458f316f18c394a37, type: 3}
@@ -784,6 +800,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   normalMaterial: {fileID: 2100000, guid: db90f06b5570a0f4e896d1a6a95cdd61, type: 2}
   highlightMaterial: {fileID: 2100000, guid: 50fdcdb34f9f35845bc9ae565055ff48, type: 2}
+  outline: {fileID: 0}
 --- !u!4 &3978349520628465517 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3184590060104785864, guid: 519b49229779432458f316f18c394a37, type: 3}
@@ -823,6 +840,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   normalMaterial: {fileID: 2100000, guid: 1cef938def0b527469f8ef0720c534dc, type: 2}
   highlightMaterial: {fileID: 2100000, guid: a3778e7fb6592bc4298d4d9f584b2f67, type: 2}
+  outline: {fileID: 0}
 --- !u!1 &7623690394024410605 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8271082832379469128, guid: 519b49229779432458f316f18c394a37, type: 3}
@@ -842,6 +860,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   normalMaterial: {fileID: 2100000, guid: fc784489aed61b94ab6adf870dbd85dd, type: 2}
   highlightMaterial: {fileID: 2100000, guid: 9695f635210f4ff4c9bbab2ab3e289ae, type: 2}
+  outline: {fileID: 0}
 --- !u!4 &8669261997418910835 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7154926628577752278, guid: 519b49229779432458f316f18c394a37, type: 3}
